@@ -21,8 +21,8 @@ These are stand-ins for RAVOMA's own product photography.
 | File | Source |
 |---|---|
 | mark.webp | RAVOMA ornamental R monogram — from `ravoma-mark-source.png` |
-| favicon-16/32/48.png | Playfair Display "R" on brand navy — rendered from the brand typeface |
-| apple-touch-icon.png | Full monogram on brand navy |
+| favicon-16/32/48/512.png | RAVOMA monogram on brand navy, from `brand/ravoma-mark-source.png` |
+| apple-touch-icon.png | RAVOMA monogram on brand navy (180px) |
 
 Source files kept in the project root: `ravoma-mark-source.png` (transparent monogram),
 `ravoma-logo-full-source.png` (full lockup), `ravoma-brand-board-source.png` (brand board).
