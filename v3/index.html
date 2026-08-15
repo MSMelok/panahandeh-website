@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PANAHANDEH — Pulses &amp; Spices from the Plateau</title>
+<meta name="description" content="Panahandeh Foodstuff Trading L.L.C — saffron, pulses, beans and spices sourced across Iran and the region, packed under the RAVOMA label and exported from Dubai.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#12305E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   PANAHANDEH — demo 03 "Plateau"
+   Persian design language: girih tessellation, pointed-arch
+   niches, lapis / turquoise / saffron on lime plaster.
+   Bilingual EN ⇄ فارسی with a real RTL flip.
+   ============================================================ */
+
+:root{
+  --plaster:#F7F0E1;
+  --plaster-2:#EFE5CF;
+  --plaster-3:#E4D6B9;
+  --lapis:#12305E;
+  --lapis-dk:#0B2044;
+  --lapis-lt:#1E4A8A;
+  --turq:#106963;        /* 5.8:1 on plaster, 4.6:1 on the darkest plaster tone */
+  --turq-lt:#3FB3AB;
+  --saffron:#A9660D;     /* display + ornament only: 4.0:1, clears 3:1 for large text */
+  --saffron-dk:#87510A;  /* 4.5:1 everywhere, for saffron at body sizes */
+  --saffron-lt:#E0A648;
+  --rose:#8E3535;
+  --ink:#221A0E;
+  --body:#4E4436;        /* 7.6:1 on plaster */
+  --muted:#645848;       /* 5.5:1 on plaster */
+  --hair:rgba(34,26,14,.16);
+  --hair-2:rgba(34,26,14,.08);
+  --gutter:20px;
+  --ease:cubic-bezier(.2,.9,.25,1);
+}
+@media(min-width:768px){ :root{ --gutter:34px } }
+@media(min-width:1200px){ :root{ --gutter:56px } }
+
+*,*::before,*::after{ box-sizing:border-box }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth }
+@media(prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
+body{
+  margin:0; background:var(--plaster); color:var(--ink);
+  font-family:Jost,system-ui,sans-serif; font-size:16.5px; line-height:1.68; font-weight:400;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{ display:block; max-width:100% }
+a{ color:inherit; text-decoration:none }
+button,input,textarea,select{ font:inherit; color:inherit }
+::selection{ background:var(--lapis); color:var(--plaster) }
+:focus-visible{ outline:2px solid var(--saffron); outline-offset:3px }
+
+.wrap{ width:100%; max-width:1300px; margin-inline:auto; padding-inline:var(--gutter) }
+
+/* ---------- Persian typography ---------- */
+html[lang="fa"] body{ font-family:Vazirmatn,Jost,system-ui,sans-serif; font-size:16px; line-height:1.95 }
+html[lang="fa"] .disp{ font-family:Vazirmatn,serif; font-weight:700; line-height:1.6; letter-spacing:0 }
+html[lang="fa"] .kicker,html[lang="fa"] .lbl,html[lang="fa"] .tag{ letter-spacing:0; font-family:Vazirmatn,sans-serif }
+.nasta{ font-family:Gulzar,'Vazirmatn',serif; line-height:2.5; font-weight:400 }
+
+/* ---------- display type ---------- */
+.disp{ font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; line-height:1.06; letter-spacing:-.008em; margin:0 }
+.d1{ font-size:clamp(3.1rem,7.6vw,6.2rem) }
+.d2{ font-size:clamp(2.3rem,4.6vw,3.9rem) }
+.d3{ font-size:clamp(1.45rem,2.2vw,1.85rem); line-height:1.2 }
+.acc{ color:var(--saffron); font-style:italic; font-weight:500 }
+.lede{ font-size:clamp(16.5px,1.3vw,18.5px); line-height:1.8; color:var(--body); font-weight:300 }
+html[lang="fa"] .lede{ font-weight:400 }
+
+.kicker{
+  display:inline-flex; align-items:center; gap:11px; margin:0;
+  font-size:11.5px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--turq);
+}
+.kicker::before,.kicker::after{ content:''; width:20px; height:1px; background:currentColor; opacity:.55 }
+.kicker.on-lapis{ color:var(--turq-lt) }
+
+/* ---------- ornament rails ---------- */
+.rail{ height:12px; background:var(--lapis); position:relative; overflow:hidden }
+.rail svg{ position:absolute; inset:0; width:100%; height:100% }
+.hair{ height:1px; background:var(--hair) }
+.diamonds{ display:flex; justify-content:center; gap:9px; align-items:center; padding:2px 0 }
+.diamonds i{ width:5px; height:5px; background:var(--saffron); transform:rotate(45deg); opacity:.7 }
+.diamonds i:nth-child(2){ width:8px; height:8px; background:var(--turq); opacity:.85 }
+
+/* ---------- girih backdrop ---------- */
+.girih{ position:absolute; inset:0; pointer-events:none; z-index:0 }
+.girih svg{ width:100%; height:100% }
+/* keep the tessellation off the reading column: it should frame the copy, not sit under it */
+.girih.fade svg{
+  mask-image:radial-gradient(58% 48% at 50% 40%, transparent 0%, transparent 34%, #000 78%);
+  -webkit-mask-image:radial-gradient(58% 48% at 50% 40%, transparent 0%, transparent 34%, #000 78%);
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:11px; padding:15px 28px; cursor:pointer;
+  font-family:Jost,sans-serif; font-size:12.5px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+  background:var(--lapis); color:var(--plaster); border:1px solid var(--lapis);
+  position:relative; overflow:hidden; transition:color .35s var(--ease);
+}
+html[lang="fa"] .btn{ font-family:Vazirmatn,sans-serif; letter-spacing:0; font-size:14px; text-transform:none }
+.btn > span{ position:relative; z-index:1; display:inline-flex; align-items:center; gap:11px }
+.btn::after{ content:''; position:absolute; inset:0; background:var(--saffron); transform:scaleY(0); transform-origin:bottom; transition:transform .42s var(--ease) }
+.btn:hover::after{ transform:scaleY(1) }
+.btn svg{ width:15px; height:15px }
+html[dir="rtl"] .btn svg{ transform:scaleX(-1) }
+.btn-out{ background:transparent; color:var(--lapis); border-color:var(--lapis) }
+.btn-out::after{ background:var(--lapis) }
+.btn-out:hover{ color:var(--plaster) }
+.btn-cream{ background:var(--plaster); color:var(--lapis); border-color:var(--plaster) }
+.btn-cream::after{ background:var(--saffron-lt) }
+
+/* ---------- reveal ---------- */
+.rev{ opacity:0; transform:translateY(18px); transition:opacity .75s var(--ease),transform .75s var(--ease); transition-delay:var(--d,0s) }
+.rev.in{ opacity:1; transform:none }
+@media(prefers-reduced-motion:reduce){ .rev{ opacity:1; transform:none; transition:none } }
+
+/* ==================== HEADER ==================== */
+.top{ background:var(--lapis-dk); color:rgba(247,240,225,.8) }
+.top-in{ display:flex; flex-wrap:wrap; gap:6px 22px; justify-content:space-between; padding:8px 0; font-size:11.5px; letter-spacing:.13em; text-transform:uppercase }
+html[lang="fa"] .top-in{ letter-spacing:0; text-transform:none; font-size:12.5px }
+
+.hdr{ position:sticky; top:0; z-index:60; background:rgba(247,240,225,.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid transparent; transition:border-color .3s,box-shadow .3s }
+.hdr.stuck{ border-bottom-color:var(--hair); box-shadow:0 2px 20px rgba(34,26,14,.07) }
+.hdr-in{ display:flex; align-items:center; justify-content:space-between; gap:18px; height:78px; transition:height .3s var(--ease) }
+.hdr.stuck .hdr-in{ height:66px }
+.lock{ display:flex; align-items:center; gap:12px; flex:none }
+.lock svg{ width:34px; height:34px; color:var(--saffron); flex:none }
+.lock b{ display:block; font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; letter-spacing:.13em; line-height:1 }
+.lock small{ display:block; font-size:8.5px; letter-spacing:.26em; color:var(--muted); margin-top:5px; line-height:1 }
+html[lang="fa"] .lock small{ letter-spacing:0; font-size:10px }
+@media(max-width:430px){ .lock small{ display:none } .lock b{ font-size:19px } }
+/* below 400px the lockup + language toggle + burger no longer share one line */
+@media(max-width:400px){
+  .lock b{ font-size:17px; letter-spacing:.1em }
+  .lock svg{ width:28px; height:28px }
+  .lock{ gap:9px }
+  .hdr-end{ gap:8px }
+  .lang button{ padding:7px 8px; font-size:10.5px }
+}
+@media(max-width:345px){ .lock b{ display:none } }
+.nav{ display:none; gap:30px; font-size:14px; font-weight:400 }
+.nav a{ position:relative; padding:5px 0; color:var(--body) }
+.nav a::after{ content:''; position:absolute; inset-inline:0; bottom:0; height:1px; background:var(--saffron); transform:scaleX(0); transition:transform .38s var(--ease) }
+.nav a:hover{ color:var(--ink) } .nav a:hover::after{ transform:scaleX(1) }
+.hdr-end{ display:flex; align-items:center; gap:14px }
+.lang{ display:inline-flex; border:1px solid var(--hair); flex:none }
+.lang button{ background:none; border:0; padding:8px 12px; cursor:pointer; font-size:11.5px; letter-spacing:.1em; color:var(--muted); transition:.25s }
+.lang button[aria-pressed="true"]{ background:var(--lapis); color:var(--plaster) }
+.lang button:last-child{ font-family:Vazirmatn,sans-serif; letter-spacing:0 }
+.hdr-cta{ display:none }
+@media(min-width:1080px){ .nav{ display:flex } .hdr-cta{ display:inline-flex } }
+.burger{ display:grid; gap:6px; background:none; border:0; padding:10px; margin-inline-end:-10px; cursor:pointer }
+.burger i{ display:block; width:22px; height:1.5px; background:var(--ink); transition:transform .35s var(--ease) }
+@media(min-width:1080px){ .burger{ display:none } }
+.mnav{ position:fixed; inset:0; z-index:59; background:var(--plaster); display:flex; flex-direction:column; justify-content:center;
+       padding-inline:var(--gutter); clip-path:circle(0% at 92% 6%); transition:clip-path .6s var(--ease) }
+.mnav[data-open="true"]{ clip-path:circle(150% at 92% 6%) }
+.mnav a{ font-family:'Cormorant Garamond',serif; font-size:clamp(2.1rem,9vw,3rem); font-weight:600; padding:12px 0; border-bottom:1px solid var(--hair-2) }
+html[lang="fa"] .mnav a{ font-family:Vazirmatn,sans-serif; font-weight:600; font-size:clamp(1.7rem,7vw,2.2rem) }
+.mnav .mm{ margin-top:34px; font-size:13px; letter-spacing:.1em; color:var(--muted); line-height:2.1 }
+
+/* ==================== ARCH ==================== */
+.arch{ position:relative; isolation:isolate }
+.arch-in{ position:relative; overflow:hidden; background:var(--plaster-2); clip-path:url(#archClip) }
+.arch-in img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 1.2s var(--ease) }
+.arch-line{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:2 }
+.arch-line path{ fill:none; stroke:var(--saffron); stroke-width:1.4; vector-effect:non-scaling-stroke; opacity:.85 }
+
+/* ==================== HERO ==================== */
+.hero{ position:relative; overflow:hidden; padding:clamp(48px,6vw,84px) 0 clamp(56px,7vw,96px) }
+.hero .girih{ opacity:.5 }
+.hero-in{ position:relative; z-index:1; text-align:center }
+.hero .d1{ margin-top:24px }
+.hero .lede{ max-width:56ch; margin-inline:auto; margin-top:26px }
+.hero-fa{ margin-top:16px; font-size:clamp(1.5rem,3.2vw,2.3rem); color:var(--lapis) }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:34px }
+.hero-arch{ width:min(340px,72vw); margin:44px auto 0 }
+.hero-arch .arch-in{ aspect-ratio:3/4.4 }
+
+/* ==================== NICHE STATS ==================== */
+.niches{ display:grid; gap:2px; background:var(--hair-2); border-block:1px solid var(--hair) }
+@media(min-width:700px){ .niches{ grid-template-columns:repeat(4,1fr) } }
+.niche{ background:var(--plaster); padding:34px 24px 30px; text-align:center; position:relative; transition:background .35s var(--ease) }
+.niche:hover{ background:var(--plaster-2) }
+.niche .nv{ font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,4vw,3.2rem); font-weight:600; line-height:1; color:var(--lapis) }
+.niche .nl{ margin-top:11px; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted) }
+html[lang="fa"] .niche .nl{ letter-spacing:0; text-transform:none; font-size:13px }
+
+/* ==================== SECTIONS ==================== */
+.sec{ padding:clamp(72px,8.5vw,118px) 0; position:relative }
+.sec-head{ text-align:center; max-width:64ch; margin-inline:auto; margin-bottom:clamp(42px,4.5vw,64px) }
+.sec-head .d2{ margin-top:20px }
+.sec-head .lede{ margin-top:22px }
+
+/* ==================== PRODUCTS ==================== */
+.pgrid{ display:grid; gap:26px 22px; grid-template-columns:repeat(2,1fr) }
+@media(min-width:820px){ .pgrid{ grid-template-columns:repeat(3,1fr) } }
+@media(min-width:1140px){ .pgrid{ grid-template-columns:repeat(4,1fr) } }
+.pcard{ text-align:center }
+.pcard .arch-in{ aspect-ratio:3/4 }
+.pcard:hover .arch-in img{ transform:scale(1.07) }
+.pname{ font-family:'Cormorant Garamond',serif; font-size:1.42rem; font-weight:600; margin:18px 0 0; line-height:1.2 }
+.pfa{ font-family:Vazirmatn,serif; font-size:1.05rem; color:var(--turq); margin:7px 0 0; font-weight:500 }
+html[lang="fa"] .pname{ font-family:Vazirmatn,sans-serif; font-weight:600; font-size:1.2rem }
+html[lang="fa"] .pfa{ font-family:'Cormorant Garamond',serif; letter-spacing:.04em }
+.porigin{ margin:10px 0 0; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted) }
+html[lang="fa"] .porigin{ letter-spacing:0; text-transform:none; font-size:13px }
+.pdiv{ width:34px; height:1px; background:var(--saffron); margin:14px auto 0; opacity:.55; transition:width .45s var(--ease) }
+.pcard:hover .pdiv{ width:66px; opacity:1 }
+
+.brandnote{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px 26px; margin-top:52px;
+  padding:26px 30px; border:1px solid var(--hair); background:var(--plaster-2); text-align:center }
+.brandnote img{ width:44px; height:44px }
+.brandnote b{ font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:.16em; font-weight:700 }
+.brandnote p{ margin:0; max-width:52ch; font-size:15px; color:var(--body) }
+
+/* ==================== STORY (lapis) ==================== */
+.story{ background:var(--lapis); color:var(--plaster); position:relative; overflow:hidden }
+.story .girih{ opacity:.42 }
+.story .lede{ color:rgba(247,240,225,.78) }
+.story .disp{ color:var(--plaster) }
+.story .acc{ color:var(--saffron-lt) }
+.story-grid{ position:relative; z-index:1; display:grid; gap:44px; align-items:center }
+@media(min-width:960px){ .story-grid{ grid-template-columns:.92fr 1.08fr; gap:64px } }
+.story .arch-in{ aspect-ratio:3/3.8 }
+.story .arch-line path{ stroke:var(--saffron-lt) }
+.story ul{ list-style:none; margin:34px 0 0; padding:0; display:grid; gap:0 }
+.story li{ padding:19px 0; border-top:1px solid rgba(247,240,225,.3); display:flex; gap:18px; align-items:baseline }
+.story li b{ font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--saffron-lt); flex:none; width:34px }
+html[lang="fa"] .story li b{ font-family:Vazirmatn,sans-serif; font-size:1rem }
+.story li span{ color:rgba(247,240,225,.82); font-size:15.5px; font-weight:300 }
+html[lang="fa"] .story li span{ font-weight:400 }
+
+/* ==================== ORIGINS RAIL ==================== */
+.orail{ display:flex; gap:2px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:10px }
+.orail::-webkit-scrollbar{ height:3px } .orail::-webkit-scrollbar-thumb{ background:var(--plaster-3) }
+.ocity{ flex:0 0 210px; scroll-snap-align:start; background:var(--plaster-2); padding:26px 22px 28px; border-top:2px solid transparent; transition:.35s var(--ease) }
+.ocity:hover{ background:var(--plaster-3); border-top-color:var(--turq) }
+@media(min-width:760px){
+  .orail{ display:grid; grid-template-columns:repeat(3,1fr); overflow:visible; padding-bottom:0 }
+  .ocity{ flex:none }
+}
+@media(min-width:1140px){ .orail{ grid-template-columns:repeat(6,1fr) } }
+.ocity .oc{ font-family:'Cormorant Garamond',serif; font-size:1.32rem; font-weight:600 }
+html[lang="fa"] .ocity .oc{ font-family:Vazirmatn,sans-serif; font-size:1.1rem; font-weight:600 }
+.ocity .of{ font-family:Vazirmatn,serif; font-size:.95rem; color:var(--turq); margin-top:5px }
+html[lang="fa"] .ocity .of{ font-family:'Cormorant Garamond',serif; font-size:1.05rem }
+.ocity .op{ margin:12px 0 0; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted) }
+html[lang="fa"] .ocity .op{ letter-spacing:0; text-transform:none; font-size:13.5px }
+
+/* ==================== ASSURANCE ==================== */
+.aq{ display:grid; gap:2px; background:var(--hair-2); border:1px solid var(--hair) }
+@media(min-width:760px){ .aq{ grid-template-columns:repeat(2,1fr) } }
+@media(min-width:1140px){ .aq{ grid-template-columns:repeat(4,1fr) } }
+.aq article{ background:var(--plaster); padding:34px 28px 38px; transition:background .35s var(--ease) }
+.aq article:hover{ background:var(--plaster-2) }
+.aq .num{ font-family:'Cormorant Garamond',serif; font-size:2.1rem; color:var(--saffron); line-height:1 }
+.aq h3{ margin:16px 0 11px }
+.aq p{ margin:0; font-size:15px; color:var(--body); line-height:1.75; font-weight:300 }
+html[lang="fa"] .aq p{ font-weight:400 }
+
+/* ==================== BAND ==================== */
+.band{ position:relative; min-height:min(68vh,520px); display:flex; align-items:center; overflow:hidden; text-align:center }
+.band > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+.band::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,32,68,.86) 0%,rgba(11,32,68,.68) 45%,rgba(11,32,68,.84) 100%) }
+.band .wrap{ position:relative; z-index:1; padding-block:70px }
+.band .d2{ color:var(--plaster); max-width:20ch; margin-inline:auto; margin-top:22px }
+.band p{ margin:24px auto 0; max-width:52ch; color:rgba(247,240,225,.78); font-weight:300 }
+html[lang="fa"] .band p{ font-weight:400 }
+
+/* ==================== CONTACT ==================== */
+.cgrid{ display:grid; gap:48px }
+@media(min-width:980px){ .cgrid{ grid-template-columns:1fr 1fr; gap:66px } }
+.field{ margin-bottom:24px }
+.field label{ display:block; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px }
+html[lang="fa"] .field label{ letter-spacing:0; text-transform:none; font-size:13px }
+.field input,.field textarea,.field select{ width:100%; background:var(--plaster-2); border:1px solid var(--hair); padding:13px 15px; font-size:16px; transition:border-color .3s,background .3s }
+.field input:focus,.field textarea:focus,.field select:focus{ outline:none; border-color:var(--turq); background:var(--plaster) }
+.field textarea{ resize:vertical; min-height:112px }
+.field .err{ display:none; margin-top:7px; font-size:12.5px; color:var(--rose) }
+.field.bad input,.field.bad textarea{ border-color:var(--rose) }
+.field.bad .err{ display:block }
+.f2{ display:grid; gap:0 22px } @media(min-width:600px){ .f2{ grid-template-columns:1fr 1fr } }
+.sent{ display:none; margin-top:20px; padding:18px 20px; border:1px solid var(--turq); background:rgba(18,117,111,.08); color:var(--turq); font-size:15px }
+.sent.on{ display:block }
+.cinfo{ list-style:none; margin:32px 0 0; padding:0 }
+.cinfo li{ padding:18px 0; border-top:1px solid var(--hair) }
+.cinfo .k{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted) }
+html[lang="fa"] .cinfo .k{ letter-spacing:0; text-transform:none; font-size:13px }
+.cinfo .v{ font-family:'Cormorant Garamond',serif; font-size:1.4rem; margin-top:6px; display:inline-block }
+html[lang="fa"] .cinfo .v{ font-family:Vazirmatn,sans-serif; font-size:1.15rem }
+.cinfo a.v:hover{ color:var(--saffron-dk) }
+.contact-arch{ margin-top:34px; max-width:300px }
+.contact-arch .arch-in{ aspect-ratio:3/3.6 }
+
+/* ==================== FOOTER ==================== */
+.ftr{ background:var(--lapis-dk); color:rgba(247,240,225,.72); position:relative; overflow:hidden; padding:62px 0 26px }
+.ftr .girih{ opacity:.3 }
+.ftr .wrap{ position:relative; z-index:1 }
+.fgrid{ display:grid; gap:38px }
+@media(min-width:820px){ .fgrid{ grid-template-columns:1.5fr 1fr 1fr 1fr; gap:42px } }
+.ftr h4{ margin:0 0 15px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--saffron-lt); font-weight:500 }
+html[lang="fa"] .ftr h4{ letter-spacing:0; text-transform:none; font-size:13px }
+.ftr ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; font-size:14.5px }
+.ftr ul a:hover{ color:var(--saffron-lt) }
+.ftr .fmark{ font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,4vw,2.6rem); font-weight:700; letter-spacing:.12em; color:var(--plaster); line-height:1 }
+.ftr .fsub{ margin-top:10px; font-size:10.5px; letter-spacing:.24em; color:rgba(247,240,225,.55) }
+html[lang="fa"] .ftr .fsub{ letter-spacing:0; font-size:12.5px }
+.ftr .fblurb{ margin:20px 0 0; max-width:40ch; font-size:14.5px; line-height:1.8; font-weight:300 }
+html[lang="fa"] .ftr .fblurb{ font-weight:400 }
+.fbase{ display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:space-between; margin-top:48px; padding-top:20px;
+  border-top:1px solid rgba(247,240,225,.18); font-size:11.5px; letter-spacing:.11em; text-transform:uppercase }
+html[lang="fa"] .fbase{ letter-spacing:0; text-transform:none; font-size:13px }
+
+/* ==================== DEMO SWITCHER ==================== */
+.vsw{ position:fixed; inset-inline-start:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:var(--lapis-dk); padding:1px }
+.vsw a{ font-size:10.5px; letter-spacing:.12em; padding:7px 10px; color:rgba(247,240,225,.6) }
+.vsw a[aria-current]{ background:var(--plaster); color:var(--lapis) }
+.vsw a:hover{ color:var(--plaster) }
+</style>
+</head>
+
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- girih: 8-point khatam stars at tile corners and centre -->
+  <pattern id="girih" width="120" height="120" patternUnits="userSpaceOnUse">
+    <g fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M0.00 -26.00L4.12 -9.95L18.38 -18.38L9.95 -4.12L26.00 0.00L9.95 4.12L18.38 18.38L4.12 9.95L0.00 26.00L-4.12 9.95L-18.38 18.38L-9.95 4.12L-26.00 0.00L-9.95 -4.12L-18.38 -18.38L-4.12 -9.95Z M120.00 -26.00L124.12 -9.95L138.38 -18.38L129.95 -4.12L146.00 0.00L129.95 4.12L138.38 18.38L124.12 9.95L120.00 26.00L115.88 9.95L101.62 18.38L110.05 4.12L94.00 0.00L110.05 -4.12L101.62 -18.38L115.88 -9.95Z M0.00 94.00L4.12 110.05L18.38 101.62L9.95 115.88L26.00 120.00L9.95 124.12L18.38 138.38L4.12 129.95L0.00 146.00L-4.12 129.95L-18.38 138.38L-9.95 124.12L-26.00 120.00L-9.95 115.88L-18.38 101.62L-4.12 110.05Z M120.00 94.00L124.12 110.05L138.38 101.62L129.95 115.88L146.00 120.00L129.95 124.12L138.38 138.38L124.12 129.95L120.00 146.00L115.88 129.95L101.62 138.38L110.05 124.12L94.00 120.00L110.05 115.88L101.62 101.62L115.88 110.05Z M60.00 34.00L64.12 50.05L78.38 41.62L69.95 55.88L86.00 60.00L69.95 64.12L78.38 78.38L64.12 69.95L60.00 86.00L55.88 69.95L41.62 78.38L50.05 64.12L34.00 60.00L50.05 55.88L41.62 41.62L55.88 50.05Z"/>
+      <path d="M30 0 L60 30 L90 0 M30 120 L60 90 L90 120 M0 30 L30 60 L0 90 M120 30 L90 60 L120 90" opacity=".55"/>
+    </g>
+  </pattern>
+
+  <!-- pointed (four-centred) arch, normalised so it scales with any box -->
+  <clipPath id="archClip" clipPathUnits="objectBoundingBox">
+    <path d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"/>
+  </clipPath>
+
+  <symbol id="i-seal" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="58" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M60 6 L114 60 L60 114 L6 60 Z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"/>
+    <text x="60" y="63" text-anchor="middle" dominant-baseline="central" fill="currentColor"
+          font-family="'Cormorant Garamond',Georgia,serif" font-size="58" font-weight="700">P</text>
+  </symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 12h15"/><path d="m13 5.5 6.5 6.5-6.5 6.5"/>
+  </symbol>
+</defs></svg>
+
+<!-- DEMO SWITCHER — remove before client hand-off -->
+<nav class="vsw" aria-label="Design versions">
+  <a href="../index.html">01</a><a href="../v2/">02</a><a href="./" aria-current="page">03</a>
+</nav>
+
+<!-- ==================== TOP BAR ==================== -->
+<div class="top">
+  <div class="wrap top-in">
+    <span data-t="top.a">Dubai · United Arab Emirates</span>
+    <span data-t="top.b">Saffron · Pulses · Beans · Spices</span>
+    <span data-t="top.c">Consolidated at Jebel Ali</span>
+  </div>
+</div>
+<div class="rail"><svg aria-hidden="true" style="color:rgba(63,179,171,.55)"><rect width="100%" height="100%" fill="url(#girih)"/></svg></div>
+
+<!-- ==================== HEADER ==================== -->
+<header class="hdr" id="hdr">
+  <div class="wrap hdr-in">
+    <a href="#top" class="lock" aria-label="Panahandeh — home">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#i-seal"/></svg>
+      <span><b>PANAHANDEH</b><small data-t="lock.sub">FOODSTUFF TRADING L.L.C</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#products"  data-t="nav.products">Products</a>
+      <a href="#story"     data-t="nav.story">Our Story</a>
+      <a href="#origins"   data-t="nav.origins">Origins</a>
+      <a href="#assurance" data-t="nav.assurance">Quality</a>
+    </nav>
+    <div class="hdr-end">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="fa" aria-pressed="false">فارسی</button>
+      </div>
+      <a href="#contact" class="btn hdr-cta"><span data-t="cta.quote">Request a quote</span></a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="mnav" id="mnav" data-open="false">
+  <nav aria-label="Mobile">
+    <a href="#products"  data-t="nav.products">Products</a>
+    <a href="#story"     data-t="nav.story">Our Story</a>
+    <a href="#origins"   data-t="nav.origins">Origins</a>
+    <a href="#assurance" data-t="nav.assurance">Quality</a>
+    <a href="#contact"   data-t="nav.contact">Contact</a>
+  </nav>
+  <div class="mm"><div>+971 50 123 4567</div><div>info@panahandeh.ae</div><div data-t="top.a">Dubai · United Arab Emirates</div></div>
+</div>
+
+<main id="top">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="girih fade"><svg aria-hidden="true" style="color:rgba(18,117,111,.2)"><rect width="100%" height="100%" fill="url(#girih)"/></svg></div>
+  <div class="wrap hero-in">
+    <p class="kicker rev" data-t="hero.kicker">Dubai · Since the first harvest</p>
+    <h1 class="disp d1 rev" style="--d:.06s" data-t="hero.h1">From the plateau<br>to the <span class="acc">port.</span></h1>
+    <p class="nasta hero-fa rev" style="--d:.12s" lang="fa" dir="rtl" data-t="hero.fa">از فلات ایران تا بندر دبی</p>
+    <p class="lede rev" style="--d:.18s" data-t="hero.lede">
+      Panahandeh buys saffron, pulses, beans and spices where they grow best — grades them,
+      packs them under our own RAVOMA label, and ships them out of Dubai.
+    </p>
+    <div class="hero-cta rev" style="--d:.24s">
+      <a href="#products" class="btn"><span data-t="cta.products">See the products <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
+      <a href="#contact" class="btn btn-out"><span data-t="cta.quote">Request a quote</span></a>
+    </div>
+
+    <figure class="arch hero-arch rev" style="--d:.3s;margin-inline:auto">
+      <div class="arch-in">
+        <img src="../assets/saffron.webp" width="900" height="1200" fetchpriority="high" decoding="async"
+             alt="Saffron threads">
+      </div>
+      <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100"/>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ==================== NICHE STATS ==================== -->
+<div class="niches">
+  <div class="niche"><div class="nv" data-count="12" data-suffix="+">0</div><div class="nl" data-t="stat.origins">Sourcing origins</div></div>
+  <div class="niche"><div class="nv" data-count="40" data-suffix="+">0</div><div class="nl" data-t="stat.markets">Export markets</div></div>
+  <div class="niche"><div class="nv" data-count="8">0</div><div class="nl" data-t="stat.lines">Core commodities</div></div>
+  <div class="niche"><div class="nv" data-count="100" data-suffix="%">0</div><div class="nl" data-t="stat.checked">Inspected pre-shipment</div></div>
+</div>
+
+<!-- ==================== PRODUCTS ==================== -->
+<section class="sec" id="products">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rev" data-t="sec.products.k">01 — Products</p>
+      <h2 class="disp d2 rev" style="--d:.06s" data-t="sec.products.h">Four pulses.<br>Four <span class="acc">spices.</span></h2>
+      <p class="lede rev" style="--d:.12s" data-t="sec.products.p">
+        Dry beans and pulses from the plateau and beyond, and the spices that go with them —
+        each line graded against the destination market before it leaves.
+      </p>
+    </div>
+
+    <div class="pgrid" id="pgrid"></div>
+
+    <div class="brandnote rev">
+      <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
+      <b>RAVOMA</b>
+      <p data-t="brand.note">Our retail label — 1&nbsp;kg pouches with premium printing and a freshness seal.
+         Private label and bulk formats come off the same lots.</p>
+    </div>
+  </div>
+</section>
+
+<div class="diamonds"><i></i><i></i><i></i></div>
+
+<!-- ==================== STORY ==================== -->
+<section class="sec story" id="story">
+  <div class="girih"><svg aria-hidden="true" style="color:rgba(63,179,171,.3)"><rect width="100%" height="100%" fill="url(#girih)"/></svg></div>
+  <div class="wrap story-grid">
+    <figure class="arch rev" style="margin:0">
+      <div class="arch-in">
+        <img src="../assets/about.webp" width="1000" height="1250" loading="lazy" decoding="async"
+             alt="Jute sacks of graded pulses stacked in dry storage">
+      </div>
+      <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100"/>
+      </svg>
+    </figure>
+
+    <div>
+      <p class="kicker on-lapis rev" data-t="sec.story.k">02 — Our Story</p>
+      <h2 class="disp d2 rev" style="--d:.06s;margin-top:20px" data-t="sec.story.h">A house built on<br><span class="acc">provenance.</span></h2>
+      <p class="lede rev" style="--d:.12s;margin-top:24px" data-t="sec.story.p1">
+        Saffron from Khorasan, chickpeas from Anatolia, lentils from the Kazakh steppe. We buy in
+        season and at source, because that is the only point where quality is still a choice.
+      </p>
+      <p class="lede rev" style="--d:.16s;margin-top:18px" data-t="sec.story.p2">
+        Panahandeh Foodstuff Trading L.L.C operates from Dubai, an hour's road from Jebel Ali —
+        so a lot bought at origin can be graded, packed and stuffed without changing hands twice.
+      </p>
+      <ul class="rev" style="--d:.2s" id="storyList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ORIGINS ==================== -->
+<section class="sec" id="origins">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rev" data-t="sec.origins.k">03 — Origins</p>
+      <h2 class="disp d2 rev" style="--d:.06s" data-t="sec.origins.h">Where each<br>line <span class="acc">comes from.</span></h2>
+      <p class="lede rev" style="--d:.12s" data-t="sec.origins.p">
+        Twelve growing regions and the same relationships season after season.
+      </p>
+    </div>
+    <div class="orail rev" id="orail"></div>
+  </div>
+</section>
+
+<!-- ==================== BAND ==================== -->
+<section class="band">
+  <img src="../assets/band.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" width="2400" height="1000">
+  <div class="wrap">
+    <p class="kicker on-lapis" style="justify-content:center" data-t="band.k">Sourcing standard</p>
+    <h2 class="disp d2" data-t="band.h">Bought where the crop is <span class="acc">best.</span></h2>
+    <p data-t="band.p">Origin is chosen on the season, not the spreadsheet. Every lot is graded before it is
+      packed and inspected against destination-market requirements before it ships.</p>
+  </div>
+</section>
+
+<!-- ==================== ASSURANCE ==================== -->
+<section class="sec" id="assurance">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rev" data-t="sec.assurance.k">04 — Quality</p>
+      <h2 class="disp d2 rev" style="--d:.06s" data-t="sec.assurance.h">Four things we<br>will not <span class="acc">move on.</span></h2>
+    </div>
+    <div class="aq rev" id="aq"></div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="sec" id="contact" style="background:var(--plaster-2);border-block:1px solid var(--hair)">
+  <div class="wrap cgrid">
+    <div>
+      <p class="kicker rev" data-t="sec.contact.k">05 — Contact</p>
+      <h2 class="disp d2 rev" style="--d:.06s;margin-top:20px" data-t="sec.contact.h">Tell us what you<br>need <span class="acc">landed.</span></h2>
+      <p class="lede rev" style="--d:.12s;margin-top:22px" data-t="sec.contact.p">
+        Commodity, grade, format, destination port and target volume. We come back with an
+        indication and a lead time.
+      </p>
+
+      <ul class="cinfo">
+        <li><span class="k" data-t="c.tel">Telephone</span><br><a class="v" href="tel:+971501234567" dir="ltr">+971 50 123 4567</a></li>
+        <li><span class="k" data-t="c.mail">Email</span><br><a class="v" href="mailto:info@panahandeh.ae" dir="ltr">info@panahandeh.ae</a></li>
+        <li><span class="k" data-t="c.office">Office</span><br><span class="v" data-t="c.officev">Dubai, United Arab Emirates</span></li>
+      </ul>
+
+      <figure class="arch contact-arch" style="margin-inline:0">
+        <div class="arch-in"><img src="../assets/skyline.webp" width="2400" height="1030" loading="lazy" decoding="async" alt="Dubai skyline"></div>
+        <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100"/>
+        </svg>
+      </figure>
+    </div>
+
+    <div>
+      <form id="form" novalidate>
+        <div class="f2">
+          <div class="field"><label for="f-name" data-t="f.name">Full name</label><input id="f-name" autocomplete="name"><span class="err" data-t="f.e.name">Please enter your name.</span></div>
+          <div class="field"><label for="f-co" data-t="f.co">Company</label><input id="f-co" autocomplete="organization"><span class="err" data-t="f.e.co">Please enter your company.</span></div>
+        </div>
+        <div class="f2">
+          <div class="field"><label for="f-mail" data-t="f.mail">Email</label><input id="f-mail" type="email" autocomplete="email" dir="ltr"><span class="err" data-t="f.e.mail">Please enter a valid email.</span></div>
+          <div class="field"><label for="f-port" data-t="f.port">Destination port</label><input id="f-port"><span class="err" data-t="f.e.port">Please enter a destination.</span></div>
+        </div>
+        <div class="field"><label for="f-line" data-t="f.line">Commodity</label><select id="f-line"></select></div>
+        <div class="field"><label for="f-msg" data-t="f.msg">Volume &amp; specification</label><textarea id="f-msg" rows="4"></textarea><span class="err" data-t="f.e.msg">Please add a few details.</span></div>
+        <button class="btn" type="submit" style="width:100%;justify-content:center"><span data-t="f.send">Send enquiry <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></button>
+        <p class="sent" id="sent" role="status" data-t="f.sent">Thank you — your enquiry has been logged. A trader will respond within one business day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="ftr">
+  <div class="girih"><svg aria-hidden="true" style="color:rgba(63,179,171,.28)"><rect width="100%" height="100%" fill="url(#girih)"/></svg></div>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <p class="fmark" style="margin:0">PANAHANDEH</p>
+        <p class="fsub" style="margin:10px 0 0" data-t="lock.sub">FOODSTUFF TRADING L.L.C</p>
+        <p class="fblurb" data-t="ftr.blurb">Saffron, pulses, beans and spices — bought at origin, packed under the
+          RAVOMA label and shipped from Dubai.</p>
+      </div>
+      <div>
+        <h4 data-t="ftr.company">Company</h4>
+        <ul>
+          <li><a href="#story" data-t="nav.story">Our Story</a></li>
+          <li><a href="#origins" data-t="nav.origins">Origins</a></li>
+          <li><a href="#assurance" data-t="nav.assurance">Quality</a></li>
+          <li><a href="#contact" data-t="nav.contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-t="ftr.products">Products</h4>
+        <ul id="ftrProducts"></ul>
+      </div>
+      <div>
+        <h4 data-t="ftr.reach">Get in touch</h4>
+        <ul>
+          <li><a href="tel:+971501234567" dir="ltr">+971 50 123 4567</a></li>
+          <li><a href="mailto:info@panahandeh.ae" dir="ltr">info@panahandeh.ae</a></li>
+          <li dir="ltr">www.panahandeh.ae</li>
+          <li data-t="c.officev">Dubai, United Arab Emirates</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbase">
+      <span>© <span id="yr"></span> <span data-t="ftr.rights">Panahandeh Foodstuff Trading L.L.C — All rights reserved</span></span>
+      <span data-t="top.a">Dubai · United Arab Emirates</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
+const archSVG = () =>
+  `<svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="${ARCH}"/></svg>`;
+
+/* ---------------------------------------------------------- data */
+const PRODUCTS = [
+  { img:'chickpeas',   en:'Chickpeas',         fa:'نخود',        oEn:'India · Turkey',        oFa:'هند · ترکیه' },
+  { img:'lentils',     en:'Green Lentils',     fa:'عدس سبز',     oEn:'Turkey · Canada',       oFa:'ترکیه · کانادا' },
+  { img:'splitpeas',   en:'Yellow Split Peas', fa:'لپه',         oEn:'Canada · Russia',       oFa:'کانادا · روسیه' },
+  { img:'kidneybeans', en:'Red Kidney Beans',  fa:'لوبیا قرمز',  oEn:'Ethiopia · Argentina',  oFa:'اتیوپی · آرژانتین' },
+  { img:'saffron',     en:'Saffron',           fa:'زعفران',      oEn:'Iran · Afghanistan',    oFa:'ایران · افغانستان' },
+  { img:'turmeric',    en:'Turmeric',          fa:'زردچوبه',     oEn:'India · Iran',          oFa:'هند · ایران' },
+  { img:'blackpepper', en:'Black Pepper',      fa:'فلفل سیاه',   oEn:'Vietnam · India',       oFa:'ویتنام · هند' },
+  { img:'coriander',   en:'Coriander Seeds',   fa:'تخم گشنیز',   oEn:'India · Iran',          oFa:'هند · ایران' }
+];
+
+const ORIGINS = [
+  { en:'Mashhad',   fa:'مشهد',      pEn:'Saffron',              pFa:'زعفران' },
+  { en:'Qazvin',    fa:'قزوین',     pEn:'Pistachio · Pulses',   pFa:'پسته · حبوبات' },
+  { en:'Kerman',    fa:'کرمان',     pEn:'Cumin · Pistachio',    pFa:'زیره · پسته' },
+  { en:'Herat',     fa:'هرات',      pEn:'Saffron',              pFa:'زعفران' },
+  { en:'Anatolia',  fa:'آناتولی',   pEn:'Chickpeas · Lentils',  pFa:'نخود · عدس' },
+  { en:'Punjab',    fa:'پنجاب',     pEn:'Rice · Turmeric',      pFa:'برنج · زردچوبه' },
+  { en:'Saskatchewan', fa:'ساسکاچوان', pEn:'Lentils · Split peas', pFa:'عدس · لپه' },
+  { en:'Kazakh steppe', fa:'دشت قزاق', pEn:'Lentils',           pFa:'عدس' },
+  { en:'Odesa',     fa:'اودسا',     pEn:'Split peas · Grains',  pFa:'لپه · غلات' },
+  { en:'Dak Lak',   fa:'داک‌لاک',   pEn:'Black pepper',         pFa:'فلفل سیاه' },
+  { en:'Oromia',    fa:'اورومیا',   pEn:'Kidney beans',         pFa:'لوبیا قرمز' },
+  { en:'Nile Delta', fa:'دلتای نیل', pEn:'Pulses · Grains',     pFa:'حبوبات · غلات' }
+];
+
+const STORY = [
+  { en:'Bought in season, at source',            fa:'خرید در فصل و از سرِ زمین' },
+  { en:'Graded before packing, not after',       fa:'درجه‌بندی پیش از بسته‌بندی، نه پس از آن' },
+  { en:'Stuffed and consolidated at Jebel Ali',  fa:'بارگیری و تجمیع در جبل‌علی' },
+  { en:'Documents issued to the destination',    fa:'صدور اسناد بر اساس الزامات مقصد' }
+];
+
+const AQ = {
+  en: [
+    ['Grading','Sieved, de-stoned and colour-sorted to the calibration named in the contract — moisture and foreign matter fixed before we buy, not argued on arrival.'],
+    ['Saffron','Sargol, category I under ISO 3632, with lab results per lot. Colouring strength stated, never estimated.'],
+    ['Packing','1 kg retail pouches under RAVOMA with a freshness seal, or 25 kg and 50 kg PP and jute for bulk.'],
+    ['Traceability','Every pouch carries a lot code that resolves to origin, harvest window, cleaning line and packing date.']
+  ],
+  fa: [
+    ['درجه‌بندی','الک، سنگ‌گیری و رنگ‌سورت مطابق کالیبر تعیین‌شده در قرارداد. رطوبت و ناخالصی پیش از خرید تثبیت می‌شود، نه هنگام تحویل.'],
+    ['زعفران','سرگل، درجه یک بر پایه ایزو ۳۶۳۲، همراه با نتیجه آزمایشگاه برای هر محموله. قدرت رنگی اعلام می‌شود، نه تخمین زده.'],
+    ['بسته‌بندی','پاکت‌های خرده‌فروشی یک کیلویی با نشان راوما و درزبند تازگی، یا کیسه‌های ۲۵ و ۵۰ کیلویی برای عمده.'],
+    ['ردیابی','روی هر بسته کد محموله درج می‌شود که به مبدأ، بازه برداشت، خط بوجاری و تاریخ بسته‌بندی می‌رسد.']
+  ]
+};
+
+/* ---------------------------------------------------------- i18n */
+const T = {
+  'top.a':            ['Dubai · United Arab Emirates','دبی · امارات متحده عربی'],
+  'top.b':            ['Saffron · Pulses · Beans · Spices','زعفران · حبوبات · لوبیا · ادویه'],
+  'top.c':            ['Consolidated at Jebel Ali','تجمیع بار در جبل‌علی'],
+  'lock.sub':         ['FOODSTUFF TRADING L.L.C','بازرگانی مواد غذایی'],
+  'nav.products':     ['Products','محصولات'],
+  'nav.story':        ['Our Story','درباره ما'],
+  'nav.origins':      ['Origins','مناطق تأمین'],
+  'nav.assurance':    ['Quality','کیفیت'],
+  'nav.contact':      ['Contact','تماس'],
+  'cta.quote':        ['Request a quote','درخواست قیمت'],
+  'cta.products':     ['See the products <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg>','مشاهده محصولات <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg>'],
+
+  'hero.kicker':      ['Dubai · Since the first harvest','دبی · از نخستین برداشت'],
+  'hero.h1':          ['From the plateau<br>to the <span class="acc">port.</span>','از فلات<br>تا <span class="acc">بندر.</span>'],
+  'hero.fa':          ['از فلات ایران تا بندر دبی','From the plateau to the port'],
+  'hero.lede':        ['Panahandeh buys saffron, pulses, beans and spices where they grow best — grades them, packs them under our own RAVOMA label, and ships them out of Dubai.',
+                       'پناهنده زعفران، حبوبات، لوبیا و ادویه را از بهترین مناطق کشت تهیه می‌کند؛ آن‌ها را درجه‌بندی می‌کند، با نشان راوما بسته‌بندی می‌کند و از دبی صادر می‌کند.'],
+
+  'stat.origins':     ['Sourcing origins','منطقه تأمین'],
+  'stat.markets':     ['Export markets','بازار صادراتی'],
+  'stat.lines':       ['Core commodities','قلم کالای اصلی'],
+  'stat.checked':     ['Inspected pre-shipment','بازرسی پیش از حمل'],
+
+  'sec.products.k':   ['01 — Products','۰۱ — محصولات'],
+  'sec.products.h':   ['Four pulses.<br>Four <span class="acc">spices.</span>','چهار نوع حبوبات.<br>چهار نوع <span class="acc">ادویه.</span>'],
+  'sec.products.p':   ['Dry beans and pulses from the plateau and beyond, and the spices that go with them — each line graded against the destination market before it leaves.',
+                       'حبوبات و لوبیای خشک از فلات ایران و فراتر از آن، و ادویه‌هایی که در کنارشان می‌آیند — هر قلم پیش از حمل مطابق الزامات بازار مقصد درجه‌بندی می‌شود.'],
+  'brand.note':       ['Our retail label — 1 kg pouches with premium printing and a freshness seal. Private label and bulk formats come off the same lots.',
+                       'نشان خرده‌فروشی ما — پاکت‌های یک کیلویی با چاپ ممتاز و درزبند تازگی. برند اختصاصی و بسته‌بندی عمده از همان محموله تأمین می‌شود.'],
+
+  'sec.story.k':      ['02 — Our Story','۰۲ — درباره ما'],
+  'sec.story.h':      ['A house built on<br><span class="acc">provenance.</span>','بازرگانی‌ای بر پایه<br><span class="acc">اصالت.</span>'],
+  'sec.story.p1':     ['Saffron from Khorasan, chickpeas from Anatolia, lentils from the Kazakh steppe. We buy in season and at source, because that is the only point where quality is still a choice.',
+                       'زعفران از خراسان، نخود از آناتولی، عدس از دشت‌های قزاقستان. ما در فصل و از سرِ زمین خرید می‌کنیم، چون تنها همان‌جاست که کیفیت هنوز یک انتخاب است.'],
+  'sec.story.p2':     ['Panahandeh Foodstuff Trading L.L.C operates from Dubai, an hour’s road from Jebel Ali — so a lot bought at origin can be graded, packed and stuffed without changing hands twice.',
+                       'شرکت بازرگانی مواد غذایی پناهنده در دبی و یک ساعت با جبل‌علی فاصله دارد؛ به این ترتیب محموله‌ای که در مبدأ خریداری می‌شود، بدون دست‌به‌دست شدن، درجه‌بندی، بسته‌بندی و بارگیری می‌شود.'],
+
+  'sec.origins.k':    ['03 — Origins','۰۳ — مناطق تأمین'],
+  'sec.origins.h':    ['Where each<br>line <span class="acc">comes from.</span>','هر قلم<br>از <span class="acc">کجا می‌آید.</span>'],
+  'sec.origins.p':    ['Twelve growing regions and the same relationships season after season.',
+                       'دوازده منطقه کشت و همان روابط، فصل پس از فصل.'],
+
+  'band.k':           ['Sourcing standard','معیار تأمین'],
+  'band.h':           ['Bought where the crop is <span class="acc">best.</span>','خرید از جایی که محصول <span class="acc">بهترین است.</span>'],
+  'band.p':           ['Origin is chosen on the season, not the spreadsheet. Every lot is graded before it is packed and inspected against destination-market requirements before it ships.',
+                       'مبدأ بر اساس فصل انتخاب می‌شود، نه بر اساس جدول قیمت. هر محموله پیش از بسته‌بندی درجه‌بندی و پیش از حمل مطابق الزامات بازار مقصد بازرسی می‌شود.'],
+
+  'sec.assurance.k':  ['04 — Quality','۰۴ — کیفیت'],
+  'sec.assurance.h':  ['Four things we<br>will not <span class="acc">move on.</span>','چهار چیز که بر سرِ آن<br><span class="acc">کوتاه نمی‌آییم.</span>'],
+
+  'sec.contact.k':    ['05 — Contact','۰۵ — تماس'],
+  'sec.contact.h':    ['Tell us what you<br>need <span class="acc">landed.</span>','بگویید چه چیزی را<br>می‌خواهید <span class="acc">تحویل بگیرید.</span>'],
+  'sec.contact.p':    ['Commodity, grade, format, destination port and target volume. We come back with an indication and a lead time.',
+                       'نوع کالا، درجه، بسته‌بندی، بندر مقصد و حجم مورد نظر را بنویسید. ما قیمت پیشنهادی و زمان تحویل را اعلام می‌کنیم.'],
+  'c.tel':            ['Telephone','تلفن'],
+  'c.mail':           ['Email','ایمیل'],
+  'c.office':         ['Office','دفتر'],
+  'c.officev':        ['Dubai, United Arab Emirates','دبی، امارات متحده عربی'],
+
+  'f.name':           ['Full name','نام و نام خانوادگی'],
+  'f.co':             ['Company','شرکت'],
+  'f.mail':           ['Email','ایمیل'],
+  'f.port':           ['Destination port','بندر مقصد'],
+  'f.line':           ['Commodity','کالا'],
+  'f.msg':            ['Volume &amp; specification','حجم و مشخصات'],
+  'f.send':           ['Send enquiry <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg>','ارسال درخواست <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg>'],
+  'f.sent':           ['Thank you — your enquiry has been logged. A trader will respond within one business day.',
+                       'سپاسگزاریم — درخواست شما ثبت شد. یکی از همکاران ما ظرف یک روز کاری پاسخ می‌دهد.'],
+  'f.e.name':         ['Please enter your name.','لطفاً نام خود را وارد کنید.'],
+  'f.e.co':           ['Please enter your company.','لطفاً نام شرکت را وارد کنید.'],
+  'f.e.mail':         ['Please enter a valid email.','لطفاً ایمیل معتبر وارد کنید.'],
+  'f.e.port':         ['Please enter a destination.','لطفاً بندر مقصد را وارد کنید.'],
+  'f.e.msg':          ['Please add a few details.','لطفاً کمی توضیح بیشتر بنویسید.'],
+
+  'ftr.company':      ['Company','شرکت'],
+  'ftr.products':     ['Products','محصولات'],
+  'ftr.reach':        ['Get in touch','ارتباط با ما'],
+  'ftr.blurb':        ['Saffron, pulses, beans and spices — bought at origin, packed under the RAVOMA label and shipped from Dubai.',
+                       'زعفران، حبوبات، لوبیا و ادویه — خرید از مبدأ، بسته‌بندی با نشان راوما و حمل از دبی.'],
+  'ftr.rights':       ['Panahandeh Foodstuff Trading L.L.C — All rights reserved','بازرگانی مواد غذایی پناهنده — تمامی حقوق محفوظ است']
+};
+
+let LANG = 'en';
+const idx = () => LANG === 'fa' ? 1 : 0;
+const digits = n => LANG === 'fa' ? String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]) : String(n);
+const ord = i => digits(String(i).padStart(2, '0'));
+
+/* ---------------------------------------------------------- renderers */
+function renderProducts(){
+  $('#pgrid').innerHTML = PRODUCTS.map((p,i) => `
+    <article class="pcard rev" style="--d:${(i % 4) * .06}s">
+      <div class="arch">
+        <div class="arch-in"><img src="../assets/${p.img}.webp" width="900" height="1200" loading="lazy" decoding="async" alt="${p.en}"></div>
+        ${archSVG()}
+      </div>
+      <h3 class="pname">${LANG === 'fa' ? p.fa : p.en}</h3>
+      <p class="pfa">${LANG === 'fa' ? p.en : p.fa}</p>
+      <p class="porigin">${LANG === 'fa' ? p.oFa : p.oEn}</p>
+      <div class="pdiv"></div>
+    </article>`).join('');
+  observe($$('#pgrid .rev'));
+}
+function renderOrigins(){
+  $('#orail').innerHTML = ORIGINS.map(o => `
+    <div class="ocity">
+      <div class="oc">${LANG === 'fa' ? o.fa : o.en}</div>
+      <div class="of">${LANG === 'fa' ? o.en : o.fa}</div>
+      <p class="op">${LANG === 'fa' ? o.pFa : o.pEn}</p>
+    </div>`).join('');
+}
+function renderStory(){
+  $('#storyList').innerHTML = STORY.map((s,i) =>
+    `<li><b>${ord(i+1)}</b><span>${LANG === 'fa' ? s.fa : s.en}</span></li>`).join('');
+}
+function renderAQ(){
+  $('#aq').innerHTML = AQ[LANG].map(([t,b],i) => `
+    <article><p class="num">${ord(i+1)}</p><h3 class="disp d3">${t}</h3><p>${b}</p></article>`).join('');
+}
+function renderFooterProducts(){
+  $('#ftrProducts').innerHTML = PRODUCTS.slice(0,4).map(p =>
+    `<li><a href="#products">${LANG === 'fa' ? p.fa : p.en}</a></li>`).join('');
+}
+function renderSelect(){
+  const sel = $('#f-line'), keep = sel.value;
+  sel.innerHTML = `<option value="">${LANG === 'fa' ? 'یک کالا را انتخاب کنید…' : 'Select a line…'}</option>` +
+    PRODUCTS.map(p => `<option>${LANG === 'fa' ? p.fa : p.en}</option>`).join('') +
+    `<option>${LANG === 'fa' ? 'چند قلم / سایر' : 'Multiple / other'}</option>`;
+  sel.value = keep;
+}
+
+/* ---------------------------------------------------------- language */
+function setLang(lang){
+  LANG = lang;
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === 'fa' ? 'rtl' : 'ltr';
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  $$('[data-t]').forEach(el => {
+    const v = T[el.dataset.t];
+    if (v) el.innerHTML = v[idx()];
+  });
+  /* the Nastaliq line carries the *other* script, so flip its direction with it */
+  const fa = $('.hero-fa');
+  fa.setAttribute('lang', lang === 'fa' ? 'en' : 'fa');
+  fa.setAttribute('dir',  lang === 'fa' ? 'ltr' : 'rtl');
+  fa.classList.toggle('nasta', lang !== 'fa');
+  renderProducts(); renderOrigins(); renderStory(); renderAQ(); renderFooterProducts(); renderSelect();
+  try { localStorage.setItem('pnh-lang', lang); } catch (e) {}
+}
+
+/* ---------------------------------------------------------- reveal */
+let io;
+function observe(els){ els.forEach(el => io.observe(el)); }
+io = new IntersectionObserver((es,o) => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in'); o.unobserve(e.target);
+}), { rootMargin:'0px 0px -6% 0px', threshold:.06 });
+observe($$('.rev'));
+
+/* ---------------------------------------------------------- counters */
+{
+  const cio = new IntersectionObserver((es,o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    o.unobserve(e.target);
+    const el = e.target, to = +el.dataset.count, sfx = el.dataset.suffix || '';
+    const fmt = n => LANG === 'fa'
+      ? String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]) + sfx.replace('%','٪')
+      : n + sfx;
+    if (reduce) { el.textContent = fmt(to); return; }
+    const t0 = performance.now(), dur = 1300;
+    const tick = t => {
+      const p = Math.min(1,(t - t0)/dur), k = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(Math.round(to * k));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }), { threshold:.5 });
+  $$('[data-count]').forEach(el => cio.observe(el));
+}
+
+/* ---------------------------------------------------------- header + nav */
+{
+  const hdr = $('#hdr');
+  const onScroll = () => hdr.classList.toggle('stuck', scrollY > 12);
+  addEventListener('scroll', onScroll, { passive:true }); onScroll();
+
+  const b = $('#burger'), m = $('#mnav');
+  const set = open => {
+    m.dataset.open = String(open);
+    b.setAttribute('aria-expanded', String(open));
+    b.children[0].style.transform = open ? 'translateY(3.75px) rotate(45deg)'  : '';
+    b.children[1].style.transform = open ? 'translateY(-3.75px) rotate(-45deg)' : '';
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  b.addEventListener('click', () => set(m.dataset.open !== 'true'));
+  $$('a', m).forEach(a => a.addEventListener('click', () => set(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+}
+
+/* ---------------------------------------------------------- form */
+{
+  const f = $('#form');
+  const bad = (el, cond) => { el.closest('.field').classList.toggle('bad', cond); return cond; };
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('#f-name'), c = $('#f-co'), m = $('#f-mail'), p = $('#f-port'), t = $('#f-msg');
+    let err = false;
+    err = bad(n, !n.value.trim()) || err;
+    err = bad(c, !c.value.trim()) || err;
+    err = bad(m, !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m.value.trim())) || err;
+    err = bad(p, !p.value.trim()) || err;
+    err = bad(t, t.value.trim().length < 8) || err;
+    if (err) { f.querySelector('.field.bad input, .field.bad textarea')?.focus(); return; }
+    f.querySelectorAll('input,textarea,select').forEach(el => { el.value = ''; el.disabled = true; });
+    f.querySelector('button').disabled = true;
+    $('#sent').classList.add('on');
+  });
+  f.addEventListener('input', e => e.target.closest('.field')?.classList.remove('bad'));
+}
+
+/* ---------------------------------------------------------- boot */
+$$('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+let start = 'en';
+try { const s = localStorage.getItem('pnh-lang'); if (s === 'fa' || s === 'en') start = s; } catch (e) {}
+setLang(start);
+$('#yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PANAHANDEH — Pulses, Beans &amp; Spices | Dubai</title>
+<meta name="description" content="Panahandeh Foodstuff Trading L.L.C — a Dubai trading desk for pulses, beans and spices. Sourced at origin, graded, packed under the RAVOMA label and consolidated at Jebel Ali.">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#15150F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..800&family=Inter+Tight:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   PANAHANDEH — demo 02 "Trading Desk"
+   Light editorial. Hand-written CSS, no framework.
+   ============================================================ */
+
+:root{
+  --paper:#FBF9F4;
+  --bone:#F1EDE3;
+  --bone-2:#E7E1D3;
+  --ink:#15150F;
+  --ink-2:#1F1F17;
+  --body:#4A4B3E;      /* 7.3:1 on paper */
+  --muted:#5E6051;     /* 5.6:1 on paper */
+  --olive:#3B4A2A;
+  --clay:#A2461F;      /* 5.4:1 on paper */
+  --clay-lt:#C86A3C;
+  --line:rgba(21,21,15,.13);
+  --line-2:rgba(21,21,15,.07);
+  --gutter:20px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --snap:cubic-bezier(.3,.9,.25,1);
+}
+@media(min-width:768px){ :root{ --gutter:36px } }
+@media(min-width:1200px){ :root{ --gutter:56px } }
+
+*,*::before,*::after{ box-sizing:border-box }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth }
+@media(prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px; line-height:1.6; font-weight:400;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{ display:block; max-width:100% }
+a{ color:inherit; text-decoration:none }
+button,input,textarea,select{ font:inherit; color:inherit }
+::selection{ background:var(--ink); color:var(--paper) }
+:focus-visible{ outline:2px solid var(--clay); outline-offset:3px }
+
+.wrap{ width:100%; max-width:1340px; margin-inline:auto; padding-inline:var(--gutter) }
+.mono{ font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-ligatures:none }
+.fr{ font-family:Fraunces,Georgia,serif; font-optical-sizing:auto }
+
+/* eyebrow ------------------------------------------------------ */
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--clay);
+  display:flex; align-items:center; gap:12px;
+}
+.eyebrow::before{ content:''; width:26px; height:1px; background:currentColor; flex:none }
+.eyebrow.on-ink{ color:#E4A87E }
+
+/* headings ----------------------------------------------------- */
+h1,h2,h3{ margin:0; font-family:Fraunces,Georgia,serif; font-weight:600; letter-spacing:-.022em; line-height:1.04 }
+.h1{ font-size:clamp(2.9rem,6.6vw,5.5rem); font-weight:600 }
+.h2{ font-size:clamp(2.05rem,4vw,3.4rem) }
+.h3{ font-size:clamp(1.35rem,2vw,1.7rem); line-height:1.16; letter-spacing:-.012em }
+.lede{ font-size:clamp(17px,1.35vw,19px); line-height:1.68; color:var(--body); font-weight:400 }
+em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
+
+/* buttons ------------------------------------------------------ */
+.btn{
+  display:inline-flex; align-items:center; gap:11px; padding:16px 27px;
+  font-size:13px; font-weight:600; letter-spacing:.055em; text-transform:uppercase;
+  border:1px solid var(--ink); background:var(--ink); color:var(--paper);
+  cursor:pointer; position:relative; overflow:hidden; transition:color .35s var(--ease);
+}
+.btn span{ position:relative; z-index:1; display:inline-flex; align-items:center; gap:11px }
+.btn::after{
+  content:''; position:absolute; inset:0; background:var(--clay);
+  transform:translateY(101%); transition:transform .45s var(--ease);
+}
+.btn:hover::after{ transform:translateY(0) }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--ink) }
+.btn-ghost::after{ background:var(--ink) }
+.btn-ghost:hover{ color:var(--paper) }
+.btn svg{ width:16px; height:16px; transition:transform .4s var(--ease) }
+.btn:hover svg{ transform:translateX(5px) }
+
+/* reveal ------------------------------------------------------- */
+.rev{ opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease),transform .7s var(--ease); transition-delay:var(--d,0s) }
+.rev.in{ opacity:1; transform:none }
+@media(prefers-reduced-motion:reduce){ .rev{ opacity:1; transform:none; transition:none } }
+
+/* ==================== TICKER ==================== */
+.ticker{ background:var(--ink); color:#CFCBBD; overflow:hidden; border-bottom:1px solid #2A2A20 }
+.ticker-track{ display:flex; width:max-content; animation:slide 46s linear infinite }
+.ticker:hover .ticker-track{ animation-play-state:paused }
+.ticker-group{ display:flex; flex:none }
+.ticker span{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.13em;
+  text-transform:uppercase; padding:9px 0; white-space:nowrap;
+}
+.ticker span::after{ content:'·'; margin:0 20px; color:#7A7563 }
+.ticker b{ color:#E0A87A; font-weight:500 }
+@keyframes slide{ to{ transform:translateX(-50%) } }
+@media(prefers-reduced-motion:reduce){
+  .ticker-track{ animation:none }
+  .ticker{ overflow-x:auto }
+}
+
+/* ==================== HEADER ==================== */
+.hdr{
+  position:sticky; top:0; z-index:60; background:rgba(251,249,244,.86);
+  backdrop-filter:blur(14px) saturate(1.3); -webkit-backdrop-filter:blur(14px) saturate(1.3);
+  border-bottom:1px solid transparent; transition:border-color .3s, box-shadow .3s;
+}
+.hdr.stuck{ border-bottom-color:var(--line); box-shadow:0 1px 18px rgba(21,21,15,.05) }
+.hdr-in{ display:flex; align-items:center; justify-content:space-between; gap:20px; height:74px }
+.hdr.stuck .hdr-in{ height:64px }
+.hdr-in{ transition:height .3s var(--ease) }
+.lockup{ display:flex; align-items:center; gap:12px; flex:none }
+.lockup svg{ width:30px; height:30px; color:var(--clay); flex:none }
+.lockup .nm{ display:block; font-family:Fraunces,serif; font-weight:700; font-size:18px; letter-spacing:.1em; line-height:1 }
+.lockup .sb{ display:block; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.22em; color:var(--muted); margin-top:5px; line-height:1 }
+@media(max-width:420px){ .lockup .sb{ display:none } .lockup .nm{ font-size:16px } }
+.nav{ display:none; gap:34px; font-size:13.5px; font-weight:500; letter-spacing:.01em }
+.nav a{ position:relative; padding:4px 0; color:var(--body) }
+.nav a::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--clay); transform:scaleX(0); transform-origin:right; transition:transform .4s var(--ease) }
+.nav a:hover{ color:var(--ink) }
+.nav a:hover::after{ transform:scaleX(1); transform-origin:left }
+.hdr-cta{ display:none }
+@media(min-width:1024px){ .nav{ display:flex } .hdr-cta{ display:inline-flex } }
+.burger{ display:grid; gap:6px; background:none; border:0; padding:10px; margin-right:-10px; cursor:pointer }
+.burger i{ display:block; width:22px; height:1.5px; background:var(--ink); transition:transform .35s var(--snap),opacity .2s }
+@media(min-width:1024px){ .burger{ display:none } }
+.mnav{ position:fixed; inset:0; z-index:59; background:var(--paper); display:flex; flex-direction:column; justify-content:center; padding:0 var(--gutter);
+  clip-path:inset(0 0 100% 0); transition:clip-path .55s var(--ease); }
+.mnav[data-open="true"]{ clip-path:inset(0 0 0 0) }
+.mnav a{ font-family:Fraunces,serif; font-size:clamp(2rem,9vw,2.9rem); font-weight:600; padding:14px 0; border-bottom:1px solid var(--line-2) }
+.mnav .mmeta{ margin-top:38px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.12em; color:var(--muted); line-height:2 }
+
+/* ==================== HERO ==================== */
+.hero{ padding:clamp(56px,7vw,92px) 0 clamp(40px,5vw,64px) }
+.hero-grid{ display:grid; gap:44px }
+@media(min-width:1024px){ .hero-grid{ grid-template-columns:1.08fr .92fr; gap:64px; align-items:center } }
+.hero h1{ margin-top:26px }
+.hero .lede{ margin:28px 0 0; max-width:46ch }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:36px }
+.hero-figure{ position:relative }
+.frame{ position:relative; overflow:hidden; background:var(--bone); aspect-ratio:4/5 }
+.frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+.frame::after{ content:''; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(21,21,15,.1) }
+.spec-card{
+  position:absolute; left:-14px; bottom:-18px; background:var(--paper); border:1px solid var(--line);
+  padding:18px 20px; min-width:212px; box-shadow:0 16px 40px -22px rgba(21,21,15,.4);
+}
+@media(min-width:1024px){ .spec-card{ left:-34px; bottom:-26px } }
+.spec-card .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted) }
+.spec-card .v{ font-family:Fraunces,serif; font-size:24px; font-weight:600; margin-top:6px; line-height:1 }
+.spec-card .r{ display:flex; justify-content:space-between; gap:22px; padding-top:12px; margin-top:12px; border-top:1px solid var(--line-2);
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--body) }
+
+/* stat row ----------------------------------------------------- */
+.stats{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px 16px; margin-top:46px; padding-top:30px; border-top:1px solid var(--line) }
+@media(min-width:640px){ .stats{ grid-template-columns:repeat(4,1fr) } }
+.stats dt{ font-family:Fraunces,serif; font-size:clamp(1.9rem,3vw,2.5rem); font-weight:600; line-height:1; letter-spacing:-.02em }
+.stats dd{ margin:9px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); line-height:1.5 }
+
+/* ==================== MARKET STRIP ==================== */
+.markets{ border-block:1px solid var(--line); background:var(--bone) }
+.markets-in{ display:flex; flex-wrap:wrap; align-items:center; gap:14px 30px; padding:22px 0 }
+.markets .lbl{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted) }
+.markets ul{ display:flex; flex-wrap:wrap; gap:10px 26px; margin:0; padding:0; list-style:none }
+.markets li{ font-size:13.5px; font-weight:500; color:var(--body); letter-spacing:.01em }
+
+/* ==================== SECTION SHELL ==================== */
+.sec{ padding:clamp(72px,9vw,124px) 0 }
+.sec-head{ display:grid; gap:22px; margin-bottom:clamp(38px,4vw,56px) }
+@media(min-width:900px){ .sec-head{ grid-template-columns:1.15fr .85fr; align-items:end; gap:56px } }
+.sec-head .h2{ margin-top:20px }
+
+/* ==================== CATALOGUE ==================== */
+.filters{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:22px }
+.chip{
+  border:1px solid var(--line); background:transparent; padding:9px 17px; cursor:pointer;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--body); transition:.28s var(--ease);
+}
+.chip:hover{ border-color:var(--ink) }
+.chip[aria-pressed="true"]{ background:var(--ink); border-color:var(--ink); color:var(--paper) }
+
+.cat{ border-top:1px solid var(--ink) }
+.row{
+  display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:center;
+  padding:22px 0; border-bottom:1px solid var(--line); cursor:pointer;
+  transition:background .3s var(--ease),padding .3s var(--ease); position:relative;
+}
+.row::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:0; background:var(--clay); transition:width .35s var(--ease) }
+.row:hover,.row:focus-visible{ background:var(--bone); padding-inline:16px }
+.row:hover::before{ width:3px }
+.row[hidden]{ display:none }
+.row-main{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; min-width:0 }
+.row-idx{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); flex:none; width:26px }
+.row-nm{ font-family:Fraunces,serif; font-size:clamp(1.25rem,2.2vw,1.6rem); font-weight:600; letter-spacing:-.012em; line-height:1.1 }
+.row-ar{ font-size:15px; color:var(--muted); direction:rtl; font-family:'Noto Naskh Arabic','Amiri',serif }
+.row-meta{ display:none; gap:32px; align-items:center }
+@media(min-width:900px){
+  .row{ grid-template-columns:minmax(0,1fr) auto auto; gap:32px }
+  .row-meta{ display:flex }
+}
+.row-meta .cell{ min-width:0 }
+.row-meta .k{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); display:block }
+.row-meta .v{ font-size:13.5px; color:var(--body); margin-top:4px; display:block; white-space:nowrap }
+.row-tag{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid var(--line); padding:5px 10px; color:var(--muted); justify-self:end; white-space:nowrap }
+.row-sub{ grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted) }
+@media(min-width:900px){ .row-sub{ display:none } }
+
+/* cursor-following preview (pointer devices only) */
+.preview{
+  position:fixed; z-index:80; width:190px; aspect-ratio:4/5; pointer-events:none;
+  opacity:0; transform:translate(-50%,-50%) scale(.94); transition:opacity .3s var(--ease),transform .3s var(--ease);
+  box-shadow:0 24px 60px -24px rgba(21,21,15,.6); overflow:hidden; background:var(--bone);
+}
+.preview img{ width:100%; height:100%; object-fit:cover }
+.preview.on{ opacity:1; transform:translate(-50%,-50%) scale(1) }
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){ .preview{ display:none } }
+
+.cat-foot{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:22px; margin-top:34px;
+  padding:26px; background:var(--bone); border:1px solid var(--line) }
+.cat-foot p{ margin:0; max-width:56ch; color:var(--body); font-size:15px }
+.cat-foot .brandline{ display:flex; align-items:center; gap:13px; margin-bottom:9px }
+.cat-foot .brandline img{ width:34px; height:34px }
+.cat-foot .brandline b{ font-family:Fraunces,serif; font-size:19px; letter-spacing:.14em; font-weight:700 }
+
+/* ==================== CAPABILITIES ==================== */
+.caps{ display:grid; gap:2px; background:var(--line); border:1px solid var(--line) }
+@media(min-width:700px){ .caps{ grid-template-columns:repeat(2,1fr) } }
+@media(min-width:1100px){ .caps{ grid-template-columns:repeat(3,1fr) } }
+.cap{ background:var(--paper); padding:34px 30px 38px; transition:background .35s var(--ease) }
+.cap:hover{ background:var(--bone) }
+.cap .n{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:var(--clay) }
+.cap h3{ margin:18px 0 12px }
+.cap p{ margin:0; color:var(--body); font-size:15px; line-height:1.68 }
+
+/* ==================== PROCESS ==================== */
+.proc{ position:relative }
+.proc-rail{ position:relative; height:1px; background:var(--line); margin-bottom:34px }
+.proc-rail i{ position:absolute; left:0; top:0; height:1px; background:var(--clay); width:0; transition:width .15s linear }
+.proc-scroll{ display:flex; gap:2px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:12px; scrollbar-width:thin }
+.proc-scroll::-webkit-scrollbar{ height:3px }
+.proc-scroll::-webkit-scrollbar-thumb{ background:var(--bone-2) }
+.step{ flex:0 0 268px; scroll-snap-align:start; background:var(--bone); padding:28px 26px 32px; border-top:2px solid transparent; transition:border-color .3s,background .3s }
+.step:hover{ background:var(--bone-2); border-top-color:var(--clay) }
+@media(min-width:1100px){ .step{ flex:1 1 0; min-width:0 } .proc-scroll{ overflow:visible } }
+.step .n{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.18em; color:var(--muted) }
+.step h3{ font-size:1.22rem; margin:14px 0 10px }
+.step p{ margin:0; font-size:14.5px; color:var(--body); line-height:1.62 }
+
+/* ==================== BAND ==================== */
+.band{ position:relative; min-height:min(72vh,560px); display:flex; align-items:center; overflow:hidden }
+.band img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+.band::after{ content:''; position:absolute; inset:0; background:linear-gradient(92deg,rgba(21,21,15,.94) 0%,rgba(21,21,15,.86) 44%,rgba(21,21,15,.42) 100%) }
+.band .wrap{ position:relative; z-index:1; padding-block:72px }
+.band blockquote{ margin:24px 0 0; max-width:22ch; font-family:Fraunces,serif; font-size:clamp(1.9rem,3.8vw,3.1rem); font-weight:500; line-height:1.14; letter-spacing:-.02em; color:var(--paper) }
+.band blockquote em{ font-style:italic; color:#E9A574 }
+.band p{ margin:26px 0 0; max-width:48ch; color:rgba(251,249,244,.76); font-size:16px; line-height:1.75 }
+
+/* ==================== ORIGINS ==================== */
+.origins{ display:grid; gap:0 48px; border-top:1px solid var(--ink) }
+@media(min-width:760px){ .origins{ grid-template-columns:1fr 1fr } }
+@media(min-width:1200px){ .origins{ grid-template-columns:repeat(3,1fr) } }
+.org{ display:flex; align-items:baseline; justify-content:space-between; gap:18px; padding:17px 0; border-bottom:1px solid var(--line) }
+.org b{ font-family:Fraunces,serif; font-size:1.13rem; font-weight:600 }
+.org span{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); text-align:right }
+
+/* ==================== CONTACT ==================== */
+.contact{ background:var(--ink); color:var(--paper) }
+.contact .h2,.contact h3{ color:var(--paper) }
+.contact .lede{ color:rgba(251,249,244,.72) }
+.contact-grid{ display:grid; gap:52px }
+@media(min-width:1000px){ .contact-grid{ grid-template-columns:1.05fr .95fr; gap:72px } }
+.field{ position:relative; margin-bottom:26px }
+.field label{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.17em; text-transform:uppercase; color:rgba(251,249,244,.62); display:block; margin-bottom:9px }
+.field input,.field textarea,.field select{
+  width:100%; background:transparent; border:0; border-bottom:1px solid rgba(251,249,244,.34);
+  padding:11px 0; font-size:16px; color:var(--paper); transition:border-color .3s;
+}
+.field select option{ color:var(--ink) }
+.field input:focus,.field textarea:focus,.field select:focus{ outline:none; border-bottom-color:#E9A574 }
+.field textarea{ resize:vertical; min-height:104px }
+.field .err{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:#F0A98A; margin-top:7px; display:none }
+.field.bad input,.field.bad textarea{ border-bottom-color:#F0A98A }
+.field.bad .err{ display:block }
+.f2{ display:grid; gap:0 26px }
+@media(min-width:620px){ .f2{ grid-template-columns:1fr 1fr } }
+.contact .btn{ background:var(--paper); border-color:var(--paper); color:var(--ink); width:100% ; justify-content:center }
+.contact .btn::after{ background:#E9A574 }
+.contact .btn:hover{ color:var(--ink) }
+.sent{ display:none; border:1px solid rgba(233,165,116,.5); padding:20px 22px; margin-top:22px; color:#F3CBAF; font-size:15px }
+.sent.on{ display:block }
+.cdetails{ list-style:none; margin:34px 0 0; padding:0; display:grid; gap:0 }
+.cdetails li{ padding:20px 0; border-top:1px solid rgba(251,249,244,.16) }
+.cdetails .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(251,249,244,.6) }
+.cdetails .v{ font-family:Fraunces,serif; font-size:1.32rem; margin-top:8px; display:inline-block }
+.cdetails a.v:hover{ color:#E9A574 }
+.cimg{ margin-top:34px; aspect-ratio:3/2; position:relative; overflow:hidden }
+.cimg img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+
+/* ==================== FOOTER ==================== */
+.ftr{ background:var(--bone); border-top:1px solid var(--line); padding:64px 0 30px }
+.ftr-grid{ display:grid; gap:40px }
+@media(min-width:800px){ .ftr-grid{ grid-template-columns:1.5fr 1fr 1fr 1fr; gap:44px } }
+.ftr h4{ margin:0 0 16px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); font-weight:500 }
+.ftr ul{ list-style:none; margin:0; padding:0; display:grid; gap:11px; font-size:14.5px; color:var(--body) }
+.ftr ul a:hover{ color:var(--clay) }
+.ftr .bigmark{ font-family:Fraunces,serif; font-size:clamp(1.9rem,4vw,2.5rem); font-weight:700; letter-spacing:.1em; line-height:1 }
+.ftr .sub{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.24em; color:var(--muted); margin-top:10px }
+.ftr .blurb{ margin:22px 0 0; max-width:40ch; font-size:14.5px; color:var(--body); line-height:1.7 }
+.ftr-base{ display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:space-between; margin-top:52px; padding-top:22px; border-top:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted) }
+
+/* ==================== DEMO SWITCHER ==================== */
+.vsw{ position:fixed; left:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:var(--ink); padding:1px }
+.vsw a{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; padding:7px 10px; color:rgba(251,249,244,.6); background:var(--ink) }
+.vsw a[aria-current]{ background:var(--paper); color:var(--ink) }
+.vsw a:hover{ color:var(--paper) }
+</style>
+</head>
+
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-seal" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="58" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <circle cx="60" cy="60" r="48" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/>
+    <text x="60" y="62" text-anchor="middle" dominant-baseline="central" fill="currentColor"
+          font-family="Fraunces,Georgia,serif" font-size="58" font-weight="700">P</text>
+  </symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 12h15"/><path d="m13 5.5 6.5 6.5-6.5 6.5"/>
+  </symbol>
+</defs></svg>
+
+<!-- DEMO SWITCHER — remove before client hand-off -->
+<nav class="vsw" aria-label="Design versions">
+  <a href="../index.html">01</a><a href="./" aria-current="page">02</a><a href="../v3/">03</a>
+</nav>
+
+<!-- ==================== TICKER ==================== -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- ==================== HEADER ==================== -->
+<header class="hdr" id="hdr">
+  <div class="wrap hdr-in">
+    <a href="#top" class="lockup" aria-label="Panahandeh — home">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#i-seal"/></svg>
+      <span>
+        <span class="nm">PANAHANDEH</span>
+        <span class="sb">FOODSTUFF TRADING L.L.C</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#catalogue">Catalogue</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">Process</a>
+      <a href="#origins">Origins</a>
+    </nav>
+    <a href="#contact" class="btn hdr-cta"><span>Request a quote</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="mnav" id="mnav" data-open="false">
+  <nav aria-label="Mobile">
+    <a href="#catalogue">Catalogue</a>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#process">Process</a>
+    <a href="#origins">Origins</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="mmeta">
+    <div>+971 50 123 4567</div><div>INFO@PANAHANDEH.AE</div><div>DUBAI · UNITED ARAB EMIRATES</div>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow rev">Dubai · Est. foodstuff trading</p>
+      <h1 class="h1 rev" style="--d:.06s">Pulses, beans<br>and spices —<br><em class="acc">bought properly.</em></h1>
+      <p class="lede rev" style="--d:.14s">
+        Panahandeh is a Dubai trading desk for agricultural staples. We buy at origin, grade before
+        we pack, and consolidate at Jebel Ali — retail pouches under our own RAVOMA label, or bulk
+        to your specification.
+      </p>
+      <div class="hero-cta rev" style="--d:.2s">
+        <a href="#contact" class="btn"><span>Request a quote <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
+        <a href="#catalogue" class="btn btn-ghost"><span>View catalogue</span></a>
+      </div>
+    </div>
+
+    <figure class="hero-figure rev" style="--d:.26s; margin:0">
+      <div class="frame">
+        <img src="../assets/about.webp" width="1000" height="1250" fetchpriority="high" decoding="async"
+             alt="Jute sacks of graded pulses stacked in dry storage">
+      </div>
+      <div class="spec-card">
+        <p class="k" style="margin:0">Consolidation point</p>
+        <p class="v" style="margin:0">Jebel Ali</p>
+        <div class="r"><span>FCL &amp; LCL</span><span>25°09′N 55°09′E</span></div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="wrap">
+    <dl class="stats rev" style="--d:.32s">
+      <div><dt data-count="12" data-suffix="+">0</dt><dd>Sourcing origins</dd></div>
+      <div><dt data-count="40" data-suffix="+">0</dt><dd>Export markets</dd></div>
+      <div><dt data-count="8">0</dt><dd>Core commodities</dd></div>
+      <div><dt data-count="100" data-suffix="%">0</dt><dd>Pre-shipment inspected</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ==================== MARKETS ==================== -->
+<div class="markets">
+  <div class="wrap markets-in">
+    <p class="lbl" style="margin:0">Shipping into</p>
+    <ul>
+      <li>GCC</li><li>East &amp; West Africa</li><li>South Asia</li><li>South-East Asia</li>
+      <li>Europe</li><li>United Kingdom</li><li>North America</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== CATALOGUE ==================== -->
+<section class="sec" id="catalogue">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow rev">01 — Catalogue</p>
+        <h2 class="h2 rev" style="--d:.06s">Eight staples.<br><em class="acc">One standard.</em></h2>
+      </div>
+      <p class="lede rev" style="--d:.12s">
+        Four pulses and beans, four spices. Every line is graded against destination-market
+        requirements before it leaves — no substitutions, no surprises at the port.
+      </p>
+    </div>
+
+    <div class="filters rev" role="group" aria-label="Filter catalogue">
+      <button class="chip" data-filter="all" aria-pressed="true">All lines</button>
+      <button class="chip" data-filter="pulses" aria-pressed="false">Pulses &amp; beans</button>
+      <button class="chip" data-filter="spices" aria-pressed="false">Spices</button>
+    </div>
+
+    <div class="cat rev" id="cat" style="--d:.06s"></div>
+
+    <div class="cat-foot rev" style="--d:.12s">
+      <div>
+        <div class="brandline">
+          <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
+          <b>RAVOMA</b>
+        </div>
+        <p>Our own retail label — 1&nbsp;kg pouches with premium printing and a freshness seal.
+           Private label and bulk formats available on the same lots.</p>
+      </div>
+      <a href="#contact" class="btn btn-ghost"><span>Request full spec sheet <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CAPABILITIES ==================== -->
+<section class="sec" id="capabilities" style="background:var(--bone);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow rev">02 — Capabilities</p>
+        <h2 class="h2 rev" style="--d:.06s">What a buyer<br>actually gets.</h2>
+      </div>
+      <p class="lede rev" style="--d:.12s">
+        The parts of a shipment that decide whether it clears, sells and repeats.
+      </p>
+    </div>
+
+    <div class="caps" id="caps"></div>
+  </div>
+</section>
+
+<!-- ==================== PROCESS ==================== -->
+<section class="sec" id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow rev">03 — Process</p>
+        <h2 class="h2 rev" style="--d:.06s">Origin to<br><em class="acc">discharge port.</em></h2>
+      </div>
+      <p class="lede rev" style="--d:.12s">
+        Six controlled stages. Documentation is prepared against the destination's requirements,
+        not ours.
+      </p>
+    </div>
+
+    <div class="proc">
+      <div class="proc-rail"><i id="procBar"></i></div>
+      <div class="proc-scroll" id="proc"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BAND ==================== -->
+<section class="band">
+  <img src="../assets/band.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" width="2400" height="1000">
+  <div class="wrap">
+    <p class="eyebrow on-ink">Sourcing standard</p>
+    <blockquote>Bought where the crop is <em>best.</em></blockquote>
+    <p>Origin is chosen on the season, not the spreadsheet. Every lot is graded before it is packed
+       and inspected against destination-market requirements before it ships.</p>
+  </div>
+</section>
+
+<!-- ==================== ORIGINS ==================== -->
+<section class="sec" id="origins">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow rev">04 — Origins</p>
+        <h2 class="h2 rev" style="--d:.06s">Twelve growing<br>regions.</h2>
+      </div>
+      <p class="lede rev" style="--d:.12s">
+        Long-standing relationships with growers, cleaners and packers — so the same lot quality
+        turns up next season.
+      </p>
+    </div>
+    <div class="origins rev" id="originList"></div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="sec contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <p class="eyebrow on-ink rev">05 — Contact</p>
+      <h2 class="h2 rev" style="--d:.06s; margin-top:20px">Tell us what<br>you need landed.</h2>
+      <p class="lede rev" style="--d:.12s; margin-top:24px">
+        Commodity, grade, format, destination port and target volume. We come back with an
+        indication and lead time.
+      </p>
+
+      <ul class="cdetails">
+        <li><span class="k">Telephone</span><br><a class="v" href="tel:+971501234567">+971 50 123 4567</a></li>
+        <li><span class="k">Email</span><br><a class="v" href="mailto:info@panahandeh.ae">info@panahandeh.ae</a></li>
+        <li><span class="k">Office</span><br><span class="v">Dubai, United Arab Emirates</span></li>
+      </ul>
+
+      <div class="cimg">
+        <img src="../assets/export.webp" alt="Container vessel at berth" loading="lazy" decoding="async" width="1200" height="800">
+      </div>
+    </div>
+
+    <div>
+      <form id="form" novalidate>
+        <div class="f2">
+          <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name"><span class="err">Please enter your name.</span></div>
+          <div class="field"><label for="f-co">Company</label><input id="f-co" name="company" autocomplete="organization"><span class="err">Please enter your company.</span></div>
+        </div>
+        <div class="f2">
+          <div class="field"><label for="f-mail">Email</label><input id="f-mail" name="email" type="email" autocomplete="email"><span class="err">Please enter a valid email.</span></div>
+          <div class="field"><label for="f-port">Destination port</label><input id="f-port" name="port"><span class="err">Please enter a destination.</span></div>
+        </div>
+        <div class="field">
+          <label for="f-line">Commodity</label>
+          <select id="f-line" name="line"></select>
+        </div>
+        <div class="field"><label for="f-msg">Volume &amp; specification</label><textarea id="f-msg" name="message" rows="4"></textarea><span class="err">Please add a few details.</span></div>
+        <button class="btn" type="submit"><span>Send enquiry <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></button>
+        <p class="sent" id="sent" role="status">Thank you — your enquiry has been logged. A trader will respond within one business day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-grid">
+      <div>
+        <p class="bigmark" style="margin:0">PANAHANDEH</p>
+        <p class="sub" style="margin:10px 0 0">FOODSTUFF TRADING L.L.C · DUBAI</p>
+        <p class="blurb">Pulses, beans and spices — sourced at origin, packed under the RAVOMA label,
+          consolidated at Jebel Ali and delivered on schedule.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul><li><a href="#capabilities">Capabilities</a></li><li><a href="#process">Process</a></li>
+            <li><a href="#origins">Origins</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div>
+        <h4>Catalogue</h4>
+        <ul><li><a href="#catalogue">Pulses &amp; beans</a></li><li><a href="#catalogue">Spices</a></li>
+            <li><a href="#catalogue">RAVOMA retail</a></li><li><a href="#contact">Private label</a></li></ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul><li><a href="tel:+971501234567">+971 50 123 4567</a></li>
+            <li><a href="mailto:info@panahandeh.ae">info@panahandeh.ae</a></li>
+            <li>www.panahandeh.ae</li><li>Dubai, U.A.E.</li></ul>
+      </div>
+    </div>
+    <div class="ftr-base">
+      <span>© <span id="yr"></span> Panahandeh Foodstuff Trading L.L.C — All rights reserved</span>
+      <span>Dubai · United Arab Emirates</span>
+    </div>
+  </div>
+</footer>
+
+<div class="preview" id="preview" aria-hidden="true"><img alt="" id="previewImg"></div>
+
+<script>
+(() => {
+'use strict';
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------------------------------------------------------- data */
+const LINES = [
+  { cat:'pulses', en:'Chickpeas',         ar:'حمص',                  img:'chickpeas',
+    origin:'India · Turkey · Mexico',  grade:'Kabuli 8–9 mm',            fmt:'1 kg · 25 kg · 50 kg', hs:'0713.20' },
+  { cat:'pulses', en:'Green Lentils',     ar:'عدس أخضر',              img:'lentils',
+    origin:'Turkey · Canada',          grade:'Laird, machine-cleaned',    fmt:'1 kg · 25 kg',         hs:'0713.40' },
+  { cat:'pulses', en:'Yellow Split Peas', ar:'بازلاء صفراء مجروشة',   img:'splitpeas',
+    origin:'Canada · Russia · Ukraine',grade:'Split, 99.5% purity',       fmt:'1 kg · 25 kg',         hs:'0713.10' },
+  { cat:'pulses', en:'Red Kidney Beans',  ar:'فاصولياء حمراء',        img:'kidneybeans',
+    origin:'Ethiopia · Argentina',     grade:'Dark red, 180–200/100 g',   fmt:'1 kg · 25 kg',         hs:'0713.33' },
+  { cat:'spices', en:'Saffron',           ar:'زعفران',                img:'saffron',
+    origin:'Iran · Afghanistan',       grade:'Sargol, ISO 3632 cat. I',   fmt:'1 g · 5 g · 10 g',     hs:'0910.20' },
+  { cat:'spices', en:'Turmeric',          ar:'كركم',                  img:'turmeric',
+    origin:'India · Iran',             grade:'Ground, 3.5% curcumin',     fmt:'500 g · 25 kg',        hs:'0910.30' },
+  { cat:'spices', en:'Black Pepper',      ar:'فلفل أسود',             img:'blackpepper',
+    origin:'Vietnam · India',          grade:'550 g/l, ASTA cleaned',     fmt:'500 g · 25 kg',        hs:'0904.11' },
+  { cat:'spices', en:'Coriander Seeds',   ar:'بذور الكزبرة',          img:'coriander',
+    origin:'India · Iran · Bulgaria',  grade:'Eagle, 99% purity',         fmt:'500 g · 25 kg',        hs:'0909.21' }
+];
+
+const CAPS = [
+  ['Origin selection','We buy on the season, not the offer sheet. Where a crop underperforms, the origin changes — the specification does not.'],
+  ['Grading &amp; cleaning','Sieved, de-stoned and colour-sorted to the agreed calibration. Moisture and foreign-matter limits are fixed in the contract, not negotiated on arrival.'],
+  ['Packing &amp; private label','1 kg retail pouches under RAVOMA, or your artwork on the same lot. Bulk in 25 kg and 50 kg PP or jute.'],
+  ['Consolidation','Mixed-commodity containers built at Jebel Ali so a smaller buyer still ships a full load.'],
+  ['Documentation','Phytosanitary, certificate of origin, ISO 3632 for saffron, halal where required — prepared against the destination, not a template.'],
+  ['Traceability','Every pouch carries a lot code that resolves to origin, harvest window, cleaning line and packing date.']
+];
+
+const PROC = [
+  ['Origin','Crop assessed in-season with the grower or cleaner. Samples pulled before any commitment.'],
+  ['Grading','Calibration, moisture and foreign matter checked against the contract specification.'],
+  ['Packing','Retail pouches or bulk sacks, filled and sealed to the agreed format and lot code.'],
+  ['Consolidation','Stuffed at Jebel Ali. FCL, or LCL consolidated with other lines for the same buyer.'],
+  ['Documentation','Certificates issued to the destination market’s requirement before the vessel sails.'],
+  ['Delivery','CFR, CIF or FOB. Lot codes and shipping documents released together.']
+];
+
+const ORIGINS = [
+  ['Iran','Saffron · Nabat'], ['Afghanistan','Saffron'], ['India','Chickpeas · Turmeric'],
+  ['Pakistan','Rice'], ['Turkey','Chickpeas · Lentils'], ['Kazakhstan','Lentils · Split peas'],
+  ['Russia','Yellow split peas'], ['Ukraine','Split peas · Grains'], ['Egypt','Pulses · Grains'],
+  ['Vietnam','Black pepper'], ['Ethiopia','Kidney beans · Pulses'], ['Canada','Lentils · Split peas']
+];
+
+/* ---------------------------------------------------------- ticker */
+{
+  const items = LINES.map(l => `<span><b>${l.en}</b> ${l.origin}</span>`).join('') +
+                `<span><b>Jebel Ali</b> Consolidation</span><span><b>RAVOMA</b> Retail label</span>`;
+  $('#ticker').innerHTML = `<div class="ticker-group">${items}</div><div class="ticker-group">${items}</div>`;
+}
+
+/* ---------------------------------------------------------- catalogue */
+{
+  const cat = $('#cat');
+  cat.innerHTML = LINES.map((l,i) => `
+    <div class="row" data-cat="${l.cat}" data-img="${l.img}" tabindex="0">
+      <div class="row-main">
+        <span class="row-idx">${String(i+1).padStart(2,'0')}</span>
+        <span class="row-nm">${l.en}</span>
+        <span class="row-ar" lang="ar" dir="rtl">${l.ar}</span>
+      </div>
+      <div class="row-meta">
+        <span class="cell"><span class="k">Origin</span><span class="v">${l.origin}</span></span>
+        <span class="cell"><span class="k">Grade</span><span class="v">${l.grade}</span></span>
+        <span class="cell"><span class="k">Format</span><span class="v">${l.fmt}</span></span>
+      </div>
+      <span class="row-tag">HS ${l.hs}</span>
+      <div class="row-sub"><span>${l.origin}</span><span>${l.grade}</span><span>${l.fmt}</span></div>
+    </div>`).join('');
+
+  $$('.chip').forEach(chip => chip.addEventListener('click', () => {
+    const f = chip.dataset.filter;
+    $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+    $$('.row', cat).forEach(r => { r.hidden = !(f === 'all' || r.dataset.cat === f); });
+  }));
+
+  /* cursor-following preview */
+  const pv = $('#preview'), pvImg = $('#previewImg');
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce) {
+    let raf = 0, x = 0, y = 0;
+    const move = e => { x = e.clientX; y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(() => { pv.style.transform =
+        `translate(${x}px, ${y}px) translate(-50%,-50%) scale(${pv.classList.contains('on') ? 1 : .94})`; raf = 0; }); };
+    $$('.row', cat).forEach(r => {
+      r.addEventListener('mouseenter', () => { pvImg.src = `../assets/${r.dataset.img}.webp`; pv.classList.add('on'); });
+      r.addEventListener('mouseleave', () => pv.classList.remove('on'));
+    });
+    cat.addEventListener('mousemove', move);
+  }
+}
+
+/* ---------------------------------------------------------- capabilities */
+$('#caps').innerHTML = CAPS.map(([t,b],i) => `
+  <article class="cap rev" style="--d:${(i%3)*.07}s">
+    <p class="n">${String(i+1).padStart(2,'0')}</p>
+    <h3 class="h3">${t}</h3>
+    <p>${b}</p>
+  </article>`).join('');
+
+/* ---------------------------------------------------------- process */
+$('#proc').innerHTML = PROC.map(([t,b],i) => `
+  <article class="step">
+    <p class="n">STAGE ${String(i+1).padStart(2,'0')}</p>
+    <h3>${t}</h3>
+    <p>${b}</p>
+  </article>`).join('');
+
+{
+  const sc = $('#proc'), bar = $('#procBar');
+  const paint = () => {
+    const max = sc.scrollWidth - sc.clientWidth;
+    bar.style.width = (max > 4 ? (sc.scrollLeft / max) * 100 : 100) + '%';
+  };
+  sc.addEventListener('scroll', paint, { passive:true });
+  addEventListener('resize', paint);
+  paint();
+}
+
+/* ---------------------------------------------------------- origins */
+$('#originList').innerHTML = ORIGINS.map(([c,p]) =>
+  `<div class="org"><b>${c}</b><span>${p}</span></div>`).join('');
+
+/* ---------------------------------------------------------- form select */
+$('#f-line').innerHTML = '<option value="">Select a line…</option>' +
+  LINES.map(l => `<option>${l.en}</option>`).join('') + '<option>Multiple / other</option>';
+
+/* ---------------------------------------------------------- header */
+{
+  const hdr = $('#hdr');
+  const onScroll = () => hdr.classList.toggle('stuck', scrollY > 12);
+  addEventListener('scroll', onScroll, { passive:true }); onScroll();
+}
+
+/* ---------------------------------------------------------- mobile nav */
+{
+  const b = $('#burger'), m = $('#mnav');
+  const set = open => {
+    m.dataset.open = String(open);
+    b.setAttribute('aria-expanded', String(open));
+    b.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    b.children[0].style.transform = open ? 'translateY(3.75px) rotate(45deg)'  : '';
+    b.children[1].style.transform = open ? 'translateY(-3.75px) rotate(-45deg)' : '';
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  b.addEventListener('click', () => set(m.dataset.open !== 'true'));
+  $$('a', m).forEach(a => a.addEventListener('click', () => set(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+}
+
+/* ---------------------------------------------------------- reveal + counters */
+{
+  const io = new IntersectionObserver((es,o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); o.unobserve(e.target);
+  }), { rootMargin:'0px 0px -8% 0px', threshold:.08 });
+  $$('.rev').forEach(el => io.observe(el));
+
+  const cio = new IntersectionObserver((es,o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    o.unobserve(e.target);
+    const el = e.target, to = +el.dataset.count, sfx = el.dataset.suffix || '';
+    if (reduce) { el.textContent = to + sfx; return; }
+    const t0 = performance.now(), dur = 1250;
+    const tick = t => {
+      const p = Math.min(1, (t - t0) / dur), e2 = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(to * e2) + sfx;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }), { threshold:.5 });
+  $$('[data-count]').forEach(el => cio.observe(el));
+}
+
+/* ---------------------------------------------------------- form */
+{
+  const f = $('#form');
+  const bad = (el, cond) => { el.closest('.field').classList.toggle('bad', cond); return cond; };
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('#f-name'), c = $('#f-co'), m = $('#f-mail'), p = $('#f-port'), t = $('#f-msg');
+    let err = false;
+    err = bad(n, !n.value.trim()) || err;
+    err = bad(c, !c.value.trim()) || err;
+    err = bad(m, !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m.value.trim())) || err;
+    err = bad(p, !p.value.trim()) || err;
+    err = bad(t, t.value.trim().length < 8) || err;
+    if (err) { f.querySelector('.field.bad input, .field.bad textarea')?.focus(); return; }
+    f.querySelectorAll('input,textarea,select').forEach(el => { el.value = ''; el.disabled = true; });
+    f.querySelector('button').disabled = true;
+    $('#sent').classList.add('on');
+  });
+  f.addEventListener('input', e => e.target.closest('.field')?.classList.remove('bad'));
+}
+
+$('#yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

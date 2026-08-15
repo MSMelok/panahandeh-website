@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RAVOMA — Premium Quality Foodstuff Trading L.L.C</title>
-<meta name="description" content="RAVOMA Foodstuff Trading L.L.C sources, packs and exports premium pulses, rice and saffron from the world's finest growing regions — through Dubai, to markets on every continent.">
+<title>PANAHANDEH — Premium Quality Foodstuff Trading L.L.C</title>
+<meta name="description" content="Panahandeh Foodstuff Trading L.L.C sources, packs and exports premium pulses, beans and spices under the RAVOMA brand — from the world's finest growing regions, through Dubai, to markets on every continent.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
@@ -53,6 +53,11 @@ body{ background:#040D1B; overflow-x:hidden }
   content:''; position:fixed; inset:0; z-index:70; pointer-events:none; opacity:.042;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+
+/* Tailwind's CDN build injects its stylesheet after this one, so a plain .wm here
+   loses to text-[21px]. Doubling the class raises specificity without !important. */
+@media(max-width:400px){ .wm.wm{ font-size:18px; letter-spacing:.09em; padding-left:.09em } }
+@media(max-width:359px){ .lockmark{ display:none } }   /* 320px: seal or burger, not both */
 
 /* ---------- gold foil (mouse-reactive) ---------- */
 .foil{
@@ -221,6 +226,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <g id="i-wheat"><path d="M2.5 21.5 15 9"/><path d="M4 12.6 5.5 11 7 12.6a3.3 3.3 0 0 1 0 4.7L5.5 18.8 4 17.3a3.3 3.3 0 0 1 0-4.7"/><path d="M8 8.6 9.5 7 11 8.6a3.3 3.3 0 0 1 0 4.7L9.5 14.8 8 13.3a3.3 3.3 0 0 1 0-4.7"/><path d="M12 4.6 13.5 3 15 4.6a3.3 3.3 0 0 1 0 4.7L13.5 10.8 12 9.3a3.3 3.3 0 0 1 0-4.7"/><path d="M19.5 2.5H22v2.2a3.8 3.8 0 0 1-3.8 3.8H16V6.3a3.8 3.8 0 0 1 3.5-3.8"/></g>
     <g id="i-exchange"><path d="m15.5 3.5 4 4-4 4"/><path d="M19.5 7.5H4"/><path d="m8.5 20.5-4-4 4-4"/><path d="M4.5 16.5H20"/></g>
     <g id="i-layers"><path d="M12.8 2.2a2 2 0 0 0-1.6 0L2.6 6.1a1 1 0 0 0 0 1.8l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9a1 1 0 0 0 0-1.8z"/><path d="M2 12a1 1 0 0 0 .6.9l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .6.9l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9A1 1 0 0 0 22 17"/></g>
+    <symbol id="i-seal" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="58.2" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
+      <circle cx="60" cy="60" r="48.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M60.00 4.20 62.20 6.40 60.00 8.60 57.80 6.40z" fill="currentColor" stroke="none"/><path d="M97.90 19.00 101.00 22.10 97.90 25.20 94.80 22.10z" fill="currentColor" stroke="none"/><path d="M113.60 57.80 115.80 60.00 113.60 62.20 111.40 60.00z" fill="currentColor" stroke="none"/><path d="M97.90 94.80 101.00 97.90 97.90 101.00 94.80 97.90z" fill="currentColor" stroke="none"/><path d="M60.00 111.40 62.20 113.60 60.00 115.80 57.80 113.60z" fill="currentColor" stroke="none"/><path d="M22.10 94.80 25.20 97.90 22.10 101.00 19.00 97.90z" fill="currentColor" stroke="none"/><path d="M6.40 57.80 8.60 60.00 6.40 62.20 4.20 60.00z" fill="currentColor" stroke="none"/><path d="M22.10 19.00 25.20 22.10 22.10 25.20 19.00 22.10z" fill="currentColor" stroke="none"/>
+      <path d="M31 60a29 6.4 0 0 0 58 0" fill="none" stroke="currentColor" stroke-width="0" opacity="0"/>
+      <text x="60" y="62.5" text-anchor="middle" dominant-baseline="central" fill="currentColor" stroke="none" font-family="'Playfair Display',Georgia,serif" font-size="54" font-weight="700">P</text>
+    </symbol>
   </defs>
 </svg>
 
@@ -233,25 +245,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- mobile-only spacer so the wordmark stays optically centred against the burger -->
     <span class="lg:hidden w-11 shrink-0" aria-hidden="true"></span>
 
-    <nav class="hidden lg:flex items-center gap-9 flex-1 text-[11.5px] tracking-[.2em] font-medium text-cream/70">
+    <nav class="hidden lg:flex items-center gap-6 xl:gap-9 flex-1 text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
       <a href="#about"    class="ulink hover:text-gold transition-colors">ABOUT US</a>
       <a href="#products" class="ulink hover:text-gold transition-colors">PRODUCTS</a>
       <a href="#services" class="ulink hover:text-gold transition-colors">SERVICES</a>
     </nav>
 
-    <a href="#" class="group flex items-center gap-3 lg:gap-4 leading-none shrink-0" aria-label="RAVOMA — home">
-      <img src="assets/mark.webp" alt="" aria-hidden="true" width="400" height="400"
-           class="w-8 h-8 lg:w-11 lg:h-11 shrink-0 transition-transform duration-500 group-hover:scale-105">
+    <a href="#" class="group flex items-center gap-3 lg:gap-4 leading-none shrink-0" aria-label="PANAHANDEH — home">
+      <svg viewBox="0 0 120 120" aria-hidden="true"
+           class="lockmark w-8 h-8 lg:w-10 lg:h-10 shrink-0 text-gold transition-transform duration-500 group-hover:scale-105"><use href="#i-seal"/></svg>
       <span class="flex flex-col items-center">
-      <span class="font-display text-[26px] lg:text-[30px] tracking-[.22em] pl-[.22em] foil font-bold">RAVOMA</span>
+      <span class="wm font-display text-[21px] sm:text-[23px] lg:text-[25px] xl:text-[28px] tracking-[.15em] pl-[.15em] foil font-bold">PANAHANDEH</span>
       <span class="mt-1.5 h-px w-full rule-gold opacity-70"></span>
-      <span class="hidden sm:block mt-1.5 text-[10px] lg:text-[11px] tracking-[.36em] pl-[.36em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
+      <span class="hidden sm:block mt-1.5 text-[9px] lg:text-[10px] tracking-[.3em] pl-[.3em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
       </span>
     </a>
 
-    <div class="hidden lg:flex items-center gap-9 flex-1 justify-end text-[11.5px] tracking-[.2em] font-medium text-cream/70">
+    <div class="hidden lg:flex items-center gap-6 xl:gap-9 flex-1 justify-end text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
       <a href="#network" class="ulink hover:text-gold transition-colors">NETWORK</a>
-      <a href="#contact" class="btn-ghost px-6 py-3 text-[11px] tracking-[.22em]">PARTNER WITH US</a>
+      <a href="#contact" class="btn-ghost px-5 xl:px-6 py-3 text-[11px] tracking-[.18em] xl:tracking-[.22em] whitespace-nowrap">PARTNER WITH US</a>
     </div>
 
     <button id="burger" class="lg:hidden -mr-2 p-3 text-gold" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
@@ -275,7 +287,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <a href="#contact"  class="mob font-display text-4xl py-3 text-gold">Contact</a>
     </nav>
     <div class="mt-12 text-[11.5px] tracking-[.2em] text-cream/50 space-y-2">
-      <p>+971 50 123 4567</p><p>INFO@RAVOMA.AE</p><p>DUBAI · UNITED ARAB EMIRATES</p>
+      <p>+971 50 123 4567</p><p>INFO@PANAHANDEH.AE</p><p>DUBAI · UNITED ARAB EMIRATES</p>
     </div>
   </div>
 </div>
@@ -302,9 +314,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
     <!-- monogram seal -->
     <div class="rv flex justify-center" style="--d:.05s">
-      <img src="assets/mark.webp" width="400" height="400" fetchpriority="high" decoding="async"
-           class="w-[86px] h-[86px] lg:w-[104px] lg:h-[104px]"
-           alt="RAVOMA monogram">
+      <svg viewBox="0 0 120 120" role="img" aria-label="Panahandeh seal"
+           class="w-[86px] h-[86px] lg:w-[104px] lg:h-[104px] text-gold"><use href="#i-seal"/></svg>
     </div>
 
     <p class="rv mt-8 text-[11px] lg:text-[11.5px] tracking-[.42em] pl-[.42em] text-gold/80 font-medium" style="--d:.12s">
@@ -319,8 +330,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     </h1>
 
     <p class="rv mx-auto mt-9 max-w-[58ch] text-[16px] lg:text-[17px] leading-[1.75] text-cream/65 font-normal" style="--d:.56s">
-      RAVOMA sources, packs and exports premium pulses, rice and saffron from the world's
-      finest growing regions — through Dubai, to markets on every continent.
+      Panahandeh sources, packs and exports premium pulses, beans and spices — under our own
+      RAVOMA label — from the world's finest growing regions, through Dubai, to every continent.
     </p>
 
     <div class="rv mt-11 flex flex-col sm:flex-row gap-4 justify-center items-center" style="--d:.66s">
@@ -370,7 +381,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
     <div class="lg:col-span-7 lg:pt-14">
       <p class="rv text-[17px] lg:text-[19px] leading-[1.72] text-navy-800/80 font-normal" style="--d:.1s">
-        RAVOMA Foodstuff Trading L.L.C operates from Dubai — the world's most efficient crossroads for
+        Panahandeh Foodstuff Trading L.L.C operates from Dubai — the world's most efficient crossroads for
         agricultural trade. We select raw material at origin, control it through packing, and move it
         into more than forty markets under a single standard.
       </p>
@@ -444,7 +455,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="lg:col-span-7">
         <figure class="relative">
           <svg id="globe" viewBox="0 0 620 620" class="w-full h-auto max-w-[600px] mx-auto"
-               role="img" aria-label="Wireframe globe showing twelve sourcing origins connected by trade routes to the RAVOMA hub in Dubai, United Arab Emirates."></svg>
+               role="img" aria-label="Wireframe globe showing twelve sourcing origins connected by trade routes to the Panahandeh hub in Dubai, United Arab Emirates."></svg>
           <figcaption class="mt-5 text-center text-[11px] tracking-[.3em] text-cream/50">
             SOURCING CORRIDORS · CONSOLIDATED AT JEBEL ALI, DUBAI
           </figcaption>
@@ -476,10 +487,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
           Four staples.<br><span class="italic text-gold-dk">One standard.</span>
         </h2>
       </div>
-      <p class="rv max-w-[38ch] text-[15px] leading-[1.75] text-navy-800/65 font-normal" style="--d:.14s">
-        Retail-ready 1&nbsp;kg pouches with premium printing and freshness seal, or bulk formats
-        to your specification. Private label available.
-      </p>
+      <div class="rv max-w-[40ch]" style="--d:.14s">
+        <div class="flex items-center gap-4">
+          <img src="assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy" class="w-11 h-11 shrink-0">
+          <div class="leading-none">
+            <p class="text-[10px] tracking-[.3em] text-gold-dk font-semibold">PACKED UNDER OUR OWN LABEL</p>
+            <p class="mt-2 font-display text-[24px] tracking-[.16em] pl-[.16em] text-navy-800 font-bold">RAVOMA</p>
+          </div>
+        </div>
+        <p class="mt-5 text-[15px] leading-[1.75] text-navy-800/65 font-normal">
+          Retail-ready 1&nbsp;kg pouches with premium printing and freshness seal, or bulk formats
+          to your specification. Private label available.
+        </p>
+      </div>
     </div>
 
     <!-- 4-up only from 1280px: at 1024 the columns are too narrow for a single-line product name -->
@@ -524,10 +544,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   </div>
 </section>
 
-<!-- ================= WHY RAVOMA ================= -->
+<!-- ================= WHY PANAHANDEH ================= -->
 <section class="reveal bg-navy-900 py-24 lg:py-36 border-y border-gold/10">
   <div class="mx-auto max-w-site px-[var(--gutter)]">
-    <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">04 — WHY RAVOMA</p>
+    <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">04 — WHY PANAHANDEH</p>
     <h2 class="rv mt-6 max-w-[16ch] font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
         style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
       Five reasons partners <span class="foil italic font-normal">stay</span>.
@@ -602,7 +622,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <li class="rv flex items-start gap-5" style="--d:.22s">
           <svg viewBox="0 0 24 24" class="w-5 h-5 mt-1 text-gold-dk shrink-0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-mail"/></svg>
           <div><p class="text-[11px] tracking-[.28em] text-navy-800/65 font-semibold">EMAIL</p>
-               <a href="mailto:info@ravoma.ae" class="ulink mt-1.5 inline-block font-display text-[21px]">info@ravoma.ae</a></div>
+               <a href="mailto:info@panahandeh.ae" class="ulink mt-1.5 inline-block font-display text-[21px]">info@panahandeh.ae</a></div>
         </li>
         <li class="rv flex items-start gap-5" style="--d:.28s">
           <svg viewBox="0 0 24 24" class="w-5 h-5 mt-1 text-gold-dk shrink-0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><use href="#i-pin"/></svg>
@@ -676,11 +696,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
       <div class="md:col-span-5">
         <div class="flex flex-col items-start leading-none">
-          <img src="assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy"
-               class="w-14 h-14 mb-6">
-          <span class="font-display text-[28px] tracking-[.22em] pl-[.22em] foil font-bold">RAVOMA</span>
+          <svg viewBox="0 0 120 120" aria-hidden="true" class="w-14 h-14 mb-6 text-gold"><use href="#i-seal"/></svg>
+          <span class="font-display text-[23px] sm:text-[26px] tracking-[.15em] pl-[.15em] foil font-bold">PANAHANDEH</span>
           <span class="mt-2 h-px w-full rule-gold opacity-70"></span>
-          <span class="mt-2 text-[10px] tracking-[.42em] pl-[.42em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
+          <span class="mt-2 text-[10px] tracking-[.3em] pl-[.3em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
         </div>
         <p class="mt-7 max-w-[38ch] text-[15px] leading-[1.75] text-cream/50 font-normal">
           Quality products. Trusted partners. Global opportunities — sourced worldwide,
@@ -712,15 +731,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">GET IN TOUCH</p>
         <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
           <li><a href="tel:+971501234567" class="ulink hover:text-gold transition-colors">+971 50 123 4567</a></li>
-          <li><a href="mailto:info@ravoma.ae" class="ulink hover:text-gold transition-colors">info@ravoma.ae</a></li>
-          <li>www.ravoma.ae</li>
+          <li><a href="mailto:info@panahandeh.ae" class="ulink hover:text-gold transition-colors">info@panahandeh.ae</a></li>
+          <li>www.panahandeh.ae</li>
           <li>Dubai, United Arab Emirates</li>
         </ul>
       </div>
     </div>
 
     <div class="mt-16 pt-7 border-t border-gold/10 flex flex-col sm:flex-row gap-4 justify-between text-[11.5px] tracking-[.14em] text-cream/50">
-      <p>© <span id="yr"></span> RAVOMA FOODSTUFF TRADING L.L.C — ALL RIGHTS RESERVED</p>
+      <p>© <span id="yr"></span> PANAHANDEH FOODSTUFF TRADING L.L.C — ALL RIGHTS RESERVED</p>
       <p>DUBAI · UNITED ARAB EMIRATES</p>
     </div>
   </div>
