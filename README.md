@@ -10,43 +10,54 @@ RAVOMA mark appears where it belongs — on the products.
 Three complete homepage designs live in this repo. They share one asset library and one set of
 facts, and take three different positions on how a foodstuff trader should present itself.
 
+The root of the site is a **selector page** that shows all three side by side and opens each one
+in its own tab, so the client can move between them without losing their place.
+
 | | Design | What it is | Path |
 |---|---|---|---|
-| 01 | **The trading house** | Dark, cinematic, luxury-editorial. Navy and gold, a dotted-earth globe with trade corridors, big serif headlines. | `index.html` |
+| — | **Selector** | Presentation page. Three preview cards, each opening a design in a new tab. Excluded from search engines. | `index.html` |
+| 01 | **The trading house** | Dark, cinematic, luxury-editorial. Navy and gold, a dotted-earth globe with trade corridors, big serif headlines. | `v1/index.html` |
 | 02 | **The trading desk** | Light and editorial. Warm paper, an ink ticker, and a dense spec table with a cursor-following product preview. Reads like a commodity house, not a brochure. | `v2/index.html` |
 | 03 | **The plateau** | Persian design language — girih tessellation, pointed-arch niches, lapis and turquoise on lime plaster. Bilingual English ⇄ فارسی with a real right-to-left flip. | `v3/index.html` |
 
 Every one is a single self-contained HTML file. No build step, no dependencies to install.
 
-**Live:** https://msmelok.github.io/ravoma-website/ (01) — 02 and 03 publish to `/v2/` and `/v3/`.
+**Live:** https://panahandeh.devsource.dev — designs at `/v1/`, `/v2/` and `/v3/`.
+Also mirrored on GitHub Pages at https://msmelok.github.io/panahandeh-website/.
 
 ---
 
 ## Running it
 
 ```bash
-git clone https://github.com/MSMelok/ravoma-website.git
-cd ravoma-website
+git clone https://github.com/MSMelok/panahandeh-website.git
+cd panahandeh-website
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000, http://localhost:8000/v2/ or http://localhost:8000/v3/.
+Then open http://localhost:8000 for the selector, or go straight to `/v1/`, `/v2/` or `/v3/`.
 
 Opening the files straight off the filesystem also works, but serve them if you are testing
 anything that cares about origins.
 
-There is a small version switcher pinned to the bottom-left corner of 02 and 03 so the three can
-be compared side by side. It is marked with a comment in the source and should come out before
-the site goes to the client.
+There is a small version switcher pinned to the bottom-left corner of all three designs — a
+diamond back to the selector, then 01 / 02 / 03. It is marked with a comment in each file and
+should come out before the chosen design goes live as the real site.
+
+**Hosting.** Vercel serves the repo as static files with no build step, and resolves the
+subdirectories on its own; `vercel.json` only adds cache headers for `assets/` and `brand/` plus
+two security headers. Nothing in it is load-bearing for routing.
 
 ---
 
 ## Layout
 
 ```
-index.html                  design 01
+index.html                  selector page
+v1/index.html               design 01
 v2/index.html               design 02
 v3/index.html               design 03
+vercel.json                 cache and security headers (routing needs no config)
 DESIGN.md                   original design system: colour tokens, type scale, spacing
 assets/
   hero.webp                 saffron macro, design 01 hero
@@ -56,6 +67,7 @@ assets/
   export.webp               container vessel
   chickpeas|lentils|splitpeas|kidneybeans.webp    pulses and beans
   saffron|turmeric|blackpepper|coriander.webp     spices
+  preview-v1|v2|v3.webp     selector screenshots, regenerated when a design changes
   mark.webp                 RAVOMA brand monogram
   favicon-*.png             16 / 32 / 48 / 512
   apple-touch-icon.png      180px
@@ -73,6 +85,23 @@ seed. Same origins, same grades, same formats, same photography.
 
 What differs is everything else: palette, typeface, grid, how the catalogue is presented, and what
 each design assumes the buyer came for.
+
+---
+
+## The selector
+
+Design 01's palette, so it reads as the client's own presentation rather than a developer index:
+navy and gold, Playfair and Montserrat, the P seal. Each option is a real screenshot of that
+design plus its palette swatches, so the three directions are distinguishable before anything is
+opened.
+
+Every card is a plain `<a target="_blank" rel="noopener">` — no JavaScript is needed for the links
+to work, and the selector stays open in its own tab while the client moves between designs. The
+page carries `<meta name="robots" content="noindex">` so a comparison page never outranks the real
+site.
+
+The screenshots in `assets/preview-v*.webp` are generated from the live pages with the version
+switcher hidden. Regenerate them if a design changes.
 
 ---
 
@@ -193,8 +222,12 @@ resolve immediately, marquees and tickers stop and become scrollable, counters j
 value, the cursor-following preview is disabled, and design 01's globe cargo pulses are not emitted
 at all.
 
+On the selector, the warm radial behind the masthead lifts the background enough that gold at
+partial opacity stops clearing 4.5:1, so gold runs at full strength there; contrast was measured
+from the render with the text hidden, not assumed from the token values.
+
 Verified for horizontal overflow at 320, 360, 390, 414, 768, 1024, 1280 and 1440px — including
-design 03 in right-to-left. No page scroll at any width.
+design 03 in right-to-left and the selector. No page scroll at any width.
 
 ---
 
@@ -206,7 +239,9 @@ design 03 in right-to-left. No page scroll at any width.
 - Swap placeholder photography for the client's own
 - Confirm the Arabic/Persian question above, and whether cumin belongs in the range
 - Have a native speaker sign off the Persian copy in design 03
-- Remove the version switcher from designs 02 and 03
+- Remove the version switcher from all three designs, and decide whether the selector page
+  stays at the root or the chosen design takes it over
+- Regenerate `assets/preview-v*.webp` if a design changes after this point
 - Add the remaining pages (About, Products, Services, News, Contact)
 
 ---
