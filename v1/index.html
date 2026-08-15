@@ -66,6 +66,20 @@ body{ background:#040D1B; overflow-x:hidden }
 .vsw a[aria-current]{ background:#FBF9F5; color:#0A1D37 }
 .vsw a:hover{ color:#C9A24B }
 
+/* ---------- touch ergonomics ---------- */
+@media (pointer:coarse){
+  #burger.-mr-2{ min-height:44px; min-width:44px; padding:14px 13px; margin-right:-13px }
+  .vsw a{ min-width:46px; min-height:46px; display:flex; align-items:center; justify-content:center }
+  footer a.ulink,#menu a.mob,header a.ulink{ display:inline-block; min-height:44px; line-height:44px }
+  header a.btn-ghost{ min-height:44px }
+  /* the contact links carry an animated underline pinned 4px under the text: pad the box out
+     to 44px and shift the underline by the same amount so it stays put relative to the text */
+  main a.ulink{ padding-block:6px }
+  main a.ulink::after{ bottom:2px }
+  header a.group{ min-height:44px }
+  footer li{ line-height:1.2 }
+}
+
 /* ---------- gold foil (mouse-reactive) ---------- */
 .foil{
   background-image:linear-gradient(100deg,#8C6B22 0%,#C9A24B 18%,#F6E9C4 40%,#E8CC8A 52%,#C9A24B 68%,#8C6B22 100%);
@@ -115,8 +129,8 @@ body{ background:#040D1B; overflow-x:hidden }
 .rule-gold{ background:linear-gradient(90deg,transparent,#C9A24B 18%,#F3E1B0 50%,#C9A24B 82%,transparent) }
 
 /* ---------- reveal primitives ---------- */
-.mask{ display:block; overflow:hidden; padding-bottom:.08em }
-.mask>span{ display:block; transform:translateY(112%); opacity:0;
+.mask{ display:block; overflow:hidden; padding-bottom:.24em; margin-bottom:-.16em }
+.mask>span{ display:block; transform:translateY(145%); opacity:0;
   transition:transform 1.05s var(--ease), opacity .9s var(--ease); transition-delay:var(--d,0s) }
 .in .mask>span{ transform:none; opacity:1 }
 
@@ -269,7 +283,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <span class="flex flex-col items-center">
       <span class="wm font-display text-[21px] sm:text-[23px] lg:text-[25px] xl:text-[28px] tracking-[.15em] pl-[.15em] foil font-bold">PANAHANDEH</span>
       <span class="mt-1.5 h-px w-full rule-gold opacity-70"></span>
-      <span class="hidden sm:block mt-1.5 text-[9px] lg:text-[10px] tracking-[.3em] pl-[.3em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
+      <span class="hidden sm:block mt-1.5 text-[10px] lg:text-[11px] tracking-[.28em] pl-[.28em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
       </span>
     </a>
 

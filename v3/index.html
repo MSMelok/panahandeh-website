@@ -137,7 +137,7 @@ html[lang="fa"] .top-in{ letter-spacing:0; text-transform:none; font-size:12.5px
 .lock{ display:flex; align-items:center; gap:12px; flex:none }
 .lock svg{ width:34px; height:34px; color:var(--saffron); flex:none }
 .lock b{ display:block; font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; letter-spacing:.13em; line-height:1 }
-.lock small{ display:block; font-size:8.5px; letter-spacing:.26em; color:var(--muted); margin-top:5px; line-height:1 }
+.lock small{ display:block; font-size:10px; letter-spacing:.22em; color:var(--muted); margin-top:5px; line-height:1 }
 html[lang="fa"] .lock small{ letter-spacing:0; font-size:10px }
 @media(max-width:430px){ .lock small{ display:none } .lock b{ font-size:19px } }
 /* below 400px the lockup + language toggle + burger no longer share one line */
@@ -149,6 +149,14 @@ html[lang="fa"] .lock small{ letter-spacing:0; font-size:10px }
   .lang button{ padding:7px 8px; font-size:10.5px }
 }
 @media(max-width:345px){ .lock b{ display:none } }
+/* a 44px touch target on every control does not fit beside the wordmark on a 360px phone */
+@media (pointer:coarse) and (max-width:400px){
+  .lang button{ padding-inline:7px; font-size:10px }
+  .lock b{ font-size:15.5px; letter-spacing:.07em }
+  .lock svg{ width:26px; height:26px }
+  .lock{ gap:8px }
+  .hdr-end{ gap:6px }
+}
 .nav{ display:none; gap:30px; font-size:14px; font-weight:400 }
 .nav a{ position:relative; padding:5px 0; color:var(--body) }
 .nav a::after{ content:''; position:absolute; inset-inline:0; bottom:0; height:1px; background:var(--saffron); transform:scaleX(0); transition:transform .38s var(--ease) }
@@ -328,6 +336,16 @@ html[lang="fa"] .fbase{ letter-spacing:0; text-transform:none; font-size:13px }
 .vsw a{ font-size:10.5px; letter-spacing:.12em; padding:7px 10px; color:rgba(247,240,225,.6) }
 .vsw a[aria-current]{ background:var(--plaster); color:var(--lapis) }
 .vsw a:hover{ color:var(--plaster) }
+
+/* ---------- touch ergonomics ---------- */
+@media (pointer:coarse){
+  .burger{ min-height:44px; min-width:44px; padding:14px 11px; margin-inline-end:-11px }
+  .lock{ min-height:44px }
+  .lang button{ min-height:44px; padding-inline:14px }
+  .vsw a{ min-width:46px; min-height:46px; display:flex; align-items:center; justify-content:center }
+  .ftr ul a,.nav a,.cinfo a.v{ display:inline-block; min-height:44px; line-height:44px }
+  .ftr ul{ gap:2px }
+}
 </style>
 </head>
 

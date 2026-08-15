@@ -226,8 +226,17 @@ On the selector, the warm radial behind the masthead lifts the background enough
 partial opacity stops clearing 4.5:1, so gold runs at full strength there; contrast was measured
 from the render with the text hidden, not assumed from the token values.
 
-Verified for horizontal overflow at 320, 360, 390, 414, 768, 1024, 1280 and 1440px — including
-design 03 in right-to-left and the selector. No page scroll at any width.
+Verified for horizontal overflow at 320, 360, 375, 390, 414, 430, 768, 820, 834, 1024, 1280 and
+1440px — including design 03 in right-to-left and the selector. No page scroll at any width.
+
+**Touch.** Every page was re-measured under coarse-pointer emulation, and every interactive
+control clears 44px in height at every width: burgers, the language toggle, filter chips, nav and
+footer links, and the version switcher. The rules live in `@media (pointer:coarse)` blocks so a
+mouse-driven layout is untouched. Two of them are worth knowing about — design 01's contact links
+carry an animated underline pinned 4px under the text, so the box is padded and the underline
+offset by the same amount rather than stretched with `line-height`; and design 03's language
+toggle has a tighter variant below 400px, because three 44px targets plus the wordmark do not fit
+across a 360px phone otherwise.
 
 ---
 
