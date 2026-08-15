@@ -128,6 +128,17 @@ html[dir="rtl"] .btn svg{ transform:scaleX(-1) }
 .top{ background:var(--lapis-dk); color:rgba(247,240,225,.8) }
 .top-in{ display:flex; flex-wrap:wrap; gap:6px 22px; justify-content:space-between; padding:8px 0; font-size:11.5px; letter-spacing:.13em; text-transform:uppercase }
 html[lang="fa"] .top-in{ letter-spacing:0; text-transform:none; font-size:12.5px }
+/* three tracked-caps strings stack into a three-line wall on a phone; drop to the credentials
+   that matter at each width and centre what is left, so the band stays one line tall */
+@media(max-width:767px){
+  .top-in{ justify-content:center; text-align:center; gap:4px 16px }
+  .top-in span:nth-child(3){ display:none }
+}
+@media(max-width:559px){
+  .top-in{ font-size:10.5px; letter-spacing:.11em }
+  html[lang="fa"] .top-in{ font-size:12px }
+  .top-in span:nth-child(2){ display:none }
+}
 
 .hdr{ position:sticky; top:0; z-index:60; background:rgba(247,240,225,.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
       border-bottom:1px solid transparent; transition:border-color .3s,box-shadow .3s }

@@ -181,6 +181,20 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .markets .lbl{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted) }
 .markets ul{ display:flex; flex-wrap:wrap; gap:10px 26px; margin:0; padding:0; list-style:none }
 .markets li{ font-size:13.5px; font-weight:500; color:var(--body); letter-spacing:.01em }
+/* the seven names only fit on one line above ~900px; below that flex-wrap leaves an orphan,
+   so use a ruled grid instead — it reads as a deliberate table rather than a broken row */
+@media(max-width:899px){
+  .markets-in{ display:block; padding:20px 0 4px }
+  .markets .lbl{ display:block; margin-bottom:13px }
+  .markets ul{ display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--line) }
+  .markets li{ padding:11px 2px 11px 0; border-bottom:1px solid var(--line); font-size:14px }
+  .markets li:nth-child(odd){ padding-right:16px }
+  .markets li:last-child{ grid-column:1/-1 }
+}
+@media(min-width:560px) and (max-width:899px){
+  .markets ul{ grid-template-columns:repeat(3,1fr) }
+  .markets li:nth-child(odd){ padding-right:16px }
+}
 
 /* ==================== SECTION SHELL ==================== */
 .sec{ padding:clamp(72px,9vw,124px) 0 }
@@ -218,7 +232,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
   .row-meta{ display:flex }
 }
 .row-meta .cell{ min-width:0 }
-.row-meta .k{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); display:block }
+.row-meta .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); display:block }
 .row-meta .v{ font-size:13.5px; color:var(--body); margin-top:4px; display:block; white-space:nowrap }
 .row-tag{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
   border:1px solid var(--line); padding:5px 10px; color:var(--muted); justify-self:end; white-space:nowrap }
