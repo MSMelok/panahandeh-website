@@ -214,30 +214,50 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 
 .cat{ border-top:1px solid var(--ink) }
 .row{
-  display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:center;
-  padding:22px 0; border-bottom:1px solid var(--line); cursor:pointer;
+  display:grid; grid-template-columns:auto 1fr auto; gap:6px 16px; align-items:center;
+  padding:16px 0; border-bottom:1px solid var(--line); cursor:pointer;
   transition:background .3s var(--ease),padding .3s var(--ease); position:relative;
 }
+.row-thumb{
+  position:relative; overflow:hidden; width:54px; height:68px; flex:none;
+  background:var(--bone-2); align-self:center;
+}
+.row-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  transition:transform .7s var(--ease) }
+.row:hover .row-thumb img{ transform:scale(1.08) }
+@media(min-width:1000px){ .row-thumb{ width:64px; height:80px } }
 .row::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:0; background:var(--clay); transition:width .35s var(--ease) }
 .row:hover,.row:focus-visible{ background:var(--bone); padding-inline:16px }
 .row:hover::before{ width:3px }
 .row[hidden]{ display:none }
-.row-main{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; min-width:0 }
-.row-idx{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); flex:none; width:26px }
+.row-main{ display:flex; align-items:baseline; gap:6px 14px; flex-wrap:wrap; min-width:0 }
+.row-idx{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); flex:none; width:24px }
 .row-nm{ font-family:Fraunces,serif; font-size:clamp(1.25rem,2.2vw,1.6rem); font-weight:600; letter-spacing:-.012em; line-height:1.1 }
 .row-ar{ font-size:15px; color:var(--muted); direction:rtl; font-family:'Noto Naskh Arabic','Amiri',serif }
 .row-meta{ display:none; gap:32px; align-items:center }
-@media(min-width:900px){
-  .row{ grid-template-columns:minmax(0,1fr) auto auto; gap:32px }
-  .row-meta{ display:flex }
+@media(min-width:1000px){
+  .row{ grid-template-columns:auto minmax(0,1fr) auto auto; gap:28px }
+  /* fixed tracks rather than flex, so Origin/Grade/Format line up down the whole table */
+  .row-meta{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 24px; width:min(600px,48vw) }
 }
+@media(min-width:1280px){ .row-meta{ width:660px } }
+
+/* availability ------------------------------------------------ */
+.row-tag.live{ border-color:var(--olive); color:var(--olive); background:rgba(59,74,42,.07) }
+.row-tag.soon{ border-style:dashed; color:var(--muted) }
+.row[data-status="soon"] .row-thumb img{ filter:grayscale(.55) contrast(.95); opacity:.72 }
+.row[data-status="soon"] .row-nm{ color:var(--muted) }
+.row[data-status="soon"]:hover .row-thumb img{ filter:grayscale(0) contrast(1); opacity:1 }
+.dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--olive); flex:none;
+  margin-inline-end:2px; box-shadow:0 0 0 3px rgba(59,74,42,.16) }
 .row-meta .cell{ min-width:0 }
 .row-meta .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); display:block }
-.row-meta .v{ font-size:13.5px; color:var(--body); margin-top:4px; display:block; white-space:nowrap }
-.row-tag{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
-  border:1px solid var(--line); padding:5px 10px; color:var(--muted); justify-self:end; white-space:nowrap }
-.row-sub{ grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted) }
-@media(min-width:900px){ .row-sub{ display:none } }
+.row-meta .v{ font-size:13.5px; color:var(--body); margin-top:4px; display:block }
+.row-tag{ display:inline-flex; align-items:center; gap:7px; font-family:'IBM Plex Mono',monospace;
+  font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid var(--line); padding:6px 11px; color:var(--muted); justify-self:end; white-space:nowrap }
+.row-sub{ grid-column:2/-1; display:flex; flex-wrap:wrap; gap:6px 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted) }
+@media(min-width:1000px){ .row-sub{ display:none } }
 
 /* cursor-following preview (pointer devices only) */
 .preview{
@@ -249,12 +269,24 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .preview.on{ opacity:1; transform:translate(-50%,-50%) scale(1) }
 @media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){ .preview{ display:none } }
 
-.cat-foot{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:22px; margin-top:34px;
-  padding:26px; background:var(--bone); border:1px solid var(--line) }
-.cat-foot p{ margin:0; max-width:56ch; color:var(--body); font-size:15px }
-.cat-foot .brandline{ display:flex; align-items:center; gap:13px; margin-bottom:9px }
+.cat-foot{ margin-top:38px; padding:28px; background:var(--ink); color:var(--paper); border:1px solid var(--ink) }
+.cat-foot p{ margin:0; max-width:60ch; color:rgba(251,249,244,.72); font-size:15px; line-height:1.75 }
+.cat-foot .brandline{ display:flex; align-items:center; gap:13px; margin-bottom:10px }
 .cat-foot .brandline img{ width:34px; height:34px }
-.cat-foot .brandline b{ font-family:Fraunces,serif; font-size:19px; letter-spacing:.14em; font-weight:700 }
+.cat-foot .brandline b{ font-family:Fraunces,serif; font-size:20px; letter-spacing:.14em; font-weight:700; color:var(--paper) }
+.cat-foot .top{ display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:20px }
+.cat-foot .btn{ background:var(--paper); border-color:var(--paper); color:var(--ink) }
+.cat-foot .btn::after{ background:#E9A574 }
+.cat-foot .btn:hover{ color:var(--ink) }
+.packs{ display:grid; gap:2px; margin-top:24px; grid-template-columns:repeat(2,1fr) }
+@media(min-width:700px){ .packs{ grid-template-columns:repeat(4,1fr) } }
+.pack{ position:relative; overflow:hidden; aspect-ratio:4/5; background:#0B0B08 }
+.pack img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  transition:transform 1s var(--ease); }
+.pack:hover img{ transform:scale(1.06) }
+.pack span{ position:absolute; left:0; bottom:0; z-index:1; padding:7px 10px;
+  font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  background:var(--ink); color:#E9A574 }
 
 /* ==================== CAPABILITIES ==================== */
 .caps{ display:grid; gap:2px; background:var(--line); border:1px solid var(--line) }
@@ -429,9 +461,9 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
       <p class="eyebrow rev">Dubai · Est. foodstuff trading</p>
       <h1 class="h1 rev" style="--d:.06s">Pulses, beans<br>and spices —<br><em class="acc">bought properly.</em></h1>
       <p class="lede rev" style="--d:.14s">
-        Panahandeh is a Dubai trading desk for agricultural staples. We buy at origin, grade before
-        we pack, and consolidate at Jebel Ali — retail pouches under our own RAVOMA label, or bulk
-        to your specification.
+        Panahandeh is a Dubai trading desk for agricultural staples. Saffron and rice are shipping
+        today under our own RAVOMA label; the rest of the range follows as each origin and pack
+        is signed off.
       </p>
       <div class="hero-cta rev" style="--d:.2s">
         <a href="#contact" class="btn"><span>Request a quote <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
@@ -456,7 +488,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
     <dl class="stats rev" style="--d:.32s">
       <div><dt data-count="12" data-suffix="+">0</dt><dd>Sourcing origins</dd></div>
       <div><dt data-count="40" data-suffix="+">0</dt><dd>Export markets</dd></div>
-      <div><dt data-count="8">0</dt><dd>Core commodities</dd></div>
+      <div><dt data-count="9">0</dt><dd>Lines in the range</dd></div>
       <div><dt data-count="100" data-suffix="%">0</dt><dd>Pre-shipment inspected</dd></div>
     </dl>
   </div>
@@ -479,32 +511,44 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
     <div class="sec-head">
       <div>
         <p class="eyebrow rev">01 — Catalogue</p>
-        <h2 class="h2 rev" style="--d:.06s">Eight staples.<br><em class="acc">One standard.</em></h2>
+        <h2 class="h2 rev" style="--d:.06s">Two lines shipping.<br><em class="acc">Seven to follow.</em></h2>
       </div>
       <p class="lede rev" style="--d:.12s">
-        Four pulses and beans, four spices. Every line is graded against destination-market
-        requirements before it leaves — no substitutions, no surprises at the port.
+        Saffron and rice are moving now, packed under our own RAVOMA label. The remaining seven
+        lines have their origins secured and their packaging in design, and open in sequence.
       </p>
     </div>
 
     <div class="filters rev" role="group" aria-label="Filter catalogue">
       <button class="chip" data-filter="all" aria-pressed="true">All lines</button>
+      <button class="chip" data-filter="live" aria-pressed="false">Shipping now</button>
       <button class="chip" data-filter="pulses" aria-pressed="false">Pulses &amp; beans</button>
       <button class="chip" data-filter="spices" aria-pressed="false">Spices</button>
+      <button class="chip" data-filter="grains" aria-pressed="false">Rice</button>
     </div>
 
     <div class="cat rev" id="cat" style="--d:.06s"></div>
 
     <div class="cat-foot rev" style="--d:.12s">
-      <div>
-        <div class="brandline">
-          <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
-          <b>RAVOMA</b>
+      <div class="top">
+        <div>
+          <div class="brandline">
+            <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
+            <b>RAVOMA</b>
+          </div>
+          <p>Our own saffron label, endorsed by Panahandeh Foodstuff Trading L.L.C. Five retail
+             formats from a 10&nbsp;g pocket dispenser to a 300&nbsp;g flagship presentation box —
+             gold foil, embossed Persian motif and a UV-protected window on every one. Bulk and
+             private label come off the same lots.</p>
         </div>
-        <p>Our own retail label — 1&nbsp;kg pouches with premium printing and a freshness seal.
-           Private label and bulk formats available on the same lots.</p>
+        <a href="#contact" class="btn"><span>Request full spec sheet <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
       </div>
-      <a href="#contact" class="btn btn-ghost"><span>Request full spec sheet <svg viewBox="0 0 24 24"><use href="#i-arr"/></svg></span></a>
+      <div class="packs">
+        <figure class="pack" style="margin:0"><img src="../assets/pack-pocket-dark.webp" width="900" height="1180" loading="lazy" decoding="async" alt="RAVOMA 10 g pocket dispenser tin in black"><span>10 g pocket</span></figure>
+        <figure class="pack" style="margin:0"><img src="../assets/pack-drawer.webp" width="1200" height="1120" loading="lazy" decoding="async" alt="RAVOMA 20 g drawer box with glass bottle"><span>20 g drawer</span></figure>
+        <figure class="pack" style="margin:0"><img src="../assets/pack-tin.webp" width="900" height="720" loading="lazy" decoding="async" alt="RAVOMA 100 g embossed round gold tin"><span>100 g tin</span></figure>
+        <figure class="pack" style="margin:0"><img src="../assets/pack-gift.webp" width="1200" height="960" loading="lazy" decoding="async" alt="RAVOMA 200 g black gift box with window"><span>200 g gift box</span></figure>
+      </div>
     </div>
   </div>
 </section>
@@ -638,8 +682,8 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
       </div>
       <div>
         <h4>Catalogue</h4>
-        <ul><li><a href="#catalogue">Pulses &amp; beans</a></li><li><a href="#catalogue">Spices</a></li>
-            <li><a href="#catalogue">RAVOMA retail</a></li><li><a href="#contact">Private label</a></li></ul>
+        <ul><li><a href="#catalogue">Saffron</a></li><li><a href="#catalogue">Rice</a></li>
+            <li><a href="#catalogue">Pulses &amp; spices</a></li><li><a href="#contact">Private label</a></li></ul>
       </div>
       <div>
         <h4>Get in touch</h4>
@@ -666,28 +710,30 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------------------------------------------------------- data */
 const LINES = [
-  { cat:'pulses', en:'Chickpeas',         ar:'حمص',                  img:'chickpeas',
-    origin:'India · Turkey · Mexico',  grade:'Kabuli 8–9 mm',            fmt:'1 kg · 25 kg · 50 kg', hs:'0713.20' },
-  { cat:'pulses', en:'Green Lentils',     ar:'عدس أخضر',              img:'lentils',
+  { cat:'spices', live:true,  en:'Saffron',           ar:'زعفران',                img:'saffron-pack',
+    origin:'Iran (Khorasan) · Afghanistan', grade:'Sargol, ISO 3632 cat. I',  fmt:'10 g · 20 g · 100 g · 200 g · 300 g', hs:'0910.20' },
+  { cat:'grains', live:true,  en:'Rice',              ar:'أرز',                   img:'rice',
+    origin:'Pakistan · India',         grade:'Basmati — sella & steam',   fmt:'1 kg · 5 kg · 25 kg',  hs:'1006.30' },
+  { cat:'pulses', live:false, en:'Chickpeas',         ar:'حمص',                  img:'chickpeas',
+    origin:'India · Turkey · Mexico',  grade:'Kabuli 8–9 mm',             fmt:'1 kg · 25 kg · 50 kg', hs:'0713.20' },
+  { cat:'pulses', live:false, en:'Green Lentils',     ar:'عدس أخضر',              img:'lentils',
     origin:'Turkey · Canada',          grade:'Laird, machine-cleaned',    fmt:'1 kg · 25 kg',         hs:'0713.40' },
-  { cat:'pulses', en:'Yellow Split Peas', ar:'بازلاء صفراء مجروشة',   img:'splitpeas',
+  { cat:'pulses', live:false, en:'Yellow Split Peas', ar:'بازلاء صفراء مجروشة',   img:'splitpeas',
     origin:'Canada · Russia · Ukraine',grade:'Split, 99.5% purity',       fmt:'1 kg · 25 kg',         hs:'0713.10' },
-  { cat:'pulses', en:'Red Kidney Beans',  ar:'فاصولياء حمراء',        img:'kidneybeans',
+  { cat:'pulses', live:false, en:'Red Kidney Beans',  ar:'فاصولياء حمراء',        img:'kidneybeans',
     origin:'Ethiopia · Argentina',     grade:'Dark red, 180–200/100 g',   fmt:'1 kg · 25 kg',         hs:'0713.33' },
-  { cat:'spices', en:'Saffron',           ar:'زعفران',                img:'saffron',
-    origin:'Iran · Afghanistan',       grade:'Sargol, ISO 3632 cat. I',   fmt:'1 g · 5 g · 10 g',     hs:'0910.20' },
-  { cat:'spices', en:'Turmeric',          ar:'كركم',                  img:'turmeric',
+  { cat:'spices', live:false, en:'Turmeric',          ar:'كركم',                  img:'turmeric',
     origin:'India · Iran',             grade:'Ground, 3.5% curcumin',     fmt:'500 g · 25 kg',        hs:'0910.30' },
-  { cat:'spices', en:'Black Pepper',      ar:'فلفل أسود',             img:'blackpepper',
+  { cat:'spices', live:false, en:'Black Pepper',      ar:'فلفل أسود',             img:'blackpepper',
     origin:'Vietnam · India',          grade:'550 g/l, ASTA cleaned',     fmt:'500 g · 25 kg',        hs:'0904.11' },
-  { cat:'spices', en:'Coriander Seeds',   ar:'بذور الكزبرة',          img:'coriander',
+  { cat:'spices', live:false, en:'Coriander Seeds',   ar:'بذور الكزبرة',          img:'coriander',
     origin:'India · Iran · Bulgaria',  grade:'Eagle, 99% purity',         fmt:'500 g · 25 kg',        hs:'0909.21' }
 ];
 
 const CAPS = [
   ['Origin selection','We buy on the season, not the offer sheet. Where a crop underperforms, the origin changes — the specification does not.'],
   ['Grading &amp; cleaning','Sieved, de-stoned and colour-sorted to the agreed calibration. Moisture and foreign-matter limits are fixed in the contract, not negotiated on arrival.'],
-  ['Packing &amp; private label','1 kg retail pouches under RAVOMA, or your artwork on the same lot. Bulk in 25 kg and 50 kg PP or jute.'],
+  ['Packing &amp; private label','Five RAVOMA retail formats for saffron, from a 10 g pocket dispenser to a 300 g presentation box, or your artwork on the same lot. Bulk in 25 kg and 50 kg PP or jute.'],
   ['Consolidation','Mixed-commodity containers built at Jebel Ali so a smaller buyer still ships a full load.'],
   ['Documentation','Phytosanitary, certificate of origin, ISO 3632 for saffron, halal where required — prepared against the destination, not a template.'],
   ['Traceability','Every pouch carries a lot code that resolves to origin, harvest window, cleaning line and packing date.']
@@ -711,8 +757,9 @@ const ORIGINS = [
 
 /* ---------------------------------------------------------- ticker */
 {
-  const items = LINES.map(l => `<span><b>${l.en}</b> ${l.origin}</span>`).join('') +
-                `<span><b>Jebel Ali</b> Consolidation</span><span><b>RAVOMA</b> Retail label</span>`;
+  const items = LINES.map(l =>
+      `<span><b>${l.en}</b> ${l.live ? l.origin : 'Coming soon'}</span>`).join('') +
+    `<span><b>Jebel Ali</b> Consolidation</span><span><b>RAVOMA</b> Saffron label</span>`;
   $('#ticker').innerHTML = `<div class="ticker-group">${items}</div><div class="ticker-group">${items}</div>`;
 }
 
@@ -720,7 +767,10 @@ const ORIGINS = [
 {
   const cat = $('#cat');
   cat.innerHTML = LINES.map((l,i) => `
-    <div class="row" data-cat="${l.cat}" data-img="${l.img}" tabindex="0">
+    <div class="row" data-cat="${l.cat}" data-img="${l.img}" data-status="${l.live ? 'live' : 'soon'}" tabindex="0">
+      <figure class="row-thumb" style="margin:0">
+        <img src="../assets/${l.img}.webp" width="900" height="1200" loading="lazy" decoding="async" alt="${l.en}">
+      </figure>
       <div class="row-main">
         <span class="row-idx">${String(i+1).padStart(2,'0')}</span>
         <span class="row-nm">${l.en}</span>
@@ -731,14 +781,18 @@ const ORIGINS = [
         <span class="cell"><span class="k">Grade</span><span class="v">${l.grade}</span></span>
         <span class="cell"><span class="k">Format</span><span class="v">${l.fmt}</span></span>
       </div>
-      <span class="row-tag">HS ${l.hs}</span>
-      <div class="row-sub"><span>${l.origin}</span><span>${l.grade}</span><span>${l.fmt}</span></div>
+      ${l.live
+        ? `<span class="row-tag live"><i class="dot"></i>Shipping now</span>`
+        : `<span class="row-tag soon">Coming soon</span>`}
+      <div class="row-sub"><span>${l.origin}</span><span>${l.fmt}</span></div>
     </div>`).join('');
 
   $$('.chip').forEach(chip => chip.addEventListener('click', () => {
     const f = chip.dataset.filter;
     $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
-    $$('.row', cat).forEach(r => { r.hidden = !(f === 'all' || r.dataset.cat === f); });
+    $$('.row', cat).forEach(r => {
+      r.hidden = !(f === 'all' || (f === 'live' ? r.dataset.status === 'live' : r.dataset.cat === f));
+    });
   }));
 
   /* cursor-following preview */
@@ -789,7 +843,8 @@ $('#originList').innerHTML = ORIGINS.map(([c,p]) =>
 
 /* ---------------------------------------------------------- form select */
 $('#f-line').innerHTML = '<option value="">Select a line…</option>' +
-  LINES.map(l => `<option>${l.en}</option>`).join('') + '<option>Multiple / other</option>';
+  LINES.map(l => `<option>${l.en}${l.live ? '' : ' (coming soon)'}</option>`).join('') +
+  '<option>Multiple / other</option>';
 
 /* ---------------------------------------------------------- header */
 {

@@ -67,6 +67,9 @@ assets/
   export.webp               container vessel
   chickpeas|lentils|splitpeas|kidneybeans.webp    pulses and beans
   saffron|turmeric|blackpepper|coriander.webp     spices
+  rice.webp                 basmati, added with the availability pass
+  saffron-pack.webp         RAVOMA 10 g pocket tin, the Saffron catalogue thumbnail
+  pack-*.webp               RAVOMA packaging renders cropped from the client's design sheets
   preview-v1|v2|v3.webp     selector screenshots, regenerated when a design changes
   mark.webp                 RAVOMA brand monogram
   favicon-*.png             16 / 32 / 48 / 512
@@ -79,9 +82,14 @@ brand/                      original client artwork (monogram, full lockup, bran
 
 ## What the three share
 
-The product range is the same across all three: four pulses and beans — chickpeas, green lentils,
+Designs 01 and 03 carry the same eight lines: four pulses and beans — chickpeas, green lentils,
 yellow split peas, red kidney beans — and four spices — saffron, turmeric, black pepper, coriander
-seed. Same origins, same grades, same formats, same photography.
+seed.
+
+**Design 02 is ahead of the other two.** It carries nine lines and marks availability: saffron and
+rice are shipping, and the remaining seven are flagged "coming soon" with their thumbnails
+desaturated. It is also the only design using the client's real RAVOMA packaging renders. If the
+client picks 01 or 03, the same availability treatment needs porting across.
 
 What differs is everything else: palette, typeface, grid, how the catalogue is presented, and what
 each design assumes the buyer came for.
@@ -138,6 +146,11 @@ The catalogue is a table, not a card grid: eight rows carrying origin, grade, fo
 filterable by pulses or spices. On a pointer device, hovering a row raises a product photograph
 that follows the cursor — so the imagery is there when a buyer wants it and out of the way when
 they are scanning specifications.
+
+Each row carries a thumbnail and an availability tag. Saffron uses the client's own pack render;
+the seven unreleased lines are desaturated and tagged "coming soon", and a "Shipping now" filter
+narrows the table to what can actually be ordered. Below the table, a strip shows four of the five
+real RAVOMA saffron formats.
 
 The process rail scrolls horizontally below 1100px with a progress hairline tied to its scroll
 position.
@@ -247,6 +260,10 @@ across a 360px phone otherwise.
 - Point the contact forms at a real handler
 - Swap placeholder photography for the client's own
 - Confirm the Arabic/Persian question above, and whether cumin belongs in the range
+- Decide whether the company mark should be the **TP monogram** that appears on the real packs
+  rather than the "P" seal used in the header and favicons, which was drawn before those renders
+  existed
+- Port design 02's availability treatment to whichever design the client picks
 - Have a native speaker sign off the Persian copy in design 03
 - Remove the version switcher from all three designs, and decide whether the selector page
   stays at the root or the chosen design takes it over

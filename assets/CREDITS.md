@@ -15,10 +15,36 @@ These are stand-ins for the client's own product photography.
 | turmeric.webp | Eva Bronzini | https://www.pexels.com/photo/close-up-shot-of-turmeric-powder-6104651/ |
 | blackpepper.webp | Eva Bronzini | https://www.pexels.com/photo/close-up-photo-of-whole-peppercorns-5988689/ |
 | coriander.webp | Eva Bronzini | https://www.pexels.com/photo/a-pile-of-coriander-seeds-5988179/ |
+| rice.webp | Abdul Rehman | https://www.pexels.com/photo/basmati-rice-grains-15879426/ |
 | band.webp | Engin Akyurt | https://www.pexels.com/photo/sacks-of-beans-and-grains-in-the-market-13612369/ |
 | about.webp | Lucia Barreiros  Silva | https://www.pexels.com/photo/pile-of-brown-sacks-inside-a-wooden-barn-12293641/ |
 | export.webp | Pixabay | https://www.pexels.com/photo/boat-in-body-of-water-262353/ |
 | skyline.webp | Dreamer  Dude | https://www.pexels.com/photo/outstanding-cityscape-of-dubai-across-sea-at-dusk-18341554/ |
+
+## RAVOMA packaging renders (client-owned, not stock)
+
+Cropped from six packaging design sheets the client supplied on 16 Aug 2026. All show RAVOMA
+saffron with a Panahandeh Foodstuff Trading L.L.C endorsement and a **TP monogram** — which is the
+company's real mark, and is not the "P" seal currently used in the site header and favicons.
+
+| File | Format shown | Source sheet |
+|---|---|---|
+| saffron-pack.webp | 10 g pocket dispenser, black — the Saffron catalogue thumbnail | `pack-source-10g-pocket-black` |
+| pack-pocket-dark.webp | 10 g pocket dispenser, black | `pack-source-10g-pocket-black` |
+| pack-pocket-cream.webp | 10 g pocket dispenser, ivory | `pack-source-10g-pocket-ivory` |
+| pack-drawer.webp | 20 g drawer box with glass bottle | `pack-source-20g-drawer-box` |
+| pack-tin.webp | 100 g embossed round gold tin | `pack-source-100g-round-tin` |
+| pack-gift.webp | 200 g black gift box with window | `pack-source-200g-gift-box` |
+| pack-open.webp | 200 g inner tin, open | `pack-source-200g-gift-box` |
+| pack-flagship.webp | 300 g ivory presentation box | `pack-source-300g-presentation-box` |
+
+Panels carrying dimension callouts or caption text were avoided; the crops are the clean product
+shots only.
+
+**The source sheets are deliberately not in the repo.** They are gitignored and kept locally in
+`brand/pack-source-*.jpg`. The cropped product shots above are on the live site regardless, but the
+full sheets also carry dimensions, materials, finishes and the retail barcode, which is unreleased
+commercial detail with no reason to sit in a public repository.
 
 ## Brand assets (client-owned, not stock)
 

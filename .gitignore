@@ -11,3 +11,9 @@
 .shot.html
 .probe.html
 *.local.html
+
+# Client packaging design sheets. The cropped product shots in assets/ are on the live
+# site anyway, but the full sheets add dimensions, materials, finishes and the retail
+# barcode — unreleased commercial detail that does not belong in a public repo.
+# Kept locally in brand/ and referenced from assets/CREDITS.md.
+brand/pack-source-*.jpg
