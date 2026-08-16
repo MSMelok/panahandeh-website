@@ -17,7 +17,7 @@ in its own tab, so the client can move between them without losing their place.
 |---|---|---|---|
 | — | **Selector** | Presentation page. Three preview cards, each opening a design in a new tab. Excluded from search engines. | `index.html` |
 | 01 | **The trading house** | Dark, cinematic, luxury-editorial. Navy and gold, a dotted-earth globe with trade corridors, big serif headlines. | `v1/index.html` |
-| 02 | **The trading desk** | Light and editorial. Warm paper, an ink ticker, and a dense spec table with a cursor-following product preview. Reads like a commodity house, not a brochure. | `v2/index.html` |
+| 02 | **The trading desk** | Light and editorial. Warm paper, an ink ticker, and a dense spec table carrying thumbnails, availability and the client's real packaging. Reads like a commodity house, not a brochure. | `v2/index.html` |
 | 03 | **The plateau** | Persian design language — girih tessellation, pointed-arch niches, lapis and turquoise on lime plaster. Bilingual English ⇄ فارسی with a real right-to-left flip. | `v3/index.html` |
 
 Every one is a single self-contained HTML file. No build step, no dependencies to install.
@@ -142,15 +142,17 @@ Warm paper `#FBF9F4`, ink `#15150F`, clay `#A2461F`. Fraunces for display, Inter
 IBM Plex Mono for anything that behaves like data — origins, grades, HS codes, coordinates. The
 mono is what makes it read as a desk rather than a brochure.
 
-The catalogue is a table, not a card grid: eight rows carrying origin, grade, format and HS code,
-filterable by pulses or spices. On a pointer device, hovering a row raises a product photograph
-that follows the cursor — so the imagery is there when a buyer wants it and out of the way when
-they are scanning specifications.
+The catalogue is a table, not a card grid: nine rows carrying a thumbnail, origin, grade and
+format, filterable by category or by what is actually shipping.
 
 Each row carries a thumbnail and an availability tag. Saffron uses the client's own pack render;
 the seven unreleased lines are desaturated and tagged "coming soon", and a "Shipping now" filter
 narrows the table to what can actually be ordered. Below the table, a strip shows four of the five
 real RAVOMA saffron formats.
+
+An earlier version raised a product photograph that tracked the cursor across the table. It was
+removed: it covered the rows you were trying to read, and once every row had its own thumbnail it
+was showing you a picture you could already see.
 
 The process rail scrolls horizontally below 1100px with a progress hairline tied to its scroll
 position.
@@ -232,8 +234,7 @@ which is a separator rather than a component boundary.
 
 Motion is meaningful rather than decorative and respects `prefers-reduced-motion` — scroll reveals
 resolve immediately, marquees and tickers stop and become scrollable, counters jump to their final
-value, the cursor-following preview is disabled, and design 01's globe cargo pulses are not emitted
-at all.
+value, and design 01's globe cargo pulses are not emitted at all.
 
 On the selector, the warm radial behind the masthead lifts the background enough that gold at
 partial opacity stops clearing 4.5:1, so gold runs at full strength there; contrast was measured
