@@ -130,7 +130,7 @@ an italic accent is wanted, set the phrase in gold at a lighter weight instead.
 - **Grid:** 4px base unit, 1280px max content width.
 - **Gutters:** 20px mobile, 32px tablet, 56–64px desktop, exposed as `--gutter`.
 - **Section rhythm:** `clamp(72px, 9vw, 124px)` vertical. Generous — the brand is spacious.
-- **Radius: 0.** The shipped system is rectilinear. Circles are reserved for the TP monogram, the
+- **Radius: 0.** The shipped system is rectilinear. Circles are reserved for the P monogram, the
   status dot and the arch niches in design 03. Do not introduce a radius scale.
 - **Photography fills, it never dictates.** Images inside a fixed-ratio frame are absolutely
   positioned. In normal flow `height: 100%` cannot resolve against a flex-sized parent during
@@ -150,8 +150,16 @@ an italic accent is wanted, set the phrase in gold at a lighter weight instead.
 
 Both are inline SVG (`#i-seal`, `#i-ravoma`), not bitmaps, so they stay crisp at any size.
 
-- **TP monogram** — the company mark, taken from the real packaging. Used in the header, footer,
-  hero and every favicon size. This is Panahandeh's mark, not RAVOMA's.
+- **P monogram** — the company mark. Used in the header, footer, hero and every favicon size.
+  This is Panahandeh's mark, not RAVOMA's.
+
+  **It deliberately differs from the packaging.** The client's printed boxes and identity board
+  carry a **TP** monogram — a T laid over a P, engraved on the 300 g box pull tab. Since the
+  company name is Panahandeh, the T is most likely a first initial. Adam decided on 17 Aug 2026
+  to drop it on the grounds that TP reads as confusing, and the site now ships a single P. This
+  is a known, intentional divergence, not an error. If the client confirms the T is meaningful,
+  restore it: the TP form was two extra strokes, `M35 43 L70 39` and `M53.5 41 L53.5 85`, with
+  the P stem at x=64 rather than x=48.
 - **RAVOMA wordmark** — Cinzel with the O replaced by a gold saffron-stigma leaf. The letters are
   two `<text>` runs at x-positions measured from a real Cinzel render, with the leaf drawn between
   them, so the ornament lands correctly without depending on font metrics at runtime.
@@ -167,11 +175,18 @@ pages would have read as three versions of one idea.
 |---|---|---|---|---|
 | **01 Trading House** | Obsidian `#0C0B0A` | Antique gold | Cinzel | Dark, cinematic. SVG globe, full-bleed product cards. |
 | **02 Trading Desk** | Warm ivory `#E8DCC8` | Deep burgundy | Cinzel + Plex Mono | Light, editorial. Specification table, availability states, real packaging. |
-| **03 The Plateau** | Lime plaster `#F7F0E1` | Lapis `#12305E`, turquoise | Cormorant + Vazirmatn | Persian. Girih tessellation, pointed-arch niches, EN/فارسی with RTL. |
+| **03 The Plateau** | Warm ivory `#E8DCC8` | Deep burgundy, gold ornament | Cormorant + Vazirmatn | Persian. Girih tessellation, pointed-arch niches, EN/فارسی with RTL. |
 
-**Design 03 keeps its own palette on purpose.** It is the Persian direction; re-skinning it to
-obsidian and gold would delete the thing that makes it a separate option. It carries the brand
-marks only.
+**Design 03 was re-skinned to the brand palette on 17 Aug 2026**, at the client's direction. It
+had kept lapis, turquoise and lime plaster as the Persian direction; all three designs now share
+one palette. What still distinguishes 03 is its ornament and language, not its colour: the girih
+tessellation, the pointed-arch niches, Cormorant Garamond rather than Cinzel for Latin display,
+and the bilingual English/فارسی toggle with full RTL.
+
+Note that the substitution does not preserve the old contrast decisions. Turquoise `#106963` was
+5.8:1 on plaster and safe for body text; antique gold `#B08A4A` is 2.36:1 on warm ivory and is
+not. Anywhere the old palette used turquoise or saffron for body-size text on a light ground, the
+replacement is burgundy or `#7A4A1E` — never `#B08A4A`.
 
 **Only design 02 has availability states.** Saffron and rice ship today; the other seven lines are
 tagged "coming soon" with desaturated thumbnails. If the client picks 01 or 03, that treatment
@@ -214,3 +229,5 @@ sees. After any palette change, render the full page and look at it.
 | 17 Aug 2026 | Gold is ornament-only on light grounds | Measured 2.36:1 on ivory — fails as text and as a UI boundary |
 | 17 Aug 2026 | Antique Gold read as `#B08A4A`, not the board's `#B0BA4A` | The printed value is olive-green and contradicts its own swatch |
 | 17 Aug 2026 | Design 03 keeps its Persian palette | Re-skinning it would delete the thing that makes it a distinct option |
+| 17 Aug 2026 | Reversed: design 03 re-skinned to the brand palette | Client direction. Its distinction is now ornament and language, not colour |
+| 17 Aug 2026 | Company mark reduced from TP to P | Adam's call — TP read as confusing. Diverges from the printed packaging by decision |

@@ -14,8 +14,9 @@ Three things in that file are load-bearing and easy to get wrong:
 - **Antique gold `#B08A4A` cannot carry text on a light ground** — 2.36:1 on warm ivory.
   On light surfaces gold is ornament only; the accent role goes to deep burgundy.
 - **Cinzel has no italic.** Never apply `font-style: italic` to display type.
-- **Panahandeh is the company, RAVOMA is the product brand.** Never merge them. The TP
-  monogram is Panahandeh's mark; the leaf wordmark is RAVOMA's.
+- **Panahandeh is the company, RAVOMA is the product brand.** Never merge them. The P
+  monogram is Panahandeh's mark; the leaf wordmark is RAVOMA's. The site's P intentionally
+  differs from the TP on the client's packaging — see DESIGN.md before "fixing" it.
 
 ## Verify contrast against the render, not the tokens
 

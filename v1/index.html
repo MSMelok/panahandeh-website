@@ -37,7 +37,8 @@ tailwind.config = {
 </script>
 <style>
 :root{
-  --ease: cubic-bezier(.16,1,.3,1);
+  --ease: cubic-bezier(.22,1,.36,1);   /* entrances */
+  --snap: cubic-bezier(.3,.9,.25,1);   /* state changes */
   --gutter: 20px;
 }
 @media(min-width:768px){ :root{ --gutter:32px } }
@@ -46,6 +47,10 @@ tailwind.config = {
 html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility }
 body{ background:#0C0B0A; overflow-x:hidden }
 ::selection{ background:#B08A4A; color:#12100F }
+
+/* anchors land below the fixed header rather than under it */
+section[id]{ scroll-margin-top:84px }
+@media(min-width:1024px){ section[id]{ scroll-margin-top:104px } }
 
 /* ---------- paper grain ---------- */
 .grain::after{
@@ -57,6 +62,10 @@ body{ background:#0C0B0A; overflow-x:hidden }
    loses to text-[21px]. Doubling the class raises specificity without !important. */
 @media(max-width:400px){ .wm.wm{ font-size:18px; letter-spacing:.09em; padding-left:.09em } }
 @media(max-width:359px){ .lockmark{ display:none } }   /* 320px: seal or burger, not both */
+/* At 320 a two-up origin grid gives each cell 92px of text width, and "Afghanistan"
+   is one unbreakable word wider than that — it was pushing past the viewport.
+   One column below 360 instead of shrinking the name under the type floor. */
+@media(max-width:359px){ #originList{ grid-template-columns:1fr } }
 
 /* ---------- demo switcher (remove before client hand-off) ---------- */
 .vsw{ position:fixed; left:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:#0C0B0A; padding:1px }
@@ -73,19 +82,23 @@ body{ background:#0C0B0A; overflow-x:hidden }
   header a.btn-ghost{ min-height:44px }
   /* the contact links carry an animated underline pinned 4px under the text: pad the box out
      to 44px and shift the underline by the same amount so it stays put relative to the text */
-  main a.ulink{ padding-block:6px }
-  main a.ulink::after{ bottom:2px }
+  main a.ulink{ padding-block:7px }   /* 31.5px line box + 14 = 45.5px, clears 44 */
+  main a.ulink::after{ bottom:3px }
   header a.group{ min-height:44px }
   footer li{ line-height:1.2 }
 }
 
 /* ---------- gold foil (mouse-reactive) ---------- */
+/* Every stop is at or above brand gold. The old end stops were #7E6030, which the
+   sheen could drag into view: measured 4.03:1 against the solid nav ground, under AA.
+   Clamped to #B08A4A, the darkest pixel any foil run can paint is 4.83:1 on the
+   lightest ground it sits on and 5.71:1 on obsidian. */
 .foil{
-  background-image:linear-gradient(100deg,#7E6030 0%,#B08A4A 18%,#F0DDB8 40%,#D6B37A 52%,#B08A4A 68%,#7E6030 100%);
+  background-image:linear-gradient(100deg,#B08A4A 0%,#B08A4A 18%,#F0DDB8 40%,#D6B37A 52%,#B08A4A 68%,#B08A4A 100%);
   background-size:260% 100%;
   background-position:calc(50% + var(--foil,0px)) 0;
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  transition:background-position .35s var(--ease);
+  transition:background-position .5s var(--ease);
 }
 /* ---------- arabic / persian product names ----------
    Montserrat carries no Arabic glyphs, so these fell back to a system face and
@@ -102,7 +115,9 @@ body{ background:#0C0B0A; overflow-x:hidden }
    flow it falls back to its intrinsic aspect and dictates the grid row height, which
    is what was leaving dead space beside the shorter column. */
 .imgw>img{ position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover }
-.pimg{ transition:transform 1.1s var(--ease) }
+/* one grade across every photograph on the page, so the set reads as one shoot */
+.imgw>img,.pimg,.heroimg,.bandimg{ filter:saturate(.94) contrast(1.03) brightness(.98) }
+.pimg{ transition:transform 1.1s var(--ease), filter .9s var(--ease), opacity .9s var(--ease) }
 .pcard:hover .pimg{ transform:scale(1.07) }
 
 /* Column images: keep an aspect ratio while stacked, but from lg up let the figure
@@ -117,15 +132,32 @@ body{ background:#0C0B0A; overflow-x:hidden }
 }
 /* Tailwind's Play CDN does not emit arbitrary values found only in JS-injected
    markup, so the card metrics live here as real CSS. */
-.pbody{ min-height:520px }
+.pbody{ min-height:562px }
 .pbody dl{ min-height:182px }          /* tallest natural dl is 180px — equalises all four titles */
 .pbody h3{ font-size:26px; line-height:1.2; white-space:nowrap }
 @media (min-width:1280px){ .pbody h3{ font-size:23px } }  /* 4-up columns are only 201px wide */
-@media (max-width:639px){ .pbody{ min-height:460px } }
+@media (max-width:639px){ .pbody{ min-height:502px } }
 
-.meta-k{ color:rgba(232,220,200,.64); letter-spacing:.18em }
+/* .64 measured 3.78:1 against the saffron card's rendered ground — raised to .78 (4.84:1) */
+.meta-k{ color:rgba(232,220,200,.78); letter-spacing:.2em }
 .meta-v{ color:rgba(232,220,200,.88) }
 .rule-gold{ background:linear-gradient(90deg,transparent,#B08A4A 18%,#E8CFA4 50%,#B08A4A 82%,transparent) }
+
+/* ---------- availability states on the product cards ----------
+   Reserved height so all four cards keep their title on the same baseline
+   whether the tag pair sits on one row or two. */
+.ptags{ position:relative; display:flex; flex-wrap:wrap; align-content:flex-end;
+  gap:8px; margin-top:26px; min-height:70px }
+.ptag{ display:inline-flex; align-items:center; gap:8px; padding:7px 11px; line-height:1;
+  border:1px solid rgba(232,220,200,.34); color:#DCCDB4;
+  font-size:10.5px; letter-spacing:.2em; font-weight:600; white-space:nowrap }
+.ptag-live{ border-color:#B08A4A; color:#E8CFA4; background:rgba(176,138,74,.12) }
+.ptag-soon{ border-style:dashed; border-color:rgba(232,220,200,.4) }
+.pdot{ width:6px; height:6px; border-radius:50%; background:#E8CFA4; flex:none;
+  box-shadow:0 0 0 3px rgba(232,207,164,.18) }
+.pcard[data-status="soon"] .pimg{ filter:saturate(.2) contrast(1.02) brightness(.95); opacity:.85 }
+.pcard[data-status="soon"]:hover .pimg,
+.pcard[data-status="soon"]:focus-within .pimg{ filter:saturate(.94) contrast(1.03) brightness(.98); opacity:1 }
 
 /* ---------- reveal primitives ---------- */
 .mask{ display:block; overflow:hidden; padding-bottom:.24em; margin-bottom:-.16em }
@@ -133,8 +165,10 @@ body{ background:#0C0B0A; overflow-x:hidden }
   transition:transform 1.05s var(--ease), opacity .9s var(--ease); transition-delay:var(--d,0s) }
 .in .mask>span{ transform:none; opacity:1 }
 
-.rv{ opacity:0; transform:translateY(26px);
-  transition:opacity .85s var(--ease), transform .85s var(--ease); transition-delay:var(--d,0s) }
+/* 18px, not 26 — a shorter throw over a longer duration reads as deliberate
+   rather than as a bounce arriving late. */
+.rv{ opacity:0; transform:translateY(18px);
+  transition:opacity .9s var(--ease), transform .9s var(--ease); transition-delay:var(--d,0s) }
 .rv.in{ opacity:1; transform:none }
 
 .rv-line{ transform:scaleX(0); transform-origin:left; transition:transform 1.1s var(--ease); transition-delay:var(--d,0s) }
@@ -159,7 +193,7 @@ body{ background:#0C0B0A; overflow-x:hidden }
 .btn-ghost:hover{ border-color:#B08A4A; background:rgba(176,138,74,.09) }
 
 /* ---------- marquee ---------- */
-.marquee{ display:flex; width:max-content; animation:mq 42s linear infinite }
+.marquee{ display:flex; width:max-content; animation:mq 68s linear infinite }
 .marquee:hover{ animation-play-state:paused }
 @keyframes mq{ to{ transform:translateX(-50%) } }
 
@@ -173,24 +207,70 @@ body{ background:#0C0B0A; overflow-x:hidden }
 
 /* ---------- globe ---------- */
 .route{ stroke-dasharray:var(--len); stroke-dashoffset:var(--len);
-  transition:stroke-dashoffset 1.6s var(--ease), stroke .4s ease, stroke-width .4s ease; transition-delay:var(--d,0s) }
+  transition:stroke-dashoffset 1.6s var(--ease), stroke .4s var(--snap),
+             stroke-opacity .4s var(--snap), stroke-width .4s var(--snap); transition-delay:var(--d,0s) }
 .in .route{ stroke-dashoffset:0 }
+
+/* Tracing one corridor: the other eleven recede so the traced line is the only
+   bright path on the sphere. Dimming the field reads far better than brightening
+   one line against eleven of the same weight. */
+#globe #nodeG>g,#globe #pulseG,#globe .olabel{ transition:opacity .4s var(--snap) }
+#globe .olabel{ opacity:0 }
+#globe.tracing .route{ stroke-opacity:.12 }
+#globe.tracing .route.on{ stroke:#E8CFA4; stroke-opacity:1; stroke-width:2.1 }
+#globe.tracing #nodeG>g{ opacity:.26 }
+#globe.tracing #nodeG>g.on{ opacity:1 }
+#globe.tracing #pulseG{ opacity:.18 }
+#globe.tracing .olabel.on{ opacity:1 }
+
 .origin-cell{ border-top:1px solid rgba(176,138,74,.16);
-  transition:border-color .35s var(--ease), background-color .35s var(--ease) }
-.origin-cell:hover, .origin-cell.active{ border-top-color:#B08A4A; background:rgba(176,138,74,.06) }
-.origin-cell .dot{ transition:transform .35s var(--ease), opacity .35s var(--ease); opacity:.35 }
-.origin-cell:hover .dot, .origin-cell.active .dot{ opacity:1; transform:scale(1.6) }
+  transition:border-color .35s var(--snap), background-color .35s var(--snap) }
+.origin-cell:hover, .origin-cell.active{ border-top-color:#B08A4A; background:rgba(176,138,74,.07) }
+.origin-cell .dot{ transition:transform .35s var(--snap), opacity .35s var(--snap); opacity:.4 }
+.origin-cell:hover .dot, .origin-cell.active .dot{ opacity:1; transform:scale(1.7) }
 @keyframes hubPulse{ 0%{ r:6; opacity:.65 } 100%{ r:26; opacity:0 } }
-.hub-pulse{ animation:hubPulse 2.8s var(--ease) infinite }
-@keyframes spinSlow{ to{ transform:rotate(360deg) } }
-.ring-spin{ animation:spinSlow 70s linear infinite; transform-origin:center }
+.hub-pulse{ animation:hubPulse 3.4s var(--ease) infinite }
+
+/* ---------- indicative transit table ---------- */
+.transit{ width:100%; border-collapse:collapse; table-layout:fixed }
+.transit th,.transit td{ text-align:left; padding:17px 0; vertical-align:middle;
+  border-top:1px solid rgba(176,138,74,.18) }
+.transit thead th{ border-top:0; border-bottom:1px solid rgba(176,138,74,.42); padding-bottom:13px;
+  font-size:10.5px; letter-spacing:.28em; font-weight:600; color:#B08A4A; text-transform:uppercase }
+.transit tbody th{ font-family:Cinzel,Georgia,serif; font-weight:600; font-size:17px;
+  color:#E8DCC8; letter-spacing:.01em; padding-right:16px }
+.transit tbody td{ color:rgba(232,220,200,.66); font-size:13.5px; letter-spacing:.06em; white-space:nowrap }
+.transit .tnum{ color:#D6B37A; font-size:16px; font-weight:600; letter-spacing:.04em }
+.transit .c-days{ width:132px; text-align:right }
+.transit .c-bar{ width:auto; padding-left:28px }
+.transit .track{ position:relative; display:block; height:1px; background:rgba(176,138,74,.16) }
+.transit .tbar{ position:absolute; top:-1px; height:3px; background:#B08A4A;
+  left:var(--a); width:var(--w); transform:scaleX(0); transform-origin:left;
+  transition:transform 1.05s var(--ease); transition-delay:var(--d,0s) }
+.tblock.in .transit .tbar{ transform:scaleX(1) }
+@media (max-width:899px){
+  .transit .c-bar{ display:none }
+  .transit .c-days{ width:118px }
+  .transit tbody th{ font-size:15.5px }
+}
+@media (max-width:359px){ .transit tbody th{ font-size:14px } .transit .c-days{ width:104px } }
+
+/* ---------- assurance lists ---------- */
+.alist{ counter-reset:a }
+.alist li{ counter-increment:a; position:relative; display:grid; grid-template-columns:34px 1fr;
+  gap:0 14px; padding:20px 0; border-top:1px solid rgba(122,74,30,.2) }
+.alist li::before{ content:'0' counter(a); font-family:Cinzel,Georgia,serif; font-weight:600;
+  font-size:13px; color:#7A4A1E; letter-spacing:.06em; padding-top:2px }
+.alist li p{ font-size:15px; line-height:1.7; color:rgba(23,21,19,.75) }
+.alist li p b{ font-weight:600; color:#5A171B }
+@media (max-width:359px){ .alist li{ grid-template-columns:26px 1fr; gap:0 10px } }
 
 /* ---------- inputs ---------- */
 .fld{ background:transparent; border:0; border-bottom:1px solid rgba(23,21,19,.48);
   padding:10px 0; width:100%; font-size:16px; color:#171513; transition:border-color .35s var(--ease) }
 .fld:focus{ outline:none; border-bottom-color:#B08A4A }
 .fld::placeholder{ color:rgba(23,21,19,.55) }
-select.fld{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%230A1D37' stroke-width='1.5'%3E%3Cpath d='m2 5 5 5 5-5'/%3E%3C/svg%3E");
+select.fld{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23171513' stroke-width='1.5'%3E%3Cpath d='m2 5 5 5 5-5'/%3E%3C/svg%3E");
   background-repeat:no-repeat; background-position:right 2px center }
 
 /* ---------- focus visibility ---------- */
@@ -212,8 +292,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .rv{ opacity:1; transform:none }
   .rv-line{ transform:scaleX(1) }
   .route{ stroke-dashoffset:0 }
+  .transit .tbar{ transform:scaleX(1) }
   .marquee{ animation:none }
   #mqWrap{ overflow-x:auto }
+  .hub-pulse{ display:none }
 }
 </style>
 </head>
@@ -255,8 +337,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <symbol id="i-seal" viewBox="0 0 120 120">
       <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"/>
       <g fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M35 43 L70 39"/><path d="M53.5 41 L53.5 85"/>
-        <path d="M64 39.5 L64 85"/><path d="M64 43 h6.5 a13 13 0 0 1 0 26 H64"/>
+        <path d="M48 38 L48 86"/><path d="M48 41 h9 a14 14 0 0 1 0 28 H48"/>
       </g>
     </symbol>
     <symbol id="i-stigma" viewBox="0 0 112 104">
@@ -276,7 +357,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   </defs>
 </svg>
 
-<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-gold focus:text-navy-900 focus:px-5 focus:py-3 focus:text-xs focus:font-semibold focus:tracking-[.18em]">SKIP TO CONTENT</a>
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-gold focus:text-navy-900 focus:px-5 focus:py-4 focus:text-xs focus:font-semibold focus:tracking-[.18em]">SKIP TO CONTENT</a>
 
 <!-- ================= NAV ================= -->
 <header id="nav" class="fixed top-0 inset-x-0 z-50 border-b border-transparent py-5 lg:py-7">
@@ -285,10 +366,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- mobile-only spacer so the wordmark stays optically centred against the burger -->
     <span class="lg:hidden w-11 shrink-0" aria-hidden="true"></span>
 
-    <nav class="hidden lg:flex items-center gap-6 xl:gap-9 flex-1 text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
+    <nav class="hidden lg:flex items-center gap-6 xl:gap-8 flex-1 text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
       <a href="#about"    class="ulink hover:text-gold transition-colors">ABOUT US</a>
+      <a href="#network"  class="ulink hover:text-gold transition-colors">NETWORK</a>
       <a href="#products" class="ulink hover:text-gold transition-colors">PRODUCTS</a>
-      <a href="#services" class="ulink hover:text-gold transition-colors">SERVICES</a>
     </nav>
 
     <a href="#" class="group flex items-center gap-3 lg:gap-4 leading-none shrink-0" aria-label="PANAHANDEH — home">
@@ -301,8 +382,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </span>
     </a>
 
-    <div class="hidden lg:flex items-center gap-6 xl:gap-9 flex-1 justify-end text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
-      <a href="#network" class="ulink hover:text-gold transition-colors">NETWORK</a>
+    <div class="hidden lg:flex items-center gap-6 xl:gap-8 flex-1 justify-end text-[11.5px] tracking-[.2em] font-medium text-cream/70 whitespace-nowrap">
+      <a href="#assurance" class="hidden xl:inline ulink hover:text-gold transition-colors">ASSURANCE</a>
+      <a href="#services" class="ulink hover:text-gold transition-colors">SERVICES</a>
       <a href="#contact" class="btn-ghost px-5 xl:px-6 py-3 text-[11px] tracking-[.18em] xl:tracking-[.22em] whitespace-nowrap">PARTNER WITH US</a>
     </div>
 
@@ -315,19 +397,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 <!-- mobile menu -->
 <div id="menu" data-open="false" class="fixed inset-0 z-[55] bg-navy-950/95 backdrop-blur-xl lg:hidden">
-  <div class="h-full flex flex-col justify-center px-[var(--gutter)]">
+  <!-- scrolls rather than centres when seven items exceed a short viewport -->
+  <div class="h-full overflow-y-auto flex flex-col px-[var(--gutter)] pt-24 pb-12">
     <button id="close" class="absolute top-7 right-5 p-3 text-gold" aria-label="Close menu">
       <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 5 14 14M19 5 5 19"/></svg>
     </button>
-    <nav class="flex flex-col gap-1">
-      <a href="#about"    class="mob font-display text-4xl py-3 border-b border-gold/10">About Us</a>
-      <a href="#network"  class="mob font-display text-4xl py-3 border-b border-gold/10">Network</a>
-      <a href="#products" class="mob font-display text-4xl py-3 border-b border-gold/10">Products</a>
-      <a href="#services" class="mob font-display text-4xl py-3 border-b border-gold/10">Services</a>
-      <a href="#contact"  class="mob font-display text-4xl py-3 text-gold">Contact</a>
-    </nav>
-    <div class="mt-12 text-[11.5px] tracking-[.2em] text-cream/50 space-y-2">
-      <p>+971 50 123 4567</p><p>INFO@PANAHANDEH.AE</p><p>DUBAI · UNITED ARAB EMIRATES</p>
+    <div class="my-auto w-full">
+      <nav class="flex flex-col">
+        <a href="#about"     class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">About Us</a>
+        <a href="#network"   class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">Network</a>
+        <a href="#logistics" class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">Logistics</a>
+        <a href="#products"  class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">Products</a>
+        <a href="#assurance" class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">Assurance</a>
+        <a href="#services"  class="mob font-display text-[30px] sm:text-4xl py-2 border-b border-gold/10">Services</a>
+        <a href="#contact"   class="mob font-display text-[30px] sm:text-4xl py-2 text-gold">Contact</a>
+      </nav>
+      <div class="mt-10 text-[11.5px] tracking-[.2em] text-cream/60 space-y-2">
+        <p>+971 50 123 4567</p><p>INFO@PANAHANDEH.AE</p><p>DUBAI · UNITED ARAB EMIRATES</p>
+      </div>
     </div>
   </div>
 </div>
@@ -340,7 +427,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <div class="absolute inset-0 -z-10 bg-navy-950"></div>
   <img src="../assets/hero.webp" alt="" aria-hidden="true" fetchpriority="high" decoding="async"
        width="2400" height="1350"
-       class="absolute inset-0 -z-10 w-full h-full object-cover">
+       class="heroimg absolute inset-0 -z-10 w-full h-full object-cover">
   <div class="absolute inset-0 -z-10"
        style="background:linear-gradient(180deg,rgba(12,11,10,.93) 0%,rgba(18,16,15,.88) 38%,rgba(12,11,10,.90) 72%,rgba(12,11,10,.97) 100%)"></div>
   <div class="absolute inset-0 -z-10 opacity-[.45]"
@@ -385,13 +472,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- stats -->
     <dl class="rv mt-14 lg:mt-16 grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-gold/15 pt-9" style="--d:.78s">
       <div><dt class="font-display text-3xl lg:text-[2.6rem] text-gold" data-count="12" data-suffix="+">0</dt>
-           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/50">SOURCING ORIGINS</dd></div>
+           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/60">SOURCING ORIGINS</dd></div>
       <div><dt class="font-display text-3xl lg:text-[2.6rem] text-gold" data-count="40" data-suffix="+">0</dt>
-           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/50">EXPORT MARKETS</dd></div>
+           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/60">EXPORT MARKETS</dd></div>
       <div><dt class="font-display text-3xl lg:text-[2.6rem] text-gold" data-count="100" data-suffix="%">0</dt>
-           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/50">NATURAL PRODUCTS</dd></div>
+           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/60">NATURAL PRODUCTS</dd></div>
       <div><dt class="font-display text-3xl lg:text-[2.6rem] text-gold">24<span class="text-2xl align-top">/</span>7</dt>
-           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/50">TRADE DESK</dd></div>
+           <dd class="mt-2 text-[11px] tracking-[.26em] text-cream/60">TRADE DESK</dd></div>
     </dl>
   </div>
 </section>
@@ -472,7 +559,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">02 — OUR NETWORK</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-          From origin to Dubai.<br><span class="foil font-normal">From Dubai to the world.</span>
+          From origin to&nbsp;Dubai.<br><span class="foil font-normal">From Dubai to the&nbsp;world.</span>
         </h2>
         <p class="rv mt-7 text-[16px] leading-[1.8] text-cream/60 font-normal max-w-[46ch]" style="--d:.14s">
           Twelve sourcing corridors converge on Jebel Ali. From there, consolidated and re-packed
@@ -496,7 +583,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <figure class="relative">
           <svg id="globe" viewBox="0 0 620 620" class="w-full h-auto max-w-[600px] mx-auto"
                role="img" aria-label="Wireframe globe showing twelve sourcing origins connected by trade routes to the Panahandeh hub in Dubai, United Arab Emirates."></svg>
-          <figcaption class="mt-5 text-center text-[11px] tracking-[.3em] text-cream/50">
+          <figcaption class="mt-5 text-center text-[11px] tracking-[.3em] text-cream/60">
             SOURCING CORRIDORS · CONSOLIDATED AT JEBEL ALI, DUBAI
           </figcaption>
         </figure>
@@ -508,9 +595,107 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <div class="flex items-center gap-6">
         <p class="text-[11px] tracking-[.3em] text-gold font-semibold shrink-0">SOURCING ORIGINS</p>
         <span class="h-px flex-1 bg-gold/15"></span>
-        <p class="hidden lg:block text-[11px] tracking-[.3em] text-cream/50 shrink-0">HOVER TO TRACE A CORRIDOR</p>
+        <p class="hidden lg:block text-[11px] tracking-[.3em] text-cream/60 shrink-0">SELECT AN ORIGIN TO TRACE ITS CORRIDOR</p>
       </div>
       <ul id="originList" class="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 border-b border-gold/15"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LOGISTICS & TERMS ================= -->
+<section id="logistics" class="reveal bg-navy-900 py-24 lg:py-36 border-y border-gold/10">
+  <div class="mx-auto max-w-site px-[var(--gutter)]">
+
+    <div class="grid lg:grid-cols-12 gap-x-14 gap-y-12">
+      <div class="lg:col-span-5">
+        <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">03 — LOGISTICS &amp; TERMS</p>
+        <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
+            style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
+          Consolidated at Jebel&nbsp;Ali.<br><span class="foil font-normal">Shipped on your&nbsp;terms.</span>
+        </h2>
+        <div class="rv-line mt-9 h-px w-full bg-gold/25" style="--d:.14s"></div>
+      </div>
+
+      <div class="lg:col-span-7 lg:pt-14">
+        <p class="rv text-[17px] lg:text-[18px] leading-[1.75] text-cream/75 font-normal max-w-[54ch]" style="--d:.12s">
+          Every consignment is consolidated at Jebel Ali, Dubai. We ship both FCL and LCL, and we
+          build mixed-commodity containers — so a smaller buyer still moves a full load instead of
+          waiting to reach volume on a single line.
+        </p>
+        <p class="rv mt-6 text-[16px] leading-[1.8] text-cream/60 font-normal max-w-[54ch]" style="--d:.18s">
+          Lot codes and shipping documents are released together. The paperwork in your hand
+          describes the pallet on the quay, not a template of it.
+        </p>
+      </div>
+    </div>
+
+    <!-- full width: the headline column would otherwise leave a tall void beside it -->
+    <div class="rv mt-16 lg:mt-20" style="--d:.1s">
+      <div class="flex items-center gap-6">
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold shrink-0">INCOTERMS QUOTED</p>
+        <span class="h-px flex-1 bg-gold/15"></span>
+      </div>
+      <div class="mt-6 grid sm:grid-cols-3 border-t border-l border-gold/15">
+        <div class="border-r border-b border-gold/15 px-7 py-8 lg:px-9 lg:py-10">
+          <p class="font-display text-[18px] leading-tight text-cream">FOB Jebel&nbsp;Ali</p>
+          <p class="mt-3 text-[14px] leading-[1.7] text-cream/60 font-normal">Loaded on board at the port of loading; onward freight and insurance are yours to arrange.</p>
+        </div>
+        <div class="border-r border-b border-gold/15 px-7 py-8 lg:px-9 lg:py-10">
+          <p class="font-display text-[18px] leading-tight text-cream">CFR</p>
+          <p class="mt-3 text-[14px] leading-[1.7] text-cream/60 font-normal">Cost and freight through to the destination port you name.</p>
+        </div>
+        <div class="border-r border-b border-gold/15 px-7 py-8 lg:px-9 lg:py-10">
+          <p class="font-display text-[18px] leading-tight text-cream">CIF</p>
+          <p class="mt-3 text-[14px] leading-[1.7] text-cream/60 font-normal">Cost, freight and marine insurance through to the destination port you name.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- transit: quiet full-width data block -->
+    <div class="tblock rv mt-20 lg:mt-24" style="--d:.1s">
+      <div class="flex items-center gap-6">
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold shrink-0">INDICATIVE TRANSIT</p>
+        <span class="h-px flex-1 bg-gold/15"></span>
+        <p class="hidden sm:block text-[11px] tracking-[.3em] text-cream/60 shrink-0">FROM JEBEL ALI</p>
+      </div>
+
+      <table class="transit mt-8">
+        <caption class="sr-only">Indicative port-to-port transit times from Jebel Ali, Dubai, by destination region.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Destination region</th>
+            <th scope="col" class="c-days text-right">Transit</th>
+            <th scope="col" class="c-bar"><span class="sr-only">Relative duration</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">GCC</th>
+              <td class="c-days"><span class="tnum">3–7</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:8.6%;--w:11.4%;--d:.10s"></span></span></td></tr>
+          <tr><th scope="row">South Asia</th>
+              <td class="c-days"><span class="tnum">7–12</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:20%;--w:14.3%;--d:.16s"></span></span></td></tr>
+          <tr><th scope="row">East Africa</th>
+              <td class="c-days"><span class="tnum">10–14</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:28.6%;--w:11.4%;--d:.22s"></span></span></td></tr>
+          <tr><th scope="row">Europe</th>
+              <td class="c-days"><span class="tnum">18–24</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:51.4%;--w:17.1%;--d:.28s"></span></span></td></tr>
+          <tr><th scope="row">United Kingdom</th>
+              <td class="c-days"><span class="tnum">20–26</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:57.1%;--w:17.2%;--d:.34s"></span></span></td></tr>
+          <tr><th scope="row">North America</th>
+              <td class="c-days"><span class="tnum">25–35</span> days</td>
+              <td class="c-bar"><span class="track"><span class="tbar" style="--a:71.4%;--w:28.6%;--d:.40s"></span></span></td></tr>
+        </tbody>
+      </table>
+
+      <p class="mt-8 max-w-[64ch] text-[13px] leading-[1.7] text-cream/60 font-normal">
+        Indicative only. Port-to-port sailing time from Jebel Ali, quoted as a range because it moves
+        with the carrier and the routing. It excludes booking lead time and destination clearance, and
+        it is not a contractual delivery date — the schedule for your shipment is confirmed in writing
+        when the booking is made.
+      </p>
     </div>
   </div>
 </section>
@@ -521,18 +706,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
       <div>
-        <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">03 — OUR PRODUCTS</p>
+        <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">04 — OUR PRODUCTS</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em]"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
           Four staples.<br><span class="text-gold-dk font-normal">One standard.</span>
         </h2>
+        <p class="rv mt-6 max-w-[44ch] text-[15.5px] leading-[1.75] text-navy-800/75 font-normal" style="--d:.12s">
+          Saffron ships today, alongside rice. The rest of the range is being brought onto the same
+          standard and is marked here as it stands — not as we would like it to read.
+        </p>
       </div>
       <div class="rv max-w-[40ch]" style="--d:.14s">
         <div class="leading-none">
           <p class="text-[10px] tracking-[.3em] text-gold-dk font-semibold">PACKED UNDER OUR OWN LABEL</p>
           <svg viewBox="0 -22 506 142" role="img" aria-label="RAVOMA"
                class="mt-3 w-[196px] h-auto text-navy-800" style="--leafvein:#E8DCC8"><use href="#i-ravoma"/></svg>
-          <p class="mt-2 text-[9.5px] tracking-[.34em] text-navy-800/60 font-semibold">PREMIUM IRANIAN SAFFRON</p>
+          <!-- was 9.5px at 60% — under the 10px floor and 4.30:1. Now 10px at 75% (6.83:1). -->
+          <p class="mt-2 text-[10px] tracking-[.34em] text-navy-800/75 font-semibold">PREMIUM IRANIAN SAFFRON</p>
         </div>
         <p class="mt-5 text-[15px] leading-[1.75] text-navy-800/65 font-normal">
           Retail-ready 1&nbsp;kg pouches with premium printing and freshness seal, or bulk formats
@@ -544,14 +734,30 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- 4-up only from 1280px: at 1024 the columns are too narrow for a single-line product name -->
     <div class="mt-16 grid sm:grid-cols-2 xl:grid-cols-4 gap-5" id="productGrid"></div>
 
-    <!-- wide catalogue card -->
-    <div class="rv mt-5 border border-navy-800/10 bg-cream-2 px-8 py-9 lg:px-12 lg:py-11 flex flex-col lg:flex-row lg:items-center justify-between gap-7" style="--d:.36s">
-      <div>
-        <p class="text-[11px] tracking-[.3em] text-gold-dk font-semibold">ALSO TRADING</p>
-        <p class="mt-3 font-display text-[24px] lg:text-[30px] leading-tight">
-          Rice · Nabat · Sugar · Grains · Pulses &amp; Spices
+    <!-- wide catalogue card — carries the availability distinction for the full range -->
+    <div class="rv mt-5 border border-navy-800/10 bg-cream-2 px-8 py-9 lg:px-12 lg:py-11 flex flex-col lg:flex-row lg:items-end justify-between gap-9" style="--d:.36s">
+      <div class="min-w-0">
+        <p class="text-[11px] tracking-[.3em] text-gold-dk font-semibold">THE FULL RANGE</p>
+
+        <div class="mt-6 flex items-baseline gap-4">
+          <span class="shrink-0 text-[10.5px] tracking-[.26em] text-burgundy font-semibold">SHIPPING NOW</span>
+          <span class="h-px flex-1 bg-gold/45"></span>
+        </div>
+        <p class="mt-3 font-display text-[24px] lg:text-[30px] leading-tight">Saffron · Rice</p>
+
+        <div class="mt-8 flex items-baseline gap-4">
+          <span class="shrink-0 text-[10.5px] tracking-[.26em] text-navy-800/65 font-semibold">TO FOLLOW</span>
+          <span class="h-px flex-1 bg-navy-800/15"></span>
+        </div>
+        <p class="mt-3 font-display text-[19px] lg:text-[23px] leading-[1.35] text-navy-800/75">
+          Chickpeas · Green Lentils · Yellow Split Peas · Red Kidney Beans ·
+          Turmeric · Black Pepper · Coriander Seed
         </p>
-        <p class="mt-3 text-[15px] text-navy-800/65 font-normal">Full catalogue with grades, formats and origins available on request.</p>
+
+        <p class="mt-6 max-w-[52ch] text-[15px] leading-[1.7] text-navy-800/65 font-normal">
+          Grades, formats and origins for the whole range are available on request, with the
+          shipping position for each line stated as it currently stands.
+        </p>
       </div>
       <a href="#contact" class="shrink-0 inline-flex items-center gap-3 border border-navy-800/25 px-8 py-4 text-[11.5px] tracking-[.22em] font-semibold text-navy-800 hover:bg-navy-800 hover:text-cream hover:border-navy-800 transition-all duration-300">
         REQUEST CATALOGUE
@@ -564,7 +770,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <!-- ================= ATMOSPHERE BAND ================= -->
 <section class="reveal relative flex items-center overflow-hidden min-h-[420px] h-[62vh] max-h-[620px]">
   <img src="../assets/band.webp" alt="" aria-hidden="true" loading="lazy" decoding="async"
-       width="2400" height="1000" class="absolute inset-0 w-full h-full object-cover">
+       width="2400" height="1000" class="bandimg absolute inset-0 w-full h-full object-cover">
   <div class="absolute inset-0"
        style="background:linear-gradient(90deg,rgba(12,11,10,.96) 0%,rgba(12,11,10,.88) 42%,rgba(12,11,10,.60) 72%,rgba(12,11,10,.42) 100%)"></div>
   <div class="absolute inset-x-0 top-0 h-px rule-gold opacity-50"></div>
@@ -583,10 +789,101 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   </div>
 </section>
 
+<!-- ================= ASSURANCE ================= -->
+<section id="assurance" class="reveal bg-cream text-navy-800 py-24 lg:py-36">
+  <div class="mx-auto max-w-site px-[var(--gutter)]">
+
+    <div class="grid lg:grid-cols-12 gap-x-16 gap-y-9">
+      <div class="lg:col-span-5">
+        <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">05 — ASSURANCE</p>
+        <h2 class="rv mt-6 font-display font-semibold leading-[1.12] tracking-[-.015em]"
+            style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
+          Certified at the&nbsp;lot.<br><span class="text-gold-dk font-normal">Documented for your&nbsp;port.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-7 lg:pt-10">
+        <p class="rv text-[17px] lg:text-[19px] leading-[1.72] text-navy-800/80 font-normal max-w-[54ch]" style="--d:.12s">
+          Quality that only exists in the sales conversation is worth nothing at the port. Ours is
+          written into the contract, measured before shipment and evidenced in the file that travels
+          with the goods.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16 lg:mt-20 grid lg:grid-cols-2 gap-x-16 gap-y-14">
+
+      <div class="rv" style="--d:.1s">
+        <div class="flex items-center gap-5">
+          <p class="text-[11px] tracking-[.3em] text-gold-dk font-semibold shrink-0">CERTIFICATION &amp; COMPLIANCE</p>
+          <span class="h-px flex-1 bg-gold/50"></span>
+        </div>
+        <ol class="alist mt-4">
+          <li><p><b>ISO 3632 category I</b> for saffron, with lab results per lot. Colouring strength is stated, not estimated.</p></li>
+          <li><p><b>Phytosanitary certificate</b> and <b>certificate of origin</b> issued for every consignment.</p></li>
+          <li><p><b>Halal certification</b> where the destination market requires it.</p></li>
+          <li><p><b>Food-grade packing materials</b> throughout, retail and bulk alike.</p></li>
+          <li><p>Documentation prepared against <b>the destination market's requirement</b> — not against a template.</p></li>
+        </ol>
+      </div>
+
+      <div class="rv" style="--d:.18s">
+        <div class="flex items-center gap-5">
+          <p class="text-[11px] tracking-[.3em] text-gold-dk font-semibold shrink-0">QUALITY ASSURANCE</p>
+          <span class="h-px flex-1 bg-gold/50"></span>
+        </div>
+        <ol class="alist mt-4">
+          <li><p>The crop is assessed <b>in season</b>, with the grower or the cleaner. Samples are pulled before any commitment is made.</p></li>
+          <li><p><b>Sieved, de-stoned and colour-sorted</b> to the calibration named in the contract.</p></li>
+          <li><p><b>Moisture and foreign-matter limits are fixed in the contract</b>, not negotiated on arrival.</p></li>
+          <li><p><b>Pre-shipment inspection</b> against destination-market requirements.</p></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- traceability: a dark inset, the one moment of obsidian in an ivory section -->
+    <div class="rv mt-16 lg:mt-20 bg-navy-950 px-8 py-11 lg:px-14 lg:py-14" style="--d:.24s">
+      <div class="grid lg:grid-cols-12 gap-x-14 gap-y-10 items-start">
+        <div class="lg:col-span-5">
+          <p class="text-[11px] tracking-[.34em] text-gold font-semibold">TRACEABILITY</p>
+          <p class="mt-6 font-display font-semibold leading-[1.15] text-cream" style="font-size:clamp(1.5rem,2.4vw,2rem)">
+            Every retail pouch carries a lot&nbsp;code.
+          </p>
+          <p class="mt-5 max-w-[40ch] text-[15px] leading-[1.75] text-cream/60 font-normal">
+            One code, four answers. It is printed on the pouch and it is on the paperwork,
+            so a buyer can resolve any pack back to the field it came out of.
+          </p>
+        </div>
+
+        <div class="lg:col-span-7 lg:pt-2">
+          <p class="text-[10.5px] tracking-[.3em] text-gold font-semibold">ONE CODE RESOLVES TO</p>
+          <dl class="mt-6 grid sm:grid-cols-2 border-t border-gold/20">
+            <div class="border-b border-gold/20 sm:border-r sm:pr-8 py-6">
+              <dt class="text-[10.5px] tracking-[.26em] text-cream/60 font-semibold">01</dt>
+              <dd class="mt-2.5 font-display text-[19px] leading-tight text-cream">Origin</dd>
+            </div>
+            <div class="border-b border-gold/20 sm:pl-8 py-6">
+              <dt class="text-[10.5px] tracking-[.26em] text-cream/60 font-semibold">02</dt>
+              <dd class="mt-2.5 font-display text-[19px] leading-tight text-cream">Harvest window</dd>
+            </div>
+            <div class="border-b border-gold/20 sm:border-r sm:pr-8 py-6">
+              <dt class="text-[10.5px] tracking-[.26em] text-cream/60 font-semibold">03</dt>
+              <dd class="mt-2.5 font-display text-[19px] leading-tight text-cream">Cleaning line</dd>
+            </div>
+            <div class="border-b border-gold/20 sm:pl-8 py-6">
+              <dt class="text-[10.5px] tracking-[.26em] text-cream/60 font-semibold">04</dt>
+              <dd class="mt-2.5 font-display text-[19px] leading-tight text-cream">Packing date</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= WHY PANAHANDEH ================= -->
 <section class="reveal bg-navy-900 py-24 lg:py-36 border-y border-gold/10">
   <div class="mx-auto max-w-site px-[var(--gutter)]">
-    <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">04 — WHY PANAHANDEH</p>
+    <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">06 — WHY PANAHANDEH</p>
     <h2 class="rv mt-6 max-w-[16ch] font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
         style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
       Five reasons partners <span class="foil font-normal">stay</span>.
@@ -604,7 +901,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <div class="mx-auto max-w-site px-[var(--gutter)]">
     <div class="grid lg:grid-cols-12 gap-x-14 gap-y-10">
       <div class="lg:col-span-6">
-        <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">05 — B2B COOPERATION</p>
+        <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">07 — B2B COOPERATION</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
           We welcome manufacturers,<br>suppliers &amp; <span class="foil font-normal">food brands.</span>
@@ -634,7 +931,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="rv mt-16" style="--d:.3s">
       <p class="text-[11px] tracking-[.3em] text-gold font-semibold">WE ARE LOOKING FOR PARTNERS IN</p>
       <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" id="partnerGrid"></div>
-      <p class="mt-10 max-w-[62ch] text-[13px] leading-[1.7] text-cream/50 font-normal">
+      <p class="mt-10 max-w-[62ch] text-[13px] leading-[1.7] text-cream/60 font-normal">
         All cooperation is subject to product approval, UAE regulations and a written commercial agreement.
       </p>
     </div>
@@ -646,7 +943,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <div class="mx-auto max-w-site px-[var(--gutter)] grid lg:grid-cols-12 gap-x-16 gap-y-16">
 
     <div class="lg:col-span-5 flex flex-col">
-      <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">06 — CONTACT</p>
+      <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">08 — CONTACT</p>
       <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em]"
           style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
         Let's build a successful<br><span class="text-gold-dk font-normal">partnership together.</span>
@@ -740,7 +1037,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
           <span class="mt-2 h-px w-full rule-gold opacity-70"></span>
           <span class="mt-2 text-[10px] tracking-[.3em] pl-[.3em] text-gold font-semibold">FOODSTUFF TRADING L.L.C</span>
         </div>
-        <p class="mt-7 max-w-[38ch] text-[15px] leading-[1.75] text-cream/50 font-normal">
+        <p class="mt-7 max-w-[38ch] text-[15px] leading-[1.75] text-cream/60 font-normal">
           Quality products. Trusted partners. Global opportunities — sourced worldwide,
           consolidated in Dubai, delivered on schedule.
         </p>
@@ -748,27 +1045,32 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
       <div class="md:col-span-2">
         <p class="text-[11px] tracking-[.3em] text-gold font-semibold">COMPANY</p>
-        <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
+        <ul class="mt-5 space-y-3 text-[14px] text-cream/60 font-normal">
           <li><a href="#about" class="ulink hover:text-gold transition-colors">About Us</a></li>
           <li><a href="#network" class="ulink hover:text-gold transition-colors">Network</a></li>
+          <li><a href="#logistics" class="ulink hover:text-gold transition-colors">Logistics &amp; Terms</a></li>
+          <li><a href="#assurance" class="ulink hover:text-gold transition-colors">Assurance</a></li>
           <li><a href="#services" class="ulink hover:text-gold transition-colors">Services</a></li>
           <li><a href="#contact" class="ulink hover:text-gold transition-colors">Contact</a></li>
         </ul>
       </div>
 
       <div class="md:col-span-2">
-        <p class="text-[11px] tracking-[.3em] text-gold font-semibold">PRODUCTS</p>
-        <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
-          <li><a href="#products" class="ulink hover:text-gold transition-colors">Chickpeas</a></li>
-          <li><a href="#products" class="ulink hover:text-gold transition-colors">Green Lentils</a></li>
-          <li><a href="#products" class="ulink hover:text-gold transition-colors">Yellow Split Peas</a></li>
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold">SHIPPING NOW</p>
+        <ul class="mt-5 space-y-3 text-[14px] text-cream/60 font-normal">
           <li><a href="#products" class="ulink hover:text-gold transition-colors">Saffron</a></li>
+          <li><a href="#products" class="ulink hover:text-gold transition-colors">Rice</a></li>
+        </ul>
+        <p class="mt-7 text-[11px] tracking-[.3em] text-gold font-semibold">TO FOLLOW</p>
+        <ul class="mt-5 space-y-3 text-[14px] text-cream/60 font-normal">
+          <li><a href="#products" class="ulink hover:text-gold transition-colors">Pulses &amp; Beans</a></li>
+          <li><a href="#products" class="ulink hover:text-gold transition-colors">Ground &amp; Whole Spices</a></li>
         </ul>
       </div>
 
       <div class="md:col-span-3">
         <p class="text-[11px] tracking-[.3em] text-gold font-semibold">GET IN TOUCH</p>
-        <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
+        <ul class="mt-5 space-y-3 text-[14px] text-cream/60 font-normal">
           <li><a href="tel:+971501234567" class="ulink hover:text-gold transition-colors">+971 50 123 4567</a></li>
           <li><a href="mailto:info@panahandeh.ae" class="ulink hover:text-gold transition-colors">info@panahandeh.ae</a></li>
           <li>www.panahandeh.ae</li>
@@ -777,7 +1079,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </div>
     </div>
 
-    <div class="mt-16 pt-7 border-t border-gold/10 flex flex-col sm:flex-row gap-4 justify-between text-[11.5px] tracking-[.14em] text-cream/50">
+    <div class="mt-16 pt-7 border-t border-gold/10 flex flex-col sm:flex-row gap-4 justify-between text-[11.5px] tracking-[.2em] text-cream/60">
       <p>© <span id="yr"></span> PANAHANDEH FOODSTUFF TRADING L.L.C — ALL RIGHTS RESERVED</p>
       <p>DUBAI · UNITED ARAB EMIRATES</p>
     </div>
@@ -792,17 +1094,19 @@ const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
 /* ---------------- DATA ---------------- */
+/* `live` is the shipping position, not a marketing state: only saffron (and rice,
+   which has no card) moves today. The other three are presented as pending. */
 const PRODUCTS = [
-  { en:'Chickpeas',        ar:'حمص',   bg:'#171513', rgb:'23,21,19',  img:'chickpeas',
+  { en:'Chickpeas',        ar:'حمص',   bg:'#171513', rgb:'23,21,19',  img:'chickpeas', live:false,
     alt:'Dried Kabuli chickpeas, whole and uniformly graded',
     origin:'India · Turkey · Mexico',   fmt:'1 kg retail · 25/50 kg bulk', grade:'8–9 mm Kabuli' },
-  { en:'Green Lentils',    ar:'عدس أخضر', bg:'#5A171B', rgb:'90,23,27',  img:'lentils',
+  { en:'Green Lentils',    ar:'عدس أخضر', bg:'#5A171B', rgb:'90,23,27',  img:'lentils', live:false,
     alt:'Dried green Laird lentils, machine-cleaned',
     origin:'Turkey · Canada',          fmt:'1 kg retail · 25 kg bulk',    grade:'Laird, machine-cleaned' },
-  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#7B191F', rgb:'123,25,31',  img:'splitpeas',
+  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#7B191F', rgb:'123,25,31',  img:'splitpeas', live:false,
     alt:'Dried yellow split peas, polished and sized',
     origin:'Canada · Russia · Ukraine', fmt:'1 kg retail · 25 kg bulk',    grade:'Split, polished' },
-  { en:'Saffron',          ar:'زعفران', bg:'#533F20', rgb:'83,63,32', img:'saffron',
+  { en:'Saffron',          ar:'زعفران', bg:'#533F20', rgb:'83,63,32', img:'saffron', live:true,
     alt:'Deep red Super Negin saffron threads on a wooden spoon',
     origin:'Iran · Afghanistan',        fmt:'1 g · 5 g · 10 g',            grade:'Super Negin, all-red' }
 ];
@@ -862,19 +1166,26 @@ const icon = (id, cls='w-6 h-6') =>
 
 /* ---------------- PRODUCT CARDS ---------------- */
 $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
-  <article class="pcard rv relative flex overflow-hidden border border-navy-800/10" style="--d:${.14 + i * .07}s; background:${p.bg}">
+  <article class="pcard rv relative flex overflow-hidden border border-navy-800/10"
+           data-status="${p.live ? 'live' : 'soon'}" style="--d:${.14 + i * .07}s; background:${p.bg}">
 
     <img class="pimg absolute inset-0 w-full h-full object-cover" src="../assets/${p.img}.webp"
          alt="${p.alt}" loading="lazy" decoding="async" width="900" height="1200">
+    <!-- The title sits at 31.7% of the card. Measured against the render, the old
+         stops left it on 4.36:1 over the brightest saffron pixels, so the ground now
+         reaches .95 at 32% and solid at 42% — everything from the title down is on
+         flat colour, and the photograph still owns the top third. -->
     <div class="absolute inset-0 pointer-events-none" style="background:
          linear-gradient(180deg, rgba(12,11,10,.55) 0%, rgba(12,11,10,0) 24%),
-         linear-gradient(180deg, rgba(${p.rgb},.14) 0%, rgba(${p.rgb},.40) 26%, rgba(${p.rgb},.92) 44%, rgb(${p.rgb}) 54%)"></div>
+         linear-gradient(180deg, rgba(${p.rgb},.12) 0%, rgba(${p.rgb},.36) 20%, rgba(${p.rgb},.95) 32%, rgb(${p.rgb}) 42%)"></div>
 
     <div class="pbody relative w-full p-8 lg:p-9 flex flex-col">
       <svg viewBox="0 0 112 104" class="w-8 h-8 shrink-0 text-gold" aria-hidden="true"><use href="#i-stigma"/></svg>
 
       <h3 class="relative mt-auto font-display text-cream">${p.en}</h3>
-      <p class="ar relative mt-1 text-gold-lt" dir="rtl" lang="ar">${p.ar}</p>
+      <!-- gold-pale, not gold-lt: #D6B37A measured 4.60:1 on the saffron card's
+           rendered ground, which passes but with no margin. #E8CFA4 gives 6.6:1. -->
+      <p class="ar relative mt-1 text-gold-pale" dir="rtl" lang="ar">${p.ar}</p>
 
       <dl class="relative pt-8 space-y-3.5 text-[12.5px]">
         <div class="flex gap-3 justify-between border-b border-white/10 pb-3">
@@ -885,7 +1196,12 @@ $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
           <dt class="meta-k">GRADE</dt><dd class="meta-v text-right">${p.grade}</dd></div>
       </dl>
 
-      <span class="relative mt-7 self-start border border-gold/70 rounded-full px-4 py-1.5 text-[11px] tracking-[.24em] text-gold-lt">100% NATURAL</span>
+      <div class="ptags">
+        ${p.live
+          ? '<span class="ptag ptag-live"><span class="pdot" aria-hidden="true"></span>SHIPPING NOW</span>'
+          : '<span class="ptag ptag-soon">COMING SOON</span>'}
+        <span class="ptag">100% NATURAL</span>
+      </div>
     </div>
   </article>`).join('');
 
@@ -917,7 +1233,8 @@ $('#partnerGrid').innerHTML = PARTNERS.map((p, i) => `
 /* ---------------- ORIGIN LIST ---------------- */
 $('#originList').innerHTML = ORIGINS.map((o, i) => `
   <li class="rv" style="--d:${.12 + i * .03}s">
-    <button type="button" data-i="${i}" class="origin-cell w-full h-full text-left px-4 py-5">
+    <button type="button" data-i="${i}" aria-pressed="false"
+            class="origin-cell w-full h-full text-left px-4 py-5">
       <span class="flex items-center gap-3">
         <span class="dot inline-block w-1 h-1 rounded-full bg-gold shrink-0"></span>
         <span class="font-display text-[18px] leading-tight text-cream">${o.name}</span>
@@ -1038,6 +1355,19 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
         '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="7" fill="#B08A4A" fill-opacity=".16"/>' +
         '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="2.9" fill="#F0DDB8"/></g>').join('') +
     '</g>' +
+    // the origin's own name, drawn only while its corridor is traced. Anchored away
+    // from the sphere edge so a node near the limb cannot push the label out of frame.
+    '<g id="labelG">' +
+      routes.map(r => {
+        const right = r.p.x < C;
+        return '<text class="olabel" id="lb-' + r.i + '" ' +
+          'x="' + (r.p.x + (right ? 13 : -13)).toFixed(1) + '" y="' + (r.p.y - 11).toFixed(1) + '" ' +
+          'text-anchor="' + (right ? 'start' : 'end') + '" ' +
+          'font-family="Montserrat,sans-serif" font-size="12.5" font-weight="600" letter-spacing="2.5" ' +
+          'paint-order="stroke" stroke="#080706" stroke-width="4" stroke-linejoin="round" ' +
+          'fill="#E8CFA4">' + ORIGINS[r.i].name.toUpperCase() + '</text>';
+      }).join('') +
+    '</g>' +
     '<g>' +
       '<circle class="hub-pulse" cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="6" fill="none" stroke="#B08A4A" stroke-width="1.3"/>' +
       '<circle cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="10" fill="#080706" stroke="#B08A4A" stroke-width="1.4"/>' +
@@ -1054,30 +1384,35 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
     p.style.setProperty('--len', L);
   });
 
-  // origin list ⇄ route highlight
-  const setActive = (i, on) => {
-    const rt = $('#rt-' + i), nd = $('#nd-' + i);
-    if (!rt) return;
-    rt.style.stroke = on ? '#E8CFA4' : '';
-    rt.style.strokeOpacity = on ? '1' : '';
-    rt.style.strokeWidth = on ? '2' : '';
-    if (nd) nd.style.opacity = on ? '1' : '';
-  };
-  $$('#originList button').forEach(b => {
-    const i = +b.dataset.i;
-    ['mouseenter', 'focus'].forEach(e => b.addEventListener(e, () => setActive(i, true)));
-    ['mouseleave', 'blur'].forEach(e => b.addEventListener(e, () => setActive(i, false)));
-  });
+  /* ---- corridor tracing ----
+     One corridor at a time. Rather than brightening one line among twelve of equal
+     weight, the globe enters a "tracing" state in which the other eleven recede —
+     that is what makes a single route readable on a sphere this dense.
+     Hover and keyboard focus preview; a click pins, so a touch reader (who has no
+     hover) can hold a corridor open and read it. Nothing cycles on its own. */
+  const globe = $('#globe');
+  const cells = $$('#originList button');
+  let pinned = null, hovered = null;
 
-  // ambient cycle through routes (skipped when reduced motion is on)
-  if (!RM) {
-    let k = 0;
-    setInterval(() => {
-      setActive((k - 1 + ORIGINS.length) % ORIGINS.length, false);
-      setActive(k % ORIGINS.length, true);
-      k++;
-    }, 1800);
-  }
+  const paint = () => {
+    const active = hovered !== null ? hovered : pinned;
+    globe.classList.toggle('tracing', active !== null);
+    ORIGINS.forEach((_, i) => {
+      const on = i === active;
+      $('#rt-' + i)?.classList.toggle('on', on);
+      $('#nd-' + i)?.classList.toggle('on', on);
+      $('#lb-' + i)?.classList.toggle('on', on);
+      cells[i]?.classList.toggle('active', i === pinned);
+      cells[i]?.setAttribute('aria-pressed', String(i === pinned));
+    });
+  };
+
+  cells.forEach(b => {
+    const i = +b.dataset.i;
+    ['mouseenter', 'focus'].forEach(e => b.addEventListener(e, () => { hovered = i; paint(); }));
+    ['mouseleave', 'blur'].forEach(e => b.addEventListener(e, () => { hovered = null; paint(); }));
+    b.addEventListener('click', () => { pinned = pinned === i ? null : i; paint(); });
+  });
 }
 
 /* ---------------- SCROLL REVEALS ---------------- */
@@ -1128,19 +1463,27 @@ function countUp(el) {
   addEventListener('keydown', e => { if (e.key === 'Escape' && menu.dataset.open === 'true') { setMenu(false); burger.focus(); } });
 }
 
-/* ---------------- GOLD FOIL + MAGNETIC CTA ---------------- */
+/* ---------------- GOLD FOIL + MAGNETIC CTA ----------------
+   The sheen used to be driven by a document-level pointermove, which meant gold
+   type shifted while the reader was reading something else entirely. It is now
+   bound to the foil runs themselves: the light only travels when you point at it,
+   and the page is still while you read. */
 if (!RM) {
-  addEventListener('pointermove', e => {
-    const off = (e.clientX / innerWidth - .5) * 180;
-    document.documentElement.style.setProperty('--foil', off.toFixed(1) + 'px');
-  }, { passive: true });
+  $$('.foil').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      const off = ((e.clientX - r.left) / (r.width || 1) - .5) * 150;
+      el.style.setProperty('--foil', off.toFixed(1) + 'px');
+    }, { passive: true });
+    el.addEventListener('pointerleave', () => el.style.removeProperty('--foil'));
+  });
 
   const m = $('#magnet');
   m?.addEventListener('pointermove', e => {
     const r = m.getBoundingClientRect();
     m.style.transform = `translate(${((e.clientX - r.left - r.width / 2) * .18).toFixed(1)}px,${((e.clientY - r.top - r.height / 2) * .28).toFixed(1)}px)`;
   });
-  m?.addEventListener('pointerleave', () => { m.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)'; m.style.transform = ''; });
+  m?.addEventListener('pointerleave', () => { m.style.transition = 'transform .5s var(--ease)'; m.style.transform = ''; });
   m?.addEventListener('pointerenter', () => { m.style.transition = 'transform .12s linear'; });
 }
 
