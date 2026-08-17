@@ -8,10 +8,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
-<meta name="theme-color" content="#15150F">
+<meta name="theme-color" content="#171513">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..800&family=Inter+Tight:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -20,18 +20,21 @@
    ============================================================ */
 
 :root{
-  --paper:#FBF9F4;
-  --bone:#F1EDE3;
-  --bone-2:#E7E1D3;
-  --ink:#15150F;
-  --ink-2:#1F1F17;
-  --body:#4A4B3E;      /* 7.3:1 on paper */
-  --muted:#5E6051;     /* 5.6:1 on paper */
-  --olive:#3B4A2A;
-  --clay:#A2461F;      /* 5.4:1 on paper */
-  --clay-lt:#C86A3C;
-  --line:rgba(21,21,15,.13);
-  --line-2:rgba(21,21,15,.07);
+  /* RAVOMA identity, light mix: warm ivory ground, obsidian text, burgundy accent.
+     Antique gold is ornament only here — it is 2.36:1 on ivory and fails as text. */
+  --paper:#E8DCC8;
+  --bone:#DFD1B9;
+  --bone-2:#D2C1A4;
+  --ink:#171513;
+  --ink-2:#221E1A;
+  --body:#3E362E;      /* 10.4:1 on ivory */
+  --muted:#5A4F43;     /* 6.4:1 on ivory */
+  --olive:#5A171B;
+  --clay:#5A171B;      /* deep burgundy — 9.9:1 on ivory */
+  --clay-lt:#8F1D24;   /* saffron red — 6.5:1 on ivory */
+  --gold:#B08A4A;      /* rules, ornament and the leaf only */
+  --line:rgba(23,21,19,.22);
+  --line-2:rgba(23,21,19,.10);
   --gutter:20px;
   --ease:cubic-bezier(.22,1,.36,1);
   --snap:cubic-bezier(.3,.9,.25,1);
@@ -44,7 +47,7 @@ html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth }
 @media(prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:'Inter Tight',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-family:Montserrat,system-ui,-apple-system,sans-serif;
   font-size:16px; line-height:1.6; font-weight:400;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
 }
@@ -56,7 +59,7 @@ button,input,textarea,select{ font:inherit; color:inherit }
 
 .wrap{ width:100%; max-width:1340px; margin-inline:auto; padding-inline:var(--gutter) }
 .mono{ font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-ligatures:none }
-.fr{ font-family:Fraunces,Georgia,serif; font-optical-sizing:auto }
+.fr{ font-family:Cinzel,Georgia,serif;  }
 
 /* eyebrow ------------------------------------------------------ */
 .eyebrow{
@@ -65,15 +68,15 @@ button,input,textarea,select{ font:inherit; color:inherit }
   display:flex; align-items:center; gap:12px;
 }
 .eyebrow::before{ content:''; width:26px; height:1px; background:currentColor; flex:none }
-.eyebrow.on-ink{ color:#E4A87E }
+.eyebrow.on-ink{ color:#D6B37A }
 
 /* headings ----------------------------------------------------- */
-h1,h2,h3{ margin:0; font-family:Fraunces,Georgia,serif; font-weight:600; letter-spacing:-.022em; line-height:1.04 }
+h1,h2,h3{ margin:0; font-family:Cinzel,Georgia,serif; font-weight:600; letter-spacing:-.022em; line-height:1.04 }
 .h1{ font-size:clamp(2.9rem,6.6vw,5.5rem); font-weight:600 }
 .h2{ font-size:clamp(2.05rem,4vw,3.4rem) }
 .h3{ font-size:clamp(1.35rem,2vw,1.7rem); line-height:1.16; letter-spacing:-.012em }
 .lede{ font-size:clamp(17px,1.35vw,19px); line-height:1.68; color:var(--body); font-weight:400 }
-em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
+em.acc{ font-style:normal;  color:var(--clay); font-weight:500 }
 
 /* buttons ------------------------------------------------------ */
 .btn{
@@ -100,7 +103,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 @media(prefers-reduced-motion:reduce){ .rev{ opacity:1; transform:none; transition:none } }
 
 /* ==================== TICKER ==================== */
-.ticker{ background:var(--ink); color:#CFCBBD; overflow:hidden; border-bottom:1px solid #2A2A20 }
+.ticker{ background:var(--ink); color:#D8CBB4; overflow:hidden; border-bottom:1px solid #2A2A20 }
 .ticker-track{ display:flex; width:max-content; animation:slide 46s linear infinite }
 .ticker:hover .ticker-track{ animation-play-state:paused }
 .ticker-group{ display:flex; flex:none }
@@ -108,8 +111,8 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
   font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.13em;
   text-transform:uppercase; padding:9px 0; white-space:nowrap;
 }
-.ticker span::after{ content:'·'; margin:0 20px; color:#7A7563 }
-.ticker b{ color:#E0A87A; font-weight:500 }
+.ticker span::after{ content:'·'; margin:0 20px; color:#8A7A62 }
+.ticker b{ color:#D6B37A; font-weight:500 }
 @keyframes slide{ to{ transform:translateX(-50%) } }
 @media(prefers-reduced-motion:reduce){
   .ticker-track{ animation:none }
@@ -118,17 +121,17 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 
 /* ==================== HEADER ==================== */
 .hdr{
-  position:sticky; top:0; z-index:60; background:rgba(251,249,244,.86);
+  position:sticky; top:0; z-index:60; background:rgba(232,220,200,.86);
   backdrop-filter:blur(14px) saturate(1.3); -webkit-backdrop-filter:blur(14px) saturate(1.3);
   border-bottom:1px solid transparent; transition:border-color .3s, box-shadow .3s;
 }
-.hdr.stuck{ border-bottom-color:var(--line); box-shadow:0 1px 18px rgba(21,21,15,.05) }
+.hdr.stuck{ border-bottom-color:var(--line); box-shadow:0 1px 18px rgba(23,21,19,.05) }
 .hdr-in{ display:flex; align-items:center; justify-content:space-between; gap:20px; height:74px }
 .hdr.stuck .hdr-in{ height:64px }
 .hdr-in{ transition:height .3s var(--ease) }
 .lockup{ display:flex; align-items:center; gap:12px; flex:none }
 .lockup svg{ width:30px; height:30px; color:var(--clay); flex:none }
-.lockup .nm{ display:block; font-family:Fraunces,serif; font-weight:700; font-size:18px; letter-spacing:.1em; line-height:1 }
+.lockup .nm{ display:block; font-family:Cinzel,serif; font-weight:700; font-size:18px; letter-spacing:.1em; line-height:1 }
 .lockup .sb{ display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--muted); margin-top:5px; line-height:1 }
 @media(max-width:420px){ .lockup .sb{ display:none } .lockup .nm{ font-size:16px } }
 .nav{ display:none; gap:34px; font-size:13.5px; font-weight:500; letter-spacing:.01em }
@@ -144,7 +147,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .mnav{ position:fixed; inset:0; z-index:59; background:var(--paper); display:flex; flex-direction:column; justify-content:center; padding:0 var(--gutter);
   clip-path:inset(0 0 100% 0); transition:clip-path .55s var(--ease); }
 .mnav[data-open="true"]{ clip-path:inset(0 0 0 0) }
-.mnav a{ font-family:Fraunces,serif; font-size:clamp(2rem,9vw,2.9rem); font-weight:600; padding:14px 0; border-bottom:1px solid var(--line-2) }
+.mnav a{ font-family:Cinzel,serif; font-size:clamp(2rem,9vw,2.9rem); font-weight:600; padding:14px 0; border-bottom:1px solid var(--line-2) }
 .mnav .mmeta{ margin-top:38px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.12em; color:var(--muted); line-height:2 }
 
 /* ==================== HERO ==================== */
@@ -158,21 +161,21 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .frame{ position:relative; overflow:hidden; background:var(--bone); aspect-ratio:3/2 }
 @media(min-width:1024px){ .frame{ aspect-ratio:4/5 } }
 .frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
-.frame::after{ content:''; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(21,21,15,.1) }
+.frame::after{ content:''; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(23,21,19,.1) }
 .spec-card{
   position:absolute; left:-14px; bottom:-18px; background:var(--paper); border:1px solid var(--line);
-  padding:18px 20px; min-width:212px; box-shadow:0 16px 40px -22px rgba(21,21,15,.4);
+  padding:18px 20px; min-width:212px; box-shadow:0 16px 40px -22px rgba(23,21,19,.4);
 }
 @media(min-width:1024px){ .spec-card{ left:-34px; bottom:-26px } }
 .spec-card .k{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted) }
-.spec-card .v{ font-family:Fraunces,serif; font-size:24px; font-weight:600; margin-top:6px; line-height:1 }
+.spec-card .v{ font-family:Cinzel,serif; font-size:24px; font-weight:600; margin-top:6px; line-height:1 }
 .spec-card .r{ display:flex; justify-content:space-between; gap:22px; padding-top:12px; margin-top:12px; border-top:1px solid var(--line-2);
   font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--body) }
 
 /* stat row ----------------------------------------------------- */
 .stats{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px 16px; margin-top:46px; padding-top:30px; border-top:1px solid var(--line) }
 @media(min-width:640px){ .stats{ grid-template-columns:repeat(4,1fr) } }
-.stats dt{ font-family:Fraunces,serif; font-size:clamp(1.9rem,3vw,2.5rem); font-weight:600; line-height:1; letter-spacing:-.02em }
+.stats dt{ font-family:Cinzel,serif; font-size:clamp(1.9rem,3vw,2.5rem); font-weight:600; line-height:1; letter-spacing:-.02em }
 .stats dd{ margin:9px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); line-height:1.5 }
 
 /* ==================== MARKET STRIP ==================== */
@@ -232,7 +235,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .row[hidden]{ display:none }
 .row-main{ display:flex; align-items:baseline; gap:6px 14px; flex-wrap:wrap; min-width:0 }
 .row-idx{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); flex:none; width:24px }
-.row-nm{ font-family:Fraunces,serif; font-size:clamp(1.25rem,2.2vw,1.6rem); font-weight:600; letter-spacing:-.012em; line-height:1.1 }
+.row-nm{ font-family:Cinzel,serif; font-size:clamp(1.25rem,2.2vw,1.6rem); font-weight:600; letter-spacing:-.012em; line-height:1.1 }
 .row-ar{ font-size:15px; color:var(--muted); direction:rtl; font-family:'Noto Naskh Arabic','Amiri',serif }
 .row-meta{ display:none; gap:32px; align-items:center }
 @media(min-width:1000px){
@@ -243,13 +246,13 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 @media(min-width:1280px){ .row-meta{ width:660px } }
 
 /* availability ------------------------------------------------ */
-.row-tag.live{ border-color:var(--olive); color:var(--olive); background:rgba(59,74,42,.07) }
+.row-tag.live{ border-color:var(--olive); color:var(--olive); background:rgba(90,23,27,.07) }
 .row-tag.soon{ border-style:dashed; color:var(--muted) }
 .row[data-status="soon"] .row-thumb img{ filter:grayscale(.55) contrast(.95); opacity:.72 }
 .row[data-status="soon"] .row-nm{ color:var(--muted) }
 .row[data-status="soon"]:hover .row-thumb img{ filter:grayscale(0) contrast(1); opacity:1 }
 .dot{ display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--olive); flex:none;
-  margin-inline-end:2px; box-shadow:0 0 0 3px rgba(59,74,42,.16) }
+  margin-inline-end:2px; box-shadow:0 0 0 3px rgba(90,23,27,.16) }
 .row-meta .cell{ min-width:0 }
 .row-meta .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); display:block }
 .row-meta .v{ font-size:13.5px; color:var(--body); margin-top:4px; display:block }
@@ -260,23 +263,23 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 @media(min-width:1000px){ .row-sub{ display:none } }
 
 .cat-foot{ margin-top:38px; padding:28px; background:var(--ink); color:var(--paper); border:1px solid var(--ink) }
-.cat-foot p{ margin:0; max-width:60ch; color:rgba(251,249,244,.72); font-size:15px; line-height:1.75 }
-.cat-foot .brandline{ display:flex; align-items:center; gap:13px; margin-bottom:10px }
-.cat-foot .brandline img{ width:34px; height:34px }
-.cat-foot .brandline b{ font-family:Fraunces,serif; font-size:20px; letter-spacing:.14em; font-weight:700; color:var(--paper) }
+.cat-foot p{ margin:0; max-width:60ch; color:rgba(232,220,200,.72); font-size:15px; line-height:1.75 }
+.cat-foot .brandmark{ display:block; width:210px; height:auto; color:var(--paper) }
+.cat-foot .brandsub{ margin:8px 0 12px; font-family:Montserrat,sans-serif; font-size:9.5px;
+  letter-spacing:.34em; color:rgba(232,220,200,.66); font-weight:500 }
 .cat-foot .top{ display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:20px }
 .cat-foot .btn{ background:var(--paper); border-color:var(--paper); color:var(--ink) }
-.cat-foot .btn::after{ background:#E9A574 }
+.cat-foot .btn::after{ background:#D6B37A }
 .cat-foot .btn:hover{ color:var(--ink) }
 .packs{ display:grid; gap:2px; margin-top:24px; grid-template-columns:repeat(2,1fr) }
 @media(min-width:700px){ .packs{ grid-template-columns:repeat(4,1fr) } }
-.pack{ position:relative; overflow:hidden; aspect-ratio:4/5; background:#0B0B08 }
+.pack{ position:relative; overflow:hidden; aspect-ratio:4/5; background:#0C0B0A }
 .pack img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
   transition:transform 1s var(--ease); }
 .pack:hover img{ transform:scale(1.06) }
 .pack span{ position:absolute; left:0; bottom:0; z-index:1; padding:7px 10px;
   font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
-  background:var(--ink); color:#E9A574 }
+  background:var(--ink); color:#D6B37A }
 
 /* ==================== CAPABILITIES ==================== */
 .caps{ display:grid; gap:2px; background:var(--line); border:1px solid var(--line) }
@@ -305,50 +308,50 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 /* ==================== BAND ==================== */
 .band{ position:relative; min-height:min(72vh,560px); display:flex; align-items:center; overflow:hidden }
 .band img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
-.band::after{ content:''; position:absolute; inset:0; background:linear-gradient(92deg,rgba(21,21,15,.94) 0%,rgba(21,21,15,.86) 44%,rgba(21,21,15,.42) 100%) }
+.band::after{ content:''; position:absolute; inset:0; background:linear-gradient(92deg,rgba(23,21,19,.94) 0%,rgba(23,21,19,.86) 44%,rgba(23,21,19,.42) 100%) }
 .band .wrap{ position:relative; z-index:1; padding-block:72px }
-.band blockquote{ margin:24px 0 0; max-width:22ch; font-family:Fraunces,serif; font-size:clamp(1.9rem,3.8vw,3.1rem); font-weight:500; line-height:1.14; letter-spacing:-.02em; color:var(--paper) }
-.band blockquote em{ font-style:italic; color:#E9A574 }
-.band p{ margin:26px 0 0; max-width:48ch; color:rgba(251,249,244,.76); font-size:16px; line-height:1.75 }
+.band blockquote{ margin:24px 0 0; max-width:22ch; font-family:Cinzel,serif; font-size:clamp(1.9rem,3.8vw,3.1rem); font-weight:500; line-height:1.14; letter-spacing:-.02em; color:var(--paper) }
+.band blockquote em{  color:#D6B37A }
+.band p{ margin:26px 0 0; max-width:48ch; color:rgba(232,220,200,.76); font-size:16px; line-height:1.75 }
 
 /* ==================== ORIGINS ==================== */
 .origins{ display:grid; gap:0 48px; border-top:1px solid var(--ink) }
 @media(min-width:760px){ .origins{ grid-template-columns:1fr 1fr } }
 @media(min-width:1200px){ .origins{ grid-template-columns:repeat(3,1fr) } }
 .org{ display:flex; align-items:baseline; justify-content:space-between; gap:18px; padding:17px 0; border-bottom:1px solid var(--line) }
-.org b{ font-family:Fraunces,serif; font-size:1.13rem; font-weight:600 }
+.org b{ font-family:Cinzel,serif; font-size:1.13rem; font-weight:600 }
 .org span{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); text-align:right }
 
 /* ==================== CONTACT ==================== */
 .contact{ background:var(--ink); color:var(--paper) }
 .contact .h2,.contact h3{ color:var(--paper) }
-.contact .lede{ color:rgba(251,249,244,.72) }
+.contact .lede{ color:rgba(232,220,200,.72) }
 .contact-grid{ display:grid; gap:52px }
 @media(min-width:1000px){ .contact-grid{ grid-template-columns:1.05fr .95fr; gap:72px } }
 .field{ position:relative; margin-bottom:26px }
-.field label{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.17em; text-transform:uppercase; color:rgba(251,249,244,.62); display:block; margin-bottom:9px }
+.field label{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.17em; text-transform:uppercase; color:rgba(232,220,200,.62); display:block; margin-bottom:9px }
 .field input,.field textarea,.field select{
-  width:100%; background:transparent; border:0; border-bottom:1px solid rgba(251,249,244,.34);
+  width:100%; background:transparent; border:0; border-bottom:1px solid rgba(232,220,200,.34);
   padding:11px 0; font-size:16px; color:var(--paper); transition:border-color .3s;
 }
 .field select option{ color:var(--ink) }
-.field input:focus,.field textarea:focus,.field select:focus{ outline:none; border-bottom-color:#E9A574 }
+.field input:focus,.field textarea:focus,.field select:focus{ outline:none; border-bottom-color:#D6B37A }
 .field textarea{ resize:vertical; min-height:104px }
-.field .err{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:#F0A98A; margin-top:7px; display:none }
-.field.bad input,.field.bad textarea{ border-bottom-color:#F0A98A }
+.field .err{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:#E0918A; margin-top:7px; display:none }
+.field.bad input,.field.bad textarea{ border-bottom-color:#E0918A }
 .field.bad .err{ display:block }
 .f2{ display:grid; gap:0 26px }
 @media(min-width:620px){ .f2{ grid-template-columns:1fr 1fr } }
 .contact .btn{ background:var(--paper); border-color:var(--paper); color:var(--ink); width:100% ; justify-content:center }
-.contact .btn::after{ background:#E9A574 }
+.contact .btn::after{ background:#D6B37A }
 .contact .btn:hover{ color:var(--ink) }
-.sent{ display:none; border:1px solid rgba(233,165,116,.5); padding:20px 22px; margin-top:22px; color:#F3CBAF; font-size:15px }
+.sent{ display:none; border:1px solid rgba(233,165,116,.5); padding:20px 22px; margin-top:22px; color:#E8CFA4; font-size:15px }
 .sent.on{ display:block }
 .cdetails{ list-style:none; margin:34px 0 0; padding:0; display:grid; gap:0 }
-.cdetails li{ padding:20px 0; border-top:1px solid rgba(251,249,244,.16) }
-.cdetails .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(251,249,244,.6) }
-.cdetails .v{ font-family:Fraunces,serif; font-size:1.32rem; margin-top:8px; display:inline-block }
-.cdetails a.v:hover{ color:#E9A574 }
+.cdetails li{ padding:20px 0; border-top:1px solid rgba(232,220,200,.16) }
+.cdetails .k{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(232,220,200,.6) }
+.cdetails .v{ font-family:Cinzel,serif; font-size:1.32rem; margin-top:8px; display:inline-block }
+.cdetails a.v:hover{ color:#D6B37A }
 .cimg{ margin-top:34px; aspect-ratio:3/2; position:relative; overflow:hidden }
 .cimg img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
 
@@ -359,7 +362,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 .ftr h4{ margin:0 0 16px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); font-weight:500 }
 .ftr ul{ list-style:none; margin:0; padding:0; display:grid; gap:11px; font-size:14.5px; color:var(--body) }
 .ftr ul a:hover{ color:var(--clay) }
-.ftr .bigmark{ font-family:Fraunces,serif; font-size:clamp(1.9rem,4vw,2.5rem); font-weight:700; letter-spacing:.1em; line-height:1 }
+.ftr .bigmark{ font-family:Cinzel,serif; font-size:clamp(1.9rem,4vw,2.5rem); font-weight:700; letter-spacing:.1em; line-height:1 }
 .ftr .sub{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.24em; color:var(--muted); margin-top:10px }
 .ftr .blurb{ margin:22px 0 0; max-width:40ch; font-size:14.5px; color:var(--body); line-height:1.7 }
 .ftr-base{ display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:space-between; margin-top:52px; padding-top:22px; border-top:1px solid var(--line);
@@ -367,7 +370,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 
 /* ==================== DEMO SWITCHER ==================== */
 .vsw{ position:fixed; left:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:var(--ink); padding:1px }
-.vsw a{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; padding:7px 10px; color:rgba(251,249,244,.6); background:var(--ink) }
+.vsw a{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; padding:7px 10px; color:rgba(232,220,200,.6); background:var(--ink) }
 .vsw a[aria-current]{ background:var(--paper); color:var(--ink) }
 .vsw a:hover{ color:var(--paper) }
 
@@ -376,6 +379,7 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
   .burger{ min-height:44px; min-width:44px; padding:14px 11px; margin-inline-end:-11px }
   .lockup{ min-height:44px }
   .chip{ min-height:44px }
+  .field select,.field input{ min-height:44px }
   .vsw a{ min-width:46px; min-height:46px; display:flex; align-items:center; justify-content:center }
   .ftr ul a,.nav a,.cdetails a.v{ display:inline-block; min-height:44px; line-height:44px }
   .ftr ul{ gap:2px }
@@ -387,11 +391,22 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- the client's own marks: TP monogram, RAVOMA wordmark, saffron-stigma leaf -->
   <symbol id="i-seal" viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="58" fill="none" stroke="currentColor" stroke-width="2.4"/>
-    <circle cx="60" cy="60" r="48" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/>
-    <text x="60" y="62" text-anchor="middle" dominant-baseline="central" fill="currentColor"
-          font-family="Fraunces,Georgia,serif" font-size="58" font-weight="700">P</text>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <g fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M35 43 L70 39"/><path d="M53.5 41 L53.5 85"/>
+      <path d="M64 39.5 L64 85"/><path d="M64 43 h6.5 a13 13 0 0 1 0 26 H64"/>
+    </g>
+  </symbol>
+  <symbol id="i-ravoma" viewBox="0 -22 506 142">
+    <g fill="currentColor" stroke="none" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="100" letter-spacing="8">
+      <text x="0" y="100">RAV</text><text x="322.4" y="100">MA</text>
+    </g>
+    <g transform="translate(266.5,66) scale(1.12) translate(-56,-52)">
+      <path d="M64,4 C88,30 90,60 69,80 C59,90 49,90 43,100 C45,84 30,74 24,57 C16,34 40,16 64,4 Z" fill="#B08A4A" stroke="none"/>
+      <path d="M62,20 C70,42 67,60 53,76" fill="none" stroke="var(--leafvein,#171513)" stroke-width="5.5" stroke-linecap="round"/>
+    </g>
   </symbol>
   <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
     <path d="M4.5 12h15"/><path d="m13 5.5 6.5 6.5-6.5 6.5"/>
@@ -522,10 +537,9 @@ em.acc{ font-style:italic; color:var(--clay); font-weight:500 }
     <div class="cat-foot rev" style="--d:.12s">
       <div class="top">
         <div>
-          <div class="brandline">
-            <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
-            <b>RAVOMA</b>
-          </div>
+          <svg viewBox="0 -22 506 142" role="img" aria-label="RAVOMA"
+               class="brandmark" style="--leafvein:#171513"><use href="#i-ravoma"/></svg>
+          <p class="brandsub">PREMIUM IRANIAN SAFFRON</p>
           <p>Our own saffron label, endorsed by Panahandeh Foodstuff Trading L.L.C. Five retail
              formats from a 10&nbsp;g pocket dispenser to a 300&nbsp;g flagship presentation box —
              gold foil, embossed Persian motif and a UV-protected window on every one. Bulk and

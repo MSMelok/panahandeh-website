@@ -16,8 +16,8 @@ in its own tab, so the client can move between them without losing their place.
 | | Design | What it is | Path |
 |---|---|---|---|
 | — | **Selector** | Presentation page. Three preview cards, each opening a design in a new tab. Excluded from search engines. | `index.html` |
-| 01 | **The trading house** | Dark, cinematic, luxury-editorial. Navy and gold, a dotted-earth globe with trade corridors, big serif headlines. | `v1/index.html` |
-| 02 | **The trading desk** | Light and editorial. Warm paper, an ink ticker, and a dense spec table carrying thumbnails, availability and the client's real packaging. Reads like a commodity house, not a brochure. | `v2/index.html` |
+| 01 | **The trading house** | Dark, cinematic, luxury-editorial. Obsidian and gold, a dotted-earth globe with trade corridors, big serif headlines. | `v1/index.html` |
+| 02 | **The trading desk** | Light and editorial. Warm ivory, an ink ticker, and a dense spec table carrying thumbnails, availability and the client's real packaging. Reads like a commodity house, not a brochure. | `v2/index.html` |
 | 03 | **The plateau** | Persian design language — girih tessellation, pointed-arch niches, lapis and turquoise on lime plaster. Bilingual English ⇄ فارسی with a real right-to-left flip. | `v3/index.html` |
 
 Every one is a single self-contained HTML file. No build step, no dependencies to install.
@@ -71,7 +71,6 @@ assets/
   saffron-pack.webp         RAVOMA 10 g pocket tin, the Saffron catalogue thumbnail
   pack-*.webp               RAVOMA packaging renders cropped from the client's design sheets
   preview-v1|v2|v3.webp     selector screenshots, regenerated when a design changes
-  mark.webp                 RAVOMA brand monogram
   favicon-*.png             16 / 32 / 48 / 512
   apple-touch-icon.png      180px
   CREDITS.md                photo provenance and licensing
@@ -115,9 +114,9 @@ switcher hidden. Regenerate them if a design changes.
 
 ## 01 — The trading house
 
-Navy `#0A1D37`, satin gold `#C9A24B` and a warm off-white taken from the packaging. Playfair
-Display for headlines, Montserrat for body, Amiri for the Arabic product names. Gold is reserved
-for accents and calls to action, never body copy.
+Obsidian black `#171513`, antique gold `#B08A4A` and warm ivory `#E8DCC8` from the brand identity.
+Cinzel for headlines, Montserrat for body, Amiri for the Arabic product names. Gold is reserved for
+accents and calls to action, never body copy.
 
 The Network section renders a dotted Earth with trade routes converging on Dubai, drawn from
 scratch in SVG rather than pulled from a mapping library. Landmasses come from Natural Earth 110m
@@ -138,9 +137,14 @@ its corridor on the globe.
 
 ## 02 — The trading desk
 
-Warm paper `#FBF9F4`, ink `#15150F`, clay `#A2461F`. Fraunces for display, Inter Tight for body,
-IBM Plex Mono for anything that behaves like data — origins, grades, HS codes, coordinates. The
-mono is what makes it read as a desk rather than a brochure.
+Warm ivory `#E8DCC8`, obsidian `#171513`, deep burgundy `#5A171B`. Cinzel for display, Montserrat
+for body, IBM Plex Mono for anything that behaves like data — origins, grades, HS codes,
+coordinates. The mono is what makes it read as a desk rather than a brochure.
+
+Same palette as design 01, different mix. The identity is 60% obsidian, so both designs going dark
+would have made them read as two versions of one idea rather than two directions; this one takes
+warm ivory as its ground instead. Antique gold is **ornament only** here — it measures 2.36:1 on
+ivory and cannot carry text, so the accent is burgundy.
 
 The catalogue is a table, not a card grid: nine rows carrying a thumbnail, origin, grade and
 format, filterable by category or by what is actually shipping.
@@ -182,6 +186,40 @@ The language toggle is real. It swaps every string, sets `lang` and `dir` on the
 layout to right-to-left, switches both typeface stacks, converts numerals to Persian digits, and
 re-renders the products, origins and form in the other language. The choice persists in
 `localStorage`. The layout mirrors through CSS logical properties rather than a second stylesheet.
+
+---
+
+## Brand identity
+
+The client's identity board defines five colours, two typefaces and two marks:
+
+| | Hex | Role |
+|---|---|---|
+| Obsidian Black | `#171513` | ground, 60% |
+| Antique Gold | `#B08A4A` | accent, 20% |
+| Deep Burgundy | `#5A171B` | 15% |
+| Saffron Red | `#8F1D24` | fills |
+| Warm Ivory | `#E8DCC8` | 5% |
+
+**The board prints Antique Gold as `#B0BA4A`, which is olive-green and contradicts its own swatch.**
+Sampling the swatch returns `#9E6228`. It is treated here as a typo for `#B08A4A` — worth
+confirming with the client before anything goes to print.
+
+Typefaces are **Cinzel** (primary) and **Montserrat** (secondary). Cinzel has no lowercase and no
+italic, so headline accents that were italic are now set in gold at a lighter weight rather than
+being obliqued, which wrecks an inscriptional face.
+
+Two marks, both rebuilt as inline SVG rather than bitmaps so they stay crisp at any size:
+
+- **The RAVOMA wordmark** — Cinzel with the O replaced by a gold saffron-stigma leaf. The letters
+  are two `<text>` runs at measured x-positions with the leaf drawn between them, so the ornament
+  lands correctly without depending on runtime font metrics.
+- **The TP monogram** — the company mark that appears on the real packs. It replaces the "P" seal
+  drawn before the identity arrived, in all four pages and in the favicons.
+
+Design 03 keeps its own Persian palette deliberately; only its brand marks were updated.
+
+`assets/mark.webp`, the old ornamental R, is gone; nothing references it.
 
 ---
 
@@ -261,9 +299,7 @@ across a 360px phone otherwise.
 - Point the contact forms at a real handler
 - Swap placeholder photography for the client's own
 - Confirm the Arabic/Persian question above, and whether cumin belongs in the range
-- Decide whether the company mark should be the **TP monogram** that appears on the real packs
-  rather than the "P" seal used in the header and favicons, which was drawn before those renders
-  existed
+- Confirm the Antique Gold hex with the client — the identity board's `#B0BA4A` is olive-green
 - Port design 02's availability treatment to whichever design the client picks
 - Have a native speaker sign off the Persian copy in design 03
 - Remove the version switcher from all three designs, and decide whether the selector page

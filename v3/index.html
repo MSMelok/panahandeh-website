@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#12305E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -240,8 +240,7 @@ html[lang="fa"] .porigin{ letter-spacing:0; text-transform:none; font-size:13px 
 
 .brandnote{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px 26px; margin-top:52px;
   padding:26px 30px; border:1px solid var(--hair); background:var(--plaster-2); text-align:center }
-.brandnote img{ width:44px; height:44px }
-.brandnote b{ font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:.16em; font-weight:700 }
+.brandnote .brandmark{ width:190px; height:auto; color:var(--lapis); flex:none }
 .brandnote p{ margin:0; max-width:52ch; font-size:15px; color:var(--body) }
 
 /* ==================== STORY (lapis) ==================== */
@@ -376,11 +375,22 @@ html[lang="fa"] .fbase{ letter-spacing:0; text-transform:none; font-size:13px }
     <path d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"/>
   </clipPath>
 
+  <!-- the client's own marks -->
   <symbol id="i-seal" viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="58" fill="none" stroke="currentColor" stroke-width="2"/>
-    <path d="M60 6 L114 60 L60 114 L6 60 Z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".45"/>
-    <text x="60" y="63" text-anchor="middle" dominant-baseline="central" fill="currentColor"
-          font-family="'Cormorant Garamond',Georgia,serif" font-size="58" font-weight="700">P</text>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <g fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M35 43 L70 39"/><path d="M53.5 41 L53.5 85"/>
+      <path d="M64 39.5 L64 85"/><path d="M64 43 h6.5 a13 13 0 0 1 0 26 H64"/>
+    </g>
+  </symbol>
+  <symbol id="i-ravoma" viewBox="0 -22 506 142">
+    <g fill="currentColor" stroke="none" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="100" letter-spacing="8">
+      <text x="0" y="100">RAV</text><text x="322.4" y="100">MA</text>
+    </g>
+    <g transform="translate(266.5,66) scale(1.12) translate(-56,-52)">
+      <path d="M64,4 C88,30 90,60 69,80 C59,90 49,90 43,100 C45,84 30,74 24,57 C16,34 40,16 64,4 Z" fill="#B08A4A" stroke="none"/>
+      <path d="M62,20 C70,42 67,60 53,76" fill="none" stroke="var(--leafvein,#F7F0E1)" stroke-width="5.5" stroke-linecap="round"/>
+    </g>
   </symbol>
   <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
     <path d="M4.5 12h15"/><path d="m13 5.5 6.5 6.5-6.5 6.5"/>
@@ -490,8 +500,8 @@ html[lang="fa"] .fbase{ letter-spacing:0; text-transform:none; font-size:13px }
     <div class="pgrid" id="pgrid"></div>
 
     <div class="brandnote rev">
-      <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy">
-      <b>RAVOMA</b>
+      <svg viewBox="0 -22 506 142" role="img" aria-label="RAVOMA" class="brandmark"
+           style="--leafvein:#EFE5CF"><use href="#i-ravoma"/></svg>
       <p data-t="brand.note">Our retail label — 1&nbsp;kg pouches with premium printing and a freshness seal.
          Private label and bulk formats come off the same lots.</p>
     </div>

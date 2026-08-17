@@ -50,9 +50,11 @@ commercial detail with no reason to sit in a public repository.
 
 | File | Source |
 |---|---|
-| mark.webp | RAVOMA brand monogram (ornamental R) — from `ravoma-mark-source.png` |
-| favicon-16/32/48/512.png | Panahandeh "P" seal on brand navy — Playfair Display 700 in gold `#C9A24B` |
-| apple-touch-icon.png | Panahandeh "P" seal on brand navy (180px) |
+| favicon-16/32/48/512.png | Panahandeh TP monogram, antique gold `#B08A4A` on obsidian `#171513` |
+| apple-touch-icon.png | Panahandeh TP monogram on obsidian (180px) |
+
+The RAVOMA wordmark and the TP monogram are inline SVG in each page (`#i-ravoma`, `#i-seal`), not
+bitmaps. `mark.webp`, the old ornamental R, was removed when the identity arrived.
 
 The 48px and larger icons carry the full seal (double ring plus eight diamonds); 16 and 32 drop
 the ornament and use the letter alone, because the rings collapse into noise at that size.

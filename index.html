@@ -10,10 +10,10 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<meta name="theme-color" content="#040D1B">
+<meta name="theme-color" content="#0C0B0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -23,13 +23,13 @@
    ============================================================ */
 
 :root{
-  --navy-950:#040D1B;
-  --navy-900:#071528;
-  --navy-800:#0A1D37;
-  --gold:#C9A24B;
-  --gold-lt:#E8CC8A;
-  --cream:#FBF9F5;
-  --line:rgba(201,162,75,.18);
+  --navy-950:#0C0B0A;
+  --navy-900:#12100F;
+  --navy-800:#171513;
+  --gold:#B08A4A;
+  --gold-lt:#D6B37A;
+  --cream:#E8DCC8;
+  --line:rgba(176,138,74,.18);
   --gutter:20px;
   --ease:cubic-bezier(.16,1,.3,1);
 }
@@ -52,11 +52,11 @@ a{ color:inherit; text-decoration:none }
 /* atmosphere ---------------------------------------------------- */
 .bg{ position:fixed; inset:0; z-index:-1; pointer-events:none }
 .bg i{ position:absolute; inset:0; display:block }
-.bg .glow{ background:radial-gradient(60% 46% at 50% 4%, #12305A 0%, #0A1D37 44%, transparent 78%); opacity:.5 }
-.bg .warm{ background:radial-gradient(34% 26% at 50% 0%, rgba(201,162,75,.34) 0%, transparent 70%); opacity:.28 }
+.bg .glow{ background:radial-gradient(60% 46% at 50% 4%, #2A231C 0%, #171513 44%, transparent 78%); opacity:.5 }
+.bg .warm{ background:radial-gradient(34% 26% at 50% 0%, rgba(176,138,74,.34) 0%, transparent 70%); opacity:.28 }
 .bg .grid{
-  background-image:linear-gradient(rgba(201,162,75,.5) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(201,162,75,.5) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(176,138,74,.5) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(176,138,74,.5) 1px,transparent 1px);
   background-size:120px 120px; opacity:.1;
   mask-image:radial-gradient(58% 46% at 50% 20%,#000,transparent 76%);
   -webkit-mask-image:radial-gradient(58% 46% at 50% 20%,#000,transparent 76%);
@@ -76,9 +76,9 @@ a{ color:inherit; text-decoration:none }
   display:inline-flex; flex-direction:column; align-items:center; margin-top:22px; line-height:1;
 }
 .mark b{
-  font-family:'Playfair Display',Georgia,serif; font-weight:700;
+  font-family:Cinzel,Georgia,serif; font-weight:700;
   font-size:clamp(21px,3.3vw,31px); letter-spacing:.15em; padding-left:.15em;
-  background-image:linear-gradient(100deg,#8C6B22 0%,#C9A24B 18%,#F6E9C4 40%,#E8CC8A 52%,#C9A24B 68%,#8C6B22 100%);
+  background-image:linear-gradient(100deg,#7E6030 0%,#B08A4A 18%,#F0DDB8 40%,#D6B37A 52%,#B08A4A 68%,#7E6030 100%);
   background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .mark hr{ width:100%; height:1px; border:0; margin:9px 0 0;
@@ -87,13 +87,13 @@ a{ color:inherit; text-decoration:none }
 @media(min-width:768px){ .mark small{ font-size:10.5px } }
 
 .mast h1{
-  margin:clamp(28px,4vw,42px) 0 0; font-family:'Playfair Display',Georgia,serif;
+  margin:clamp(28px,4vw,42px) 0 0; font-family:Cinzel,Georgia,serif;
   font-weight:600; letter-spacing:-.02em; line-height:1.08;
   font-size:clamp(2rem,4.6vw,3.5rem);
 }
-.mast h1 em{ font-style:italic; font-weight:400; color:var(--gold-lt) }
+.mast h1 em{ font-style:normal; font-weight:400; color:var(--gold-lt) }
 .mast p{
-  margin:20px auto 0; max-width:54ch; color:rgba(251,249,245,.66);
+  margin:20px auto 0; max-width:54ch; color:rgba(232,220,200,.66);
   font-size:clamp(14.5px,1.15vw,16.5px); line-height:1.8; font-weight:300;
 }
 .mast .hint{
@@ -123,10 +123,10 @@ a{ color:inherit; text-decoration:none }
 }
 .card::after{
   content:''; position:absolute; inset:0; pointer-events:none; opacity:0;
-  box-shadow:0 32px 70px -34px rgba(0,0,0,.9), inset 0 0 0 1px rgba(201,162,75,.5);
+  box-shadow:0 32px 70px -34px rgba(0,0,0,.9), inset 0 0 0 1px rgba(176,138,74,.5);
   transition:opacity .45s var(--ease);
 }
-.card:hover,.card:focus-visible{ transform:translateY(-7px); border-color:rgba(201,162,75,.55); background:rgba(10,29,55,.8) }
+.card:hover,.card:focus-visible{ transform:translateY(-7px); border-color:rgba(176,138,74,.55); background:rgba(10,29,55,.8) }
 .card:hover::after,.card:focus-visible::after{ opacity:1 }
 
 .shot{ position:relative; overflow:hidden; aspect-ratio:16/10; background:var(--navy-800); border-bottom:1px solid var(--line) }
@@ -135,25 +135,25 @@ a{ color:inherit; text-decoration:none }
 .card:hover .shot img{ transform:scale(1.05); filter:saturate(1) }
 .shot .no{
   position:absolute; top:0; left:0; z-index:2; padding:9px 15px;
-  font-family:'Playfair Display',serif; font-size:15px; font-weight:700; letter-spacing:.1em;
+  font-family:Cinzel,serif; font-size:15px; font-weight:700; letter-spacing:.1em;
   background:var(--navy-950); color:var(--gold); border-right:1px solid var(--line); border-bottom:1px solid var(--line);
 }
 
 .body{ padding:24px 24px 26px; display:flex; flex-direction:column; flex:1 }
 .body h2{
-  margin:0; font-family:'Playfair Display',Georgia,serif; font-weight:600;
+  margin:0; font-family:Cinzel,Georgia,serif; font-weight:600;
   font-size:clamp(1.45rem,1.9vw,1.7rem); line-height:1.15; letter-spacing:-.012em;
 }
-.body .sub{ margin:9px 0 0; font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:rgba(201,162,75,.85); font-weight:600 }
-.body p{ margin:15px 0 0; font-size:14.5px; line-height:1.75; color:rgba(251,249,245,.66); font-weight:300 }
+.body .sub{ margin:9px 0 0; font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:rgba(176,138,74,.85); font-weight:600 }
+.body p{ margin:15px 0 0; font-size:14.5px; line-height:1.75; color:rgba(232,220,200,.66); font-weight:300 }
 
 .tags{ display:flex; flex-wrap:wrap; gap:7px; margin:18px 0 0; padding:0; list-style:none }
-.tags li{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:rgba(251,249,245,.62);
-  border:1px solid rgba(251,249,245,.18); padding:5px 9px; font-weight:500 }
+.tags li{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:rgba(232,220,200,.62);
+  border:1px solid rgba(232,220,200,.18); padding:5px 9px; font-weight:500 }
 
-.swatch{ display:flex; align-items:center; gap:9px; margin-top:20px; padding-top:18px; border-top:1px solid rgba(251,249,245,.1) }
-.swatch i{ width:19px; height:19px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(251,249,245,.2) }
-.swatch span{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(251,249,245,.5); font-weight:500 }
+.swatch{ display:flex; align-items:center; gap:9px; margin-top:20px; padding-top:18px; border-top:1px solid rgba(232,220,200,.1) }
+.swatch i{ width:19px; height:19px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(232,220,200,.2) }
+.swatch span{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(232,220,200,.5); font-weight:500 }
 
 .open{
   margin-top:auto; padding-top:22px;
@@ -168,9 +168,9 @@ a{ color:inherit; text-decoration:none }
   .card{ min-height:44px }
 }
 .foot{
-  margin-top:auto; border-top:1px solid rgba(201,162,75,.14);
+  margin-top:auto; border-top:1px solid rgba(176,138,74,.14);
   padding:20px 0 26px; display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between;
-  font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:rgba(251,249,245,.62);
+  font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:rgba(232,220,200,.62);
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -189,12 +189,11 @@ a{ color:inherit; text-decoration:none }
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-seal" viewBox="0 0 120 120">
-    <circle cx="60" cy="60" r="58.2" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
-    <circle cx="60" cy="60" r="48.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
-    <path d="M60.00 51.30L62.20 57.90L66.60 55.60L64.30 60.00L70.90 62.20L64.30 64.40L66.60 68.80L62.20 66.50L60.00 73.10L57.80 66.50L53.40 68.80L55.70 64.40L49.10 62.20L55.70 60.00L53.40 55.60L57.80 57.90Z" fill="none" stroke="none"/>
-    <g fill="currentColor" id="dots"></g>
-    <text x="60" y="62.5" text-anchor="middle" dominant-baseline="central" fill="currentColor"
-          font-family="'Playfair Display',Georgia,serif" font-size="54" font-weight="700">P</text>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <g fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M35 43 L70 39"/><path d="M53.5 41 L53.5 85"/>
+      <path d="M64 39.5 L64 85"/><path d="M64 43 h6.5 a13 13 0 0 1 0 26 H64"/>
+    </g>
   </symbol>
   <symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <path d="M9 5h10v10"/><path d="M19 5 5 19"/>
@@ -238,21 +237,21 @@ a{ color:inherit; text-decoration:none }
     const x = 60 + 53.6 * Math.cos(a), y = 60 + 53.6 * Math.sin(a), r = i % 2 ? 3.1 : 2.2;
     d.push(`M${x.toFixed(2)} ${(y - r).toFixed(2)}L${(x + r).toFixed(2)} ${y.toFixed(2)}L${x.toFixed(2)} ${(y + r).toFixed(2)}L${(x - r).toFixed(2)} ${y.toFixed(2)}Z`);
   }
-  document.getElementById('dots').innerHTML = `<path d="${d.join(' ')}"/>`;
+  
 }
 
 const DESIGNS = [
   {
     href:'v1/', no:'01', name:'The Trading House', sub:'Dark · Cinematic',
-    blurb:'Navy and gold taken straight off the packaging. A dotted-earth globe traces twelve sourcing corridors into Jebel Ali, and the products sit as full-bleed cards. Reads as a premium exporter.',
-    tags:['Playfair Display','SVG globe','Arabic product names'],
-    swatch:['#0A1D37','#C9A24B','#FBF9F5'], swatchName:'Navy · Gold'
+    blurb:'Obsidian and antique gold straight off the packaging. A dotted-earth globe traces twelve sourcing corridors into Jebel Ali, and the products sit as full-bleed cards. Reads as a premium exporter.',
+    tags:['Cinzel','SVG globe','Arabic product names'],
+    swatch:['#171513','#B08A4A','#E8DCC8'], swatchName:'Obsidian · Gold'
   },
   {
     href:'v2/', no:'02', name:'The Trading Desk', sub:'Light · Editorial',
-    blurb:'Warm paper and ink, with a live ticker across the top. The range is a filterable specification table — thumbnail, origin, grade, format, and what is shipping today versus still to come. Speaks to a buyer, not a browser.',
-    tags:['Fraunces','Spec table','Real packaging'],
-    swatch:['#FBF9F4','#A2461F','#15150F'], swatchName:'Paper · Clay'
+    blurb:'Warm ivory and ink, with a live ticker across the top. The range is a filterable specification table — thumbnail, origin, grade, format, and what is shipping today versus still to come. Speaks to a buyer, not a browser.',
+    tags:['Cinzel','Spec table','Real packaging'],
+    swatch:['#E8DCC8','#5A171B','#B08A4A'], swatchName:'Ivory · Burgundy'
   },
   {
     href:'v3/', no:'03', name:'The Plateau', sub:'Persian · Bilingual',

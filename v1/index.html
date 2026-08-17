@@ -10,25 +10,25 @@
 <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png">
 <link rel="icon" type="image/png" sizes="512x512" href="../assets/favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
-<meta name="theme-color" content="#071528">
+<meta name="theme-color" content="#12100F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
   theme: {
     extend: {
       colors: {
-        navy:    { 950:'#040D1B', 900:'#071528', 800:'#0A1D37', 700:'#0E2647', 600:'#14335C' },
-        gold:    { DEFAULT:'#C9A24B', lt:'#E8CC8A', pale:'#F3E1B0', dk:'#86682A' },
-        forest:  '#1D4032',
-        burgundy:'#5E1128',
-        plum:    '#432764',
-        cream:   { DEFAULT:'#FBF9F5', 2:'#F4EFE5', 3:'#E7DFCE' }
+        navy:    { 950:'#0C0B0A', 900:'#12100F', 800:'#171513', 700:'#221E1A', 600:'#2E2823' },
+        gold:    { DEFAULT:'#B08A4A', lt:'#D6B37A', pale:'#E8CFA4', dk:'#7A4A1E' },
+        forest:  '#5A171B',
+        burgundy:'#8F1D24',
+        plum:    '#7E6030',
+        cream:   { DEFAULT:'#E8DCC8', 2:'#DCCDB4', 3:'#C9B694' }
       },
       fontFamily: {
-        display: ['"Playfair Display"','Georgia','serif'],
+        display: ['Cinzel','Georgia','serif'],
         sans:    ['Montserrat','system-ui','sans-serif']
       },
       maxWidth: { site: '1280px' }
@@ -45,8 +45,8 @@ tailwind.config = {
 @media(min-width:1024px){ :root{ --gutter:64px } }
 
 html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility }
-body{ background:#040D1B; overflow-x:hidden }
-::selection{ background:#C9A24B; color:#071528 }
+body{ background:#0C0B0A; overflow-x:hidden }
+::selection{ background:#B08A4A; color:#12100F }
 
 /* ---------- paper grain ---------- */
 .grain::after{
@@ -60,11 +60,11 @@ body{ background:#040D1B; overflow-x:hidden }
 @media(max-width:359px){ .lockmark{ display:none } }   /* 320px: seal or burger, not both */
 
 /* ---------- demo switcher (remove before client hand-off) ---------- */
-.vsw{ position:fixed; left:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:#040D1B; padding:1px }
+.vsw{ position:fixed; left:14px; bottom:14px; z-index:90; display:flex; gap:1px; background:#0C0B0A; padding:1px }
 .vsw a{ font-family:Montserrat,sans-serif; font-size:10px; letter-spacing:.12em; padding:7px 10px;
-        color:rgba(251,249,245,.6); background:#040D1B; text-decoration:none; line-height:1.4 }
-.vsw a[aria-current]{ background:#FBF9F5; color:#0A1D37 }
-.vsw a:hover{ color:#C9A24B }
+        color:rgba(232,220,200,.6); background:#0C0B0A; text-decoration:none; line-height:1.4 }
+.vsw a[aria-current]{ background:#E8DCC8; color:#171513 }
+.vsw a:hover{ color:#B08A4A }
 
 /* ---------- touch ergonomics ---------- */
 @media (pointer:coarse){
@@ -82,7 +82,7 @@ body{ background:#040D1B; overflow-x:hidden }
 
 /* ---------- gold foil (mouse-reactive) ---------- */
 .foil{
-  background-image:linear-gradient(100deg,#8C6B22 0%,#C9A24B 18%,#F6E9C4 40%,#E8CC8A 52%,#C9A24B 68%,#8C6B22 100%);
+  background-image:linear-gradient(100deg,#7E6030 0%,#B08A4A 18%,#F0DDB8 40%,#D6B37A 52%,#B08A4A 68%,#7E6030 100%);
   background-size:260% 100%;
   background-position:calc(50% + var(--foil,0px)) 0;
   -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -98,7 +98,7 @@ body{ background:#040D1B; overflow-x:hidden }
 @media (min-width:1280px){ .ar{ font-size:24px } }   /* 4-up columns are narrower */
 
 /* ---------- imagery ---------- */
-.imgw{ position:relative; overflow:hidden; background:#0A1D37 }
+.imgw{ position:relative; overflow:hidden; background:#171513 }
 /* absolute, so the img contributes NOTHING to intrinsic sizing. With height:100% in
    flow it falls back to its intrinsic aspect and dictates the grid row height, which
    is what was leaving dead space beside the shorter column. */
@@ -124,9 +124,9 @@ body{ background:#040D1B; overflow-x:hidden }
 @media (min-width:1280px){ .pbody h3{ font-size:23px } }  /* 4-up columns are only 201px wide */
 @media (max-width:639px){ .pbody{ min-height:460px } }
 
-.meta-k{ color:rgba(251,249,245,.64); letter-spacing:.18em }
-.meta-v{ color:rgba(251,249,245,.88) }
-.rule-gold{ background:linear-gradient(90deg,transparent,#C9A24B 18%,#F3E1B0 50%,#C9A24B 82%,transparent) }
+.meta-k{ color:rgba(232,220,200,.64); letter-spacing:.18em }
+.meta-v{ color:rgba(232,220,200,.88) }
+.rule-gold{ background:linear-gradient(90deg,transparent,#B08A4A 18%,#E8CFA4 50%,#B08A4A 82%,transparent) }
 
 /* ---------- reveal primitives ---------- */
 .mask{ display:block; overflow:hidden; padding-bottom:.24em; margin-bottom:-.16em }
@@ -149,15 +149,15 @@ body{ background:#040D1B; overflow-x:hidden }
 .ulink:hover::after{ transform:scaleX(1); transform-origin:left }
 
 /* ---------- buttons ---------- */
-.btn-gold{ position:relative; overflow:hidden; background:#C9A24B; color:#071528 }
+.btn-gold{ position:relative; overflow:hidden; background:#B08A4A; color:#12100F }
 .btn-gold::before{ content:''; position:absolute; inset:0;
   background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
   transform:translateX(-120%); transition:transform .75s var(--ease) }
 .btn-gold:hover::before{ transform:translateX(120%) }
-.btn-gold:hover{ background:#E8CC8A }
+.btn-gold:hover{ background:#D6B37A }
 
-.btn-ghost{ border:1px solid rgba(201,162,75,.5); color:#E8CC8A; transition:.3s var(--ease) }
-.btn-ghost:hover{ border-color:#C9A24B; background:rgba(201,162,75,.09) }
+.btn-ghost{ border:1px solid rgba(176,138,74,.5); color:#D6B37A; transition:.3s var(--ease) }
+.btn-ghost:hover{ border-color:#B08A4A; background:rgba(176,138,74,.09) }
 
 /* ---------- marquee ---------- */
 .marquee{ display:flex; width:max-content; animation:mq 42s linear infinite }
@@ -169,16 +169,16 @@ body{ background:#040D1B; overflow-x:hidden }
 .pcard::after{ content:''; position:absolute; inset:0; pointer-events:none;
   background:linear-gradient(120deg,transparent 35%,rgba(243,225,176,.14) 50%,transparent 65%);
   transform:translateX(-130%); transition:transform .9s var(--ease) }
-.pcard:hover{ transform:translateY(-8px); box-shadow:0 40px 70px -30px rgba(4,13,27,.85) }
+.pcard:hover{ transform:translateY(-8px); box-shadow:0 40px 70px -30px rgba(12,11,10,.85) }
 .pcard:hover::after{ transform:translateX(130%) }
 
 /* ---------- globe ---------- */
 .route{ stroke-dasharray:var(--len); stroke-dashoffset:var(--len);
   transition:stroke-dashoffset 1.6s var(--ease), stroke .4s ease, stroke-width .4s ease; transition-delay:var(--d,0s) }
 .in .route{ stroke-dashoffset:0 }
-.origin-cell{ border-top:1px solid rgba(201,162,75,.16);
+.origin-cell{ border-top:1px solid rgba(176,138,74,.16);
   transition:border-color .35s var(--ease), background-color .35s var(--ease) }
-.origin-cell:hover, .origin-cell.active{ border-top-color:#C9A24B; background:rgba(201,162,75,.06) }
+.origin-cell:hover, .origin-cell.active{ border-top-color:#B08A4A; background:rgba(176,138,74,.06) }
 .origin-cell .dot{ transition:transform .35s var(--ease), opacity .35s var(--ease); opacity:.35 }
 .origin-cell:hover .dot, .origin-cell.active .dot{ opacity:1; transform:scale(1.6) }
 @keyframes hubPulse{ 0%{ r:6; opacity:.65 } 100%{ r:26; opacity:0 } }
@@ -187,20 +187,20 @@ body{ background:#040D1B; overflow-x:hidden }
 .ring-spin{ animation:spinSlow 70s linear infinite; transform-origin:center }
 
 /* ---------- inputs ---------- */
-.fld{ background:transparent; border:0; border-bottom:1px solid rgba(10,29,55,.48);
-  padding:10px 0; width:100%; font-size:16px; color:#0A1D37; transition:border-color .35s var(--ease) }
-.fld:focus{ outline:none; border-bottom-color:#C9A24B }
-.fld::placeholder{ color:rgba(10,29,55,.55) }
+.fld{ background:transparent; border:0; border-bottom:1px solid rgba(23,21,19,.48);
+  padding:10px 0; width:100%; font-size:16px; color:#171513; transition:border-color .35s var(--ease) }
+.fld:focus{ outline:none; border-bottom-color:#B08A4A }
+.fld::placeholder{ color:rgba(23,21,19,.55) }
 select.fld{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%230A1D37' stroke-width='1.5'%3E%3Cpath d='m2 5 5 5 5-5'/%3E%3C/svg%3E");
   background-repeat:no-repeat; background-position:right 2px center }
 
 /* ---------- focus visibility ---------- */
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
-  outline:2px solid #C9A24B; outline-offset:3px }
+  outline:2px solid #B08A4A; outline-offset:3px }
 
 /* ---------- nav ---------- */
 #nav{ transition:background-color .5s var(--ease), backdrop-filter .5s, border-color .5s, padding .5s var(--ease) }
-#nav.solid{ background:rgba(7,21,40,.9); backdrop-filter:blur(14px); border-color:rgba(201,162,75,.18) }
+#nav.solid{ background:rgba(18,16,15,.9); backdrop-filter:blur(14px); border-color:rgba(176,138,74,.18) }
 #menu{ transition:clip-path .8s var(--ease) }
 #menu[data-open="false"]{ clip-path:inset(0 0 100% 0); pointer-events:none }
 #menu[data-open="true"]{ clip-path:inset(0 0 0 0) }
@@ -252,12 +252,27 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <g id="i-wheat"><path d="M2.5 21.5 15 9"/><path d="M4 12.6 5.5 11 7 12.6a3.3 3.3 0 0 1 0 4.7L5.5 18.8 4 17.3a3.3 3.3 0 0 1 0-4.7"/><path d="M8 8.6 9.5 7 11 8.6a3.3 3.3 0 0 1 0 4.7L9.5 14.8 8 13.3a3.3 3.3 0 0 1 0-4.7"/><path d="M12 4.6 13.5 3 15 4.6a3.3 3.3 0 0 1 0 4.7L13.5 10.8 12 9.3a3.3 3.3 0 0 1 0-4.7"/><path d="M19.5 2.5H22v2.2a3.8 3.8 0 0 1-3.8 3.8H16V6.3a3.8 3.8 0 0 1 3.5-3.8"/></g>
     <g id="i-exchange"><path d="m15.5 3.5 4 4-4 4"/><path d="M19.5 7.5H4"/><path d="m8.5 20.5-4-4 4-4"/><path d="M4.5 16.5H20"/></g>
     <g id="i-layers"><path d="M12.8 2.2a2 2 0 0 0-1.6 0L2.6 6.1a1 1 0 0 0 0 1.8l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9a1 1 0 0 0 0-1.8z"/><path d="M2 12a1 1 0 0 0 .6.9l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .6.9l8.6 3.9a2 2 0 0 0 1.6 0l8.6-3.9A1 1 0 0 0 22 17"/></g>
+    <!-- the client's own marks: TP monogram, RAVOMA wordmark, saffron-stigma leaf -->
     <symbol id="i-seal" viewBox="0 0 120 120">
-      <circle cx="60" cy="60" r="58.2" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
-      <circle cx="60" cy="60" r="48.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
-      <path d="M60.00 4.20 62.20 6.40 60.00 8.60 57.80 6.40z" fill="currentColor" stroke="none"/><path d="M97.90 19.00 101.00 22.10 97.90 25.20 94.80 22.10z" fill="currentColor" stroke="none"/><path d="M113.60 57.80 115.80 60.00 113.60 62.20 111.40 60.00z" fill="currentColor" stroke="none"/><path d="M97.90 94.80 101.00 97.90 97.90 101.00 94.80 97.90z" fill="currentColor" stroke="none"/><path d="M60.00 111.40 62.20 113.60 60.00 115.80 57.80 113.60z" fill="currentColor" stroke="none"/><path d="M22.10 94.80 25.20 97.90 22.10 101.00 19.00 97.90z" fill="currentColor" stroke="none"/><path d="M6.40 57.80 8.60 60.00 6.40 62.20 4.20 60.00z" fill="currentColor" stroke="none"/><path d="M22.10 19.00 25.20 22.10 22.10 25.20 19.00 22.10z" fill="currentColor" stroke="none"/>
-      <path d="M31 60a29 6.4 0 0 0 58 0" fill="none" stroke="currentColor" stroke-width="0" opacity="0"/>
-      <text x="60" y="62.5" text-anchor="middle" dominant-baseline="central" fill="currentColor" stroke="none" font-family="'Playfair Display',Georgia,serif" font-size="54" font-weight="700">P</text>
+      <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"/>
+      <g fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M35 43 L70 39"/><path d="M53.5 41 L53.5 85"/>
+        <path d="M64 39.5 L64 85"/><path d="M64 43 h6.5 a13 13 0 0 1 0 26 H64"/>
+      </g>
+    </symbol>
+    <symbol id="i-stigma" viewBox="0 0 112 104">
+      <g transform="translate(56,52) scale(1) translate(-56,-52)">
+        <path d="M64,4 C88,30 90,60 69,80 C59,90 49,90 43,100 C45,84 30,74 24,57 C16,34 40,16 64,4 Z" fill="currentColor" stroke="none"/>
+      </g>
+    </symbol>
+    <symbol id="i-ravoma" viewBox="0 -22 506 142">
+      <g fill="currentColor" stroke="none" font-family="Cinzel,Georgia,serif" font-weight="700" font-size="100" letter-spacing="8">
+        <text x="0" y="100">RAV</text><text x="322.4" y="100">MA</text>
+      </g>
+      <g transform="translate(266.5,66) scale(1.12) translate(-56,-52)">
+        <path d="M64,4 C88,30 90,60 69,80 C59,90 49,90 43,100 C45,84 30,74 24,57 C16,34 40,16 64,4 Z" fill="#B08A4A" stroke="none"/>
+        <path d="M62,20 C70,42 67,60 53,76" fill="none" stroke="var(--leafvein,#171513)" stroke-width="5.5" stroke-linecap="round"/>
+      </g>
     </symbol>
   </defs>
 </svg>
@@ -283,7 +298,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <span class="flex flex-col items-center">
       <span class="wm font-display text-[21px] sm:text-[23px] lg:text-[25px] xl:text-[28px] tracking-[.15em] pl-[.15em] foil font-bold">PANAHANDEH</span>
       <span class="mt-1.5 h-px w-full rule-gold opacity-70"></span>
-      <span class="hidden sm:block mt-1.5 text-[10px] lg:text-[11px] tracking-[.28em] pl-[.28em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
+      <span class="hidden sm:block mt-1.5 text-[10px] lg:text-[11px] tracking-[.28em] pl-[.28em] text-gold font-semibold">FOODSTUFF TRADING L.L.C</span>
       </span>
     </a>
 
@@ -328,13 +343,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
        width="2400" height="1350"
        class="absolute inset-0 -z-10 w-full h-full object-cover">
   <div class="absolute inset-0 -z-10"
-       style="background:linear-gradient(180deg,rgba(4,13,27,.93) 0%,rgba(7,21,40,.88) 38%,rgba(4,13,27,.90) 72%,rgba(4,13,27,.97) 100%)"></div>
+       style="background:linear-gradient(180deg,rgba(12,11,10,.93) 0%,rgba(18,16,15,.88) 38%,rgba(12,11,10,.90) 72%,rgba(12,11,10,.97) 100%)"></div>
   <div class="absolute inset-0 -z-10 opacity-[.45]"
-       style="background:radial-gradient(70% 55% at 50% 42%, #12305A 0%, #0A1D37 42%, transparent 82%)"></div>
+       style="background:radial-gradient(70% 55% at 50% 42%, #2A231C 0%, #171513 42%, transparent 82%)"></div>
   <div class="absolute inset-0 -z-10 opacity-[.26]"
-       style="background:radial-gradient(38% 30% at 50% 30%, rgba(201,162,75,.42) 0%, transparent 68%)"></div>
+       style="background:radial-gradient(38% 30% at 50% 30%, rgba(176,138,74,.42) 0%, transparent 68%)"></div>
   <div class="absolute inset-0 -z-10 opacity-[.16]"
-       style="background-image:linear-gradient(rgba(201,162,75,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,75,.5) 1px,transparent 1px);background-size:120px 120px;mask-image:radial-gradient(60% 50% at 50% 45%,#000,transparent 75%);-webkit-mask-image:radial-gradient(60% 50% at 50% 45%,#000,transparent 75%)"></div>
+       style="background-image:linear-gradient(rgba(176,138,74,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(176,138,74,.5) 1px,transparent 1px);background-size:120px 120px;mask-image:radial-gradient(60% 50% at 50% 45%,#000,transparent 75%);-webkit-mask-image:radial-gradient(60% 50% at 50% 45%,#000,transparent 75%)"></div>
 
   <div class="mx-auto max-w-site w-full px-[var(--gutter)] text-center reveal">
 
@@ -344,7 +359,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
            class="w-[86px] h-[86px] lg:w-[104px] lg:h-[104px] text-gold"><use href="#i-seal"/></svg>
     </div>
 
-    <p class="rv mt-8 text-[11px] lg:text-[11.5px] tracking-[.42em] pl-[.42em] text-gold/80 font-medium" style="--d:.12s">
+    <p class="rv mt-8 text-[11px] lg:text-[11.5px] tracking-[.42em] pl-[.42em] text-gold font-medium" style="--d:.12s">
       DUBAI · UNITED ARAB EMIRATES · EST. FOODSTUFF TRADING
     </p>
 
@@ -352,7 +367,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         style="font-size:clamp(2.65rem,7.4vw,6.4rem)">
       <span class="mask" style="--d:.18s"><span class="text-cream">Quality Products.</span></span>
       <span class="mask" style="--d:.30s"><span class="text-cream">Trusted Partners.</span></span>
-      <span class="mask" style="--d:.42s"><span class="foil italic font-normal">Global Opportunities.</span></span>
+      <span class="mask" style="--d:.42s"><span class="foil font-normal">Global Opportunities.</span></span>
     </h1>
 
     <p class="rv mx-auto mt-9 max-w-[58ch] text-[16px] lg:text-[17px] leading-[1.75] text-cream/65 font-normal" style="--d:.56s">
@@ -384,7 +399,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 <!-- ================= TRUST MARQUEE ================= -->
 <section aria-label="Brand commitments" id="mqWrap" class="border-y border-gold/20 bg-navy-900 py-5 overflow-hidden">
-  <div class="marquee items-center text-[11px] lg:text-[11.5px] tracking-[.34em] text-gold/80 font-medium whitespace-nowrap" id="mq"></div>
+  <div class="marquee items-center text-[11px] lg:text-[11.5px] tracking-[.34em] text-gold font-medium whitespace-nowrap" id="mq"></div>
 </section>
 
 <!-- ================= ABOUT / PROMISE ================= -->
@@ -395,7 +410,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">01 — WHO WE ARE</p>
       <h2 class="rv mt-6 font-display font-semibold leading-[1.12] tracking-[-.015em]"
           style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-        A trading house built on<br><span class="italic text-gold-dk">provenance and proof.</span>
+        A trading house built on<br><span class="text-gold-dk font-normal">provenance and proof.</span>
       </h2>
       <div class="rv-line mt-9 h-px w-full bg-navy-800/15" style="--d:.14s"></div>
 
@@ -447,7 +462,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <!-- ================= NETWORK / TRADE ROUTES ================= -->
 <section id="network" class="reveal relative bg-navy-950 py-24 lg:py-36 overflow-hidden">
   <div class="absolute inset-0 -z-10 opacity-60"
-       style="background:radial-gradient(55% 45% at 68% 45%, #0E2647 0%, #040D1B 70%)"></div>
+       style="background:radial-gradient(55% 45% at 68% 45%, #221E1A 0%, #0C0B0A 70%)"></div>
 
   <div class="mx-auto max-w-site px-[var(--gutter)]">
 
@@ -455,10 +470,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="grid lg:grid-cols-12 gap-x-14 gap-y-12 items-center">
 
       <div class="lg:col-span-5">
-        <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">02 — OUR NETWORK</p>
+        <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">02 — OUR NETWORK</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-          From origin to Dubai.<br><span class="foil italic font-normal">From Dubai to the world.</span>
+          From origin to Dubai.<br><span class="foil font-normal">From Dubai to the world.</span>
         </h2>
         <p class="rv mt-7 text-[16px] leading-[1.8] text-cream/60 font-normal max-w-[46ch]" style="--d:.14s">
           Twelve sourcing corridors converge on Jebel Ali. From there, consolidated and re-packed
@@ -466,7 +481,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         </p>
 
         <div class="rv mt-10" style="--d:.22s">
-          <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">EXPORT DESTINATIONS</p>
+          <p class="text-[11px] tracking-[.3em] text-gold font-semibold">EXPORT DESTINATIONS</p>
           <div class="mt-4 flex flex-wrap gap-2">
             <span class="border border-gold/25 px-4 py-2 text-[11px] tracking-[.16em] text-cream/65">GCC</span>
             <span class="border border-gold/25 px-4 py-2 text-[11px] tracking-[.16em] text-cream/65">EAST &amp; WEST AFRICA</span>
@@ -492,7 +507,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- origins run full width so twelve entries read as a compact table, not a long column -->
     <div class="rv mt-20 lg:mt-24" style="--d:.1s">
       <div class="flex items-center gap-6">
-        <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold shrink-0">SOURCING ORIGINS</p>
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold shrink-0">SOURCING ORIGINS</p>
         <span class="h-px flex-1 bg-gold/15"></span>
         <p class="hidden lg:block text-[11px] tracking-[.3em] text-cream/50 shrink-0">HOVER TO TRACE A CORRIDOR</p>
       </div>
@@ -510,16 +525,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
         <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">03 — OUR PRODUCTS</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em]"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-          Four staples.<br><span class="italic text-gold-dk">One standard.</span>
+          Four staples.<br><span class="text-gold-dk font-normal">One standard.</span>
         </h2>
       </div>
       <div class="rv max-w-[40ch]" style="--d:.14s">
-        <div class="flex items-center gap-4">
-          <img src="../assets/mark.webp" alt="" aria-hidden="true" width="400" height="400" loading="lazy" class="w-11 h-11 shrink-0">
-          <div class="leading-none">
-            <p class="text-[10px] tracking-[.3em] text-gold-dk font-semibold">PACKED UNDER OUR OWN LABEL</p>
-            <p class="mt-2 font-display text-[24px] tracking-[.16em] pl-[.16em] text-navy-800 font-bold">RAVOMA</p>
-          </div>
+        <div class="leading-none">
+          <p class="text-[10px] tracking-[.3em] text-gold-dk font-semibold">PACKED UNDER OUR OWN LABEL</p>
+          <svg viewBox="0 -22 506 142" role="img" aria-label="RAVOMA"
+               class="mt-3 w-[196px] h-auto text-navy-800" style="--leafvein:#E8DCC8"><use href="#i-ravoma"/></svg>
+          <p class="mt-2 text-[9.5px] tracking-[.34em] text-navy-800/60 font-semibold">PREMIUM IRANIAN SAFFRON</p>
         </div>
         <p class="mt-5 text-[15px] leading-[1.75] text-navy-800/65 font-normal">
           Retail-ready 1&nbsp;kg pouches with premium printing and freshness seal, or bulk formats
@@ -553,15 +567,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   <img src="../assets/band.webp" alt="" aria-hidden="true" loading="lazy" decoding="async"
        width="2400" height="1000" class="absolute inset-0 w-full h-full object-cover">
   <div class="absolute inset-0"
-       style="background:linear-gradient(90deg,rgba(4,13,27,.96) 0%,rgba(4,13,27,.88) 42%,rgba(4,13,27,.60) 72%,rgba(4,13,27,.42) 100%)"></div>
+       style="background:linear-gradient(90deg,rgba(12,11,10,.96) 0%,rgba(12,11,10,.88) 42%,rgba(12,11,10,.60) 72%,rgba(12,11,10,.42) 100%)"></div>
   <div class="absolute inset-x-0 top-0 h-px rule-gold opacity-50"></div>
   <div class="absolute inset-x-0 bottom-0 h-px rule-gold opacity-50"></div>
 
   <div class="relative mx-auto max-w-site w-full px-[var(--gutter)]">
-    <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">SOURCING STANDARD</p>
+    <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">SOURCING STANDARD</p>
     <p class="rv mt-6 max-w-[740px] font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
        style="--d:.08s;font-size:clamp(1.9rem,3.4vw,3.1rem)">
-      Bought where the crop is best —<br><span class="foil italic font-normal">not where it is cheapest.</span>
+      Bought where the crop is best —<br><span class="foil font-normal">not where it is cheapest.</span>
     </p>
     <p class="rv mt-7 max-w-[46ch] text-[16px] leading-[1.8] text-cream/65 font-normal" style="--d:.14s">
       Origin is selected on the season, not the spreadsheet. Every lot is graded before it is
@@ -573,10 +587,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <!-- ================= WHY PANAHANDEH ================= -->
 <section class="reveal bg-navy-900 py-24 lg:py-36 border-y border-gold/10">
   <div class="mx-auto max-w-site px-[var(--gutter)]">
-    <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">04 — WHY PANAHANDEH</p>
+    <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">04 — WHY PANAHANDEH</p>
     <h2 class="rv mt-6 max-w-[16ch] font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
         style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-      Five reasons partners <span class="foil italic font-normal">stay</span>.
+      Five reasons partners <span class="foil font-normal">stay</span>.
     </h2>
 
     <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-12" id="whyGrid"></div>
@@ -586,15 +600,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 <!-- ================= B2B / SERVICES ================= -->
 <section id="services" class="reveal relative bg-navy-950 py-24 lg:py-36 overflow-hidden">
   <div class="absolute inset-0 -z-10 opacity-50"
-       style="background:radial-gradient(60% 50% at 20% 20%, #0E2647 0%, #040D1B 70%)"></div>
+       style="background:radial-gradient(60% 50% at 20% 20%, #221E1A 0%, #0C0B0A 70%)"></div>
 
   <div class="mx-auto max-w-site px-[var(--gutter)]">
     <div class="grid lg:grid-cols-12 gap-x-14 gap-y-10">
       <div class="lg:col-span-6">
-        <p class="rv text-[11px] tracking-[.36em] text-gold/75 font-semibold">05 — B2B COOPERATION</p>
+        <p class="rv text-[11px] tracking-[.36em] text-gold font-semibold">05 — B2B COOPERATION</p>
         <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em] text-cream"
             style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-          We welcome manufacturers,<br>suppliers &amp; <span class="foil italic font-normal">food brands.</span>
+          We welcome manufacturers,<br>suppliers &amp; <span class="foil font-normal">food brands.</span>
         </h2>
       </div>
       <div class="lg:col-span-6 lg:pt-10">
@@ -610,7 +624,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <img src="../assets/skyline.webp" width="2400" height="1030" loading="lazy" decoding="async"
            alt="The Dubai skyline at twilight, seen across the water">
       <div class="absolute inset-0 pointer-events-none"
-           style="background:linear-gradient(180deg,rgba(4,13,27,.30) 0%,rgba(4,13,27,.12) 45%,rgba(4,13,27,.82) 100%)"></div>
+           style="background:linear-gradient(180deg,rgba(12,11,10,.30) 0%,rgba(12,11,10,.12) 45%,rgba(12,11,10,.82) 100%)"></div>
       <figcaption class="absolute left-0 bottom-0 p-7 lg:p-10 text-[11px] lg:text-[11.5px] tracking-[.3em] text-cream">
         CONSOLIDATED AT JEBEL ALI · SHIPPED TO 40+ MARKETS
       </figcaption>
@@ -619,7 +633,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-gold/10" id="serviceGrid"></div>
 
     <div class="rv mt-16" style="--d:.3s">
-      <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">WE ARE LOOKING FOR PARTNERS IN</p>
+      <p class="text-[11px] tracking-[.3em] text-gold font-semibold">WE ARE LOOKING FOR PARTNERS IN</p>
       <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" id="partnerGrid"></div>
       <p class="mt-10 max-w-[62ch] text-[13px] leading-[1.7] text-cream/50 font-normal">
         All cooperation is subject to product approval, UAE regulations and a written commercial agreement.
@@ -636,7 +650,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       <p class="rv text-[11px] tracking-[.36em] text-gold-dk font-semibold">06 — CONTACT</p>
       <h2 class="rv mt-6 font-display font-semibold leading-[1.1] tracking-[-.015em]"
           style="--d:.08s;font-size:clamp(2rem,3.6vw,3.3rem)">
-        Let's build a successful<br><span class="italic text-gold-dk">partnership together.</span>
+        Let's build a successful<br><span class="text-gold-dk font-normal">partnership together.</span>
       </h2>
 
       <ul class="mt-11 space-y-6">
@@ -669,17 +683,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
           <div>
             <label for="f-name" class="block text-[11px] tracking-[.28em] text-navy-800/65 font-semibold">FULL NAME <span class="text-gold-dk">*</span></label>
             <input id="f-name" name="name" type="text" autocomplete="name" required class="fld mt-3">
-            <p class="err mt-2 text-[11.5px] text-[#B3261E] hidden" role="alert"></p>
+            <p class="err mt-2 text-[11.5px] text-[#8F1D24] hidden" role="alert"></p>
           </div>
           <div>
             <label for="f-co" class="block text-[11px] tracking-[.28em] text-navy-800/65 font-semibold">COMPANY <span class="text-gold-dk">*</span></label>
             <input id="f-co" name="company" type="text" autocomplete="organization" required class="fld mt-3">
-            <p class="err mt-2 text-[11.5px] text-[#B3261E] hidden" role="alert"></p>
+            <p class="err mt-2 text-[11.5px] text-[#8F1D24] hidden" role="alert"></p>
           </div>
           <div>
             <label for="f-mail" class="block text-[11px] tracking-[.28em] text-navy-800/65 font-semibold">BUSINESS EMAIL <span class="text-gold-dk">*</span></label>
             <input id="f-mail" name="email" type="email" inputmode="email" autocomplete="email" required class="fld mt-3">
-            <p class="err mt-2 text-[11.5px] text-[#B3261E] hidden" role="alert"></p>
+            <p class="err mt-2 text-[11.5px] text-[#8F1D24] hidden" role="alert"></p>
           </div>
           <div>
             <label for="f-country" class="block text-[11px] tracking-[.28em] text-navy-800/65 font-semibold">COUNTRY</label>
@@ -725,7 +739,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
           <svg viewBox="0 0 120 120" aria-hidden="true" class="w-14 h-14 mb-6 text-gold"><use href="#i-seal"/></svg>
           <span class="font-display text-[23px] sm:text-[26px] tracking-[.15em] pl-[.15em] foil font-bold">PANAHANDEH</span>
           <span class="mt-2 h-px w-full rule-gold opacity-70"></span>
-          <span class="mt-2 text-[10px] tracking-[.3em] pl-[.3em] text-gold/80 font-semibold">FOODSTUFF TRADING L.L.C</span>
+          <span class="mt-2 text-[10px] tracking-[.3em] pl-[.3em] text-gold font-semibold">FOODSTUFF TRADING L.L.C</span>
         </div>
         <p class="mt-7 max-w-[38ch] text-[15px] leading-[1.75] text-cream/50 font-normal">
           Quality products. Trusted partners. Global opportunities — sourced worldwide,
@@ -734,7 +748,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </div>
 
       <div class="md:col-span-2">
-        <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">COMPANY</p>
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold">COMPANY</p>
         <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
           <li><a href="#about" class="ulink hover:text-gold transition-colors">About Us</a></li>
           <li><a href="#network" class="ulink hover:text-gold transition-colors">Network</a></li>
@@ -744,7 +758,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </div>
 
       <div class="md:col-span-2">
-        <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">PRODUCTS</p>
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold">PRODUCTS</p>
         <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
           <li><a href="#products" class="ulink hover:text-gold transition-colors">Chickpeas</a></li>
           <li><a href="#products" class="ulink hover:text-gold transition-colors">Green Lentils</a></li>
@@ -754,7 +768,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       </div>
 
       <div class="md:col-span-3">
-        <p class="text-[11px] tracking-[.3em] text-gold/75 font-semibold">GET IN TOUCH</p>
+        <p class="text-[11px] tracking-[.3em] text-gold font-semibold">GET IN TOUCH</p>
         <ul class="mt-5 space-y-3 text-[14px] text-cream/50 font-normal">
           <li><a href="tel:+971501234567" class="ulink hover:text-gold transition-colors">+971 50 123 4567</a></li>
           <li><a href="mailto:info@panahandeh.ae" class="ulink hover:text-gold transition-colors">info@panahandeh.ae</a></li>
@@ -780,16 +794,16 @@ const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
 /* ---------------- DATA ---------------- */
 const PRODUCTS = [
-  { en:'Chickpeas',        ar:'حمص',   bg:'#0A1D37', rgb:'10,29,55',  img:'chickpeas',
+  { en:'Chickpeas',        ar:'حمص',   bg:'#171513', rgb:'23,21,19',  img:'chickpeas',
     alt:'Dried Kabuli chickpeas, whole and uniformly graded',
     origin:'India · Turkey · Mexico',   fmt:'1 kg retail · 25/50 kg bulk', grade:'8–9 mm Kabuli' },
-  { en:'Green Lentils',    ar:'عدس أخضر', bg:'#1D4032', rgb:'29,64,50',  img:'lentils',
+  { en:'Green Lentils',    ar:'عدس أخضر', bg:'#5A171B', rgb:'90,23,27',  img:'lentils',
     alt:'Dried green Laird lentils, machine-cleaned',
     origin:'Turkey · Canada',          fmt:'1 kg retail · 25 kg bulk',    grade:'Laird, machine-cleaned' },
-  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#5E1128', rgb:'94,17,40',  img:'splitpeas',
+  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#8F1D24', rgb:'143,29,36',  img:'splitpeas',
     alt:'Dried yellow split peas, polished and sized',
     origin:'Canada · Russia · Ukraine', fmt:'1 kg retail · 25 kg bulk',    grade:'Split, polished' },
-  { en:'Saffron',          ar:'زعفران', bg:'#432764', rgb:'67,39,100', img:'saffron',
+  { en:'Saffron',          ar:'زعفران', bg:'#7E6030', rgb:'126,96,48', img:'saffron',
     alt:'Deep red Super Negin saffron threads on a wooden spoon',
     origin:'Iran · Afghanistan',        fmt:'1 g · 5 g · 10 g',            grade:'Super Negin, all-red' }
 ];
@@ -843,7 +857,7 @@ const icon = (id, cls='w-6 h-6') =>
                  'PREMIUM PACKAGING','HIGH QUALITY PRINTING','FRESHNESS GUARANTEED',
                  'UAE LICENSED','WORLDWIDE EXPORT'];
   const run = items.map(t =>
-    `<span class="px-9">${t}</span><span class="text-gold/75" aria-hidden="true">◆</span>`).join('');
+    `<span class="px-9">${t}</span><span class="text-gold" aria-hidden="true">◆</span>`).join('');
   $('#mq').innerHTML = run + run;
 }
 
@@ -854,12 +868,11 @@ $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
     <img class="pimg absolute inset-0 w-full h-full object-cover" src="../assets/${p.img}.webp"
          alt="${p.alt}" loading="lazy" decoding="async" width="900" height="1200">
     <div class="absolute inset-0 pointer-events-none" style="background:
-         linear-gradient(180deg, rgba(4,13,27,.55) 0%, rgba(4,13,27,0) 24%),
+         linear-gradient(180deg, rgba(12,11,10,.55) 0%, rgba(12,11,10,0) 24%),
          linear-gradient(180deg, rgba(${p.rgb},.14) 0%, rgba(${p.rgb},.40) 26%, rgba(${p.rgb},.92) 44%, rgb(${p.rgb}) 54%)"></div>
 
     <div class="pbody relative w-full p-8 lg:p-9 flex flex-col">
-      <img src="../assets/mark.webp" width="400" height="400" loading="lazy" decoding="async"
-           class="w-10 h-10 shrink-0" alt="" aria-hidden="true">
+      <svg viewBox="0 0 112 104" class="w-8 h-8 shrink-0 text-gold" aria-hidden="true"><use href="#i-stigma"/></svg>
 
       <h3 class="relative mt-auto font-display text-cream">${p.en}</h3>
       <p class="ar relative mt-1 text-gold-lt" dir="rtl" lang="ar">${p.ar}</p>
@@ -881,7 +894,7 @@ $('#productGrid').innerHTML = PRODUCTS.map((p, i) => `
 $('#whyGrid').innerHTML = WHY.map((w, i) => `
   <div class="rv" style="--d:${.12 + i * .07}s">
     <div class="flex items-center gap-4">
-      <span class="font-display text-[14px] text-gold/75">0${i + 1}</span>
+      <span class="font-display text-[14px] text-gold">0${i + 1}</span>
       <span class="h-px flex-1 bg-gold/20"></span>
     </div>
     <div class="mt-6 text-gold">${icon(w.i, 'w-7 h-7')}</div>
@@ -910,7 +923,7 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
         <span class="dot inline-block w-1 h-1 rounded-full bg-gold shrink-0"></span>
         <span class="font-display text-[18px] leading-tight text-cream">${o.name}</span>
       </span>
-      <span class="mt-2 block pl-4 text-[11.5px] tracking-[.14em] text-gold/75">${o.note}</span>
+      <span class="mt-2 block pl-4 text-[11.5px] tracking-[.14em] text-gold">${o.note}</span>
     </button>
   </li>`).join('');
 
@@ -991,7 +1004,7 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
 
   // cargo pulses travelling origin -> Dubai (omitted entirely under reduced motion)
   const pulses = RM ? '' : routes.map(r =>
-    '<circle r="2.4" fill="#F6E9C4">' +
+    '<circle r="2.4" fill="#F0DDB8">' +
       '<animateMotion dur="5s" begin="' + (r.i * 0.42).toFixed(2) + 's" repeatCount="indefinite" path="' + r.d + '"/>' +
       '<animate attributeName="fill-opacity" dur="5s" begin="' + (r.i * 0.42).toFixed(2) +
         's" repeatCount="indefinite" values="0;.95;.95;0" keyTimes="0;.12;.82;1"/>' +
@@ -1002,12 +1015,12 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
       '<radialGradient id="gSphere" cx="34%" cy="26%">' +
         '<stop offset="0" stop-color="#123258"/>' +
         '<stop offset=".55" stop-color="#0B2244"/>' +
-        '<stop offset="1" stop-color="#03080F"/>' +
+        '<stop offset="1" stop-color="#080706"/>' +
       '</radialGradient>' +
       '<radialGradient id="gRim">' +
-        '<stop offset=".93" stop-color="#C9A24B" stop-opacity="0"/>' +
-        '<stop offset=".985" stop-color="#C9A24B" stop-opacity=".18"/>' +
-        '<stop offset="1" stop-color="#C9A24B" stop-opacity="0"/>' +
+        '<stop offset=".93" stop-color="#B08A4A" stop-opacity="0"/>' +
+        '<stop offset=".985" stop-color="#B08A4A" stop-opacity=".18"/>' +
+        '<stop offset="1" stop-color="#B08A4A" stop-opacity="0"/>' +
       '</radialGradient>' +
     '</defs>' +
     '<circle cx="' + C + '" cy="' + C + '" r="' + (R + 20) + '" fill="url(#gRim)"/>' +
@@ -1016,24 +1029,24 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
       grat.map(d => '<path d="' + d + '"/>').join('') +
     '</g>' +
     '<g>' + land + '</g>' +
-    '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="none" stroke="#C9A24B" stroke-opacity=".55" stroke-width="1.1"/>' +
-    '<g id="routeG" fill="none" stroke="#C9A24B" stroke-opacity=".55" stroke-width="1.2" stroke-linecap="round">' +
+    '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="none" stroke="#B08A4A" stroke-opacity=".55" stroke-width="1.1"/>' +
+    '<g id="routeG" fill="none" stroke="#B08A4A" stroke-opacity=".55" stroke-width="1.2" stroke-linecap="round">' +
       routes.map(r => '<path class="route" id="rt-' + r.i + '" d="' + r.d + '" style="--d:' + (.5 + r.i * .1).toFixed(2) + 's"/>').join('') +
     '</g>' +
     '<g id="pulseG">' + pulses + '</g>' +
     '<g id="nodeG">' +
       routes.map(r => '<g id="nd-' + r.i + '">' +
-        '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="7" fill="#C9A24B" fill-opacity=".16"/>' +
-        '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="2.9" fill="#F6E9C4"/></g>').join('') +
+        '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="7" fill="#B08A4A" fill-opacity=".16"/>' +
+        '<circle cx="' + r.p.x.toFixed(1) + '" cy="' + r.p.y.toFixed(1) + '" r="2.9" fill="#F0DDB8"/></g>').join('') +
     '</g>' +
     '<g>' +
-      '<circle class="hub-pulse" cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="6" fill="none" stroke="#C9A24B" stroke-width="1.3"/>' +
-      '<circle cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="10" fill="#03080F" stroke="#C9A24B" stroke-width="1.4"/>' +
-      '<circle cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="3.8" fill="#F6E9C4"/>' +
+      '<circle class="hub-pulse" cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="6" fill="none" stroke="#B08A4A" stroke-width="1.3"/>' +
+      '<circle cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="10" fill="#080706" stroke="#B08A4A" stroke-width="1.4"/>' +
+      '<circle cx="' + hub.x.toFixed(1) + '" cy="' + hub.y.toFixed(1) + '" r="3.8" fill="#F0DDB8"/>' +
       '<text x="' + (hub.x + 22).toFixed(1) + '" y="' + (hub.y - 13).toFixed(1) + '" ' +
         'font-family="Montserrat,sans-serif" font-size="11.5" font-weight="600" letter-spacing="2.6" ' +
-        'paint-order="stroke" stroke="#03080F" stroke-width="3.5" stroke-linejoin="round" ' +
-        'fill="#F6E9C4">' + HUB.name + '</text>' +
+        'paint-order="stroke" stroke="#080706" stroke-width="3.5" stroke-linejoin="round" ' +
+        'fill="#F0DDB8">' + HUB.name + '</text>' +
     '</g>';
 
   // stroke-dasharray lengths for the draw-in
@@ -1046,7 +1059,7 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
   const setActive = (i, on) => {
     const rt = $('#rt-' + i), nd = $('#nd-' + i);
     if (!rt) return;
-    rt.style.stroke = on ? '#F3E1B0' : '';
+    rt.style.stroke = on ? '#E8CFA4' : '';
     rt.style.strokeOpacity = on ? '1' : '';
     rt.style.strokeWidth = on ? '2' : '';
     if (nd) nd.style.opacity = on ? '1' : '';
@@ -1140,7 +1153,7 @@ if (!RM) {
     const p = input.parentElement.querySelector('.err');
     if (!p) return;
     p.textContent = msg; p.classList.toggle('hidden', !msg);
-    input.style.borderBottomColor = msg ? '#B3261E' : '';
+    input.style.borderBottomColor = msg ? '#8F1D24' : '';
     input.setAttribute('aria-invalid', msg ? 'true' : 'false');
   };
 
@@ -1165,7 +1178,7 @@ if (!RM) {
     setTimeout(() => {
       label.textContent = 'ENQUIRY RECEIVED';
       note.textContent = 'Thank you — our trade desk replies within one business day. (Demo form: not yet connected to a backend.)';
-      note.style.color = '#1D4032';
+      note.style.color = '#5A171B';
     }, 900);
   });
 }
