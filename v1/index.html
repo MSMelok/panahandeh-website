@@ -800,10 +800,10 @@ const PRODUCTS = [
   { en:'Green Lentils',    ar:'عدس أخضر', bg:'#5A171B', rgb:'90,23,27',  img:'lentils',
     alt:'Dried green Laird lentils, machine-cleaned',
     origin:'Turkey · Canada',          fmt:'1 kg retail · 25 kg bulk',    grade:'Laird, machine-cleaned' },
-  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#8F1D24', rgb:'143,29,36',  img:'splitpeas',
+  { en:'Yellow Split Peas',ar:'بازلاء صفراء مجروشة', bg:'#7B191F', rgb:'123,25,31',  img:'splitpeas',
     alt:'Dried yellow split peas, polished and sized',
     origin:'Canada · Russia · Ukraine', fmt:'1 kg retail · 25 kg bulk',    grade:'Split, polished' },
-  { en:'Saffron',          ar:'زعفران', bg:'#7E6030', rgb:'126,96,48', img:'saffron',
+  { en:'Saffron',          ar:'زعفران', bg:'#533F20', rgb:'83,63,32', img:'saffron',
     alt:'Deep red Super Negin saffron threads on a wooden spoon',
     origin:'Iran · Afghanistan',        fmt:'1 g · 5 g · 10 g',            grade:'Super Negin, all-red' }
 ];
@@ -1013,8 +1013,8 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
   $('#globe').innerHTML =
     '<defs>' +
       '<radialGradient id="gSphere" cx="34%" cy="26%">' +
-        '<stop offset="0" stop-color="#123258"/>' +
-        '<stop offset=".55" stop-color="#0B2244"/>' +
+        '<stop offset="0" stop-color="#3A2C22"/>' +
+        '<stop offset=".55" stop-color="#1C1512"/>' +
         '<stop offset="1" stop-color="#080706"/>' +
       '</radialGradient>' +
       '<radialGradient id="gRim">' +
@@ -1025,7 +1025,7 @@ $('#originList').innerHTML = ORIGINS.map((o, i) => `
     '</defs>' +
     '<circle cx="' + C + '" cy="' + C + '" r="' + (R + 20) + '" fill="url(#gRim)"/>' +
     '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="url(#gSphere)"/>' +
-    '<g fill="none" stroke="#7FA0CE" stroke-opacity=".13" stroke-width=".7">' +
+    '<g fill="none" stroke="#B08A4A" stroke-opacity=".11" stroke-width=".7">' +
       grat.map(d => '<path d="' + d + '"/>').join('') +
     '</g>' +
     '<g>' + land + '</g>' +
