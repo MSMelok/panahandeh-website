@@ -1,0 +1,61 @@
+---
+/**
+ * Field — the seamless all-over floral from brand/newPattern02.jpeg.
+ *
+ * The generator placed every motif on a torus, so a copy that crosses a tile
+ * edge is repeated on the opposite edge and the tile joins with no seam. The
+ * six motifs are defined once and replayed with <use>.
+ *
+ * Fills whatever box it is given: no viewBox, pattern units are user units, and
+ * `size` scales the tile via patternTransform.
+ */
+import { FIELD } from './geometry';
+import { uid } from './uid';
+
+interface Props {
+  /** Rendered tile edge in px. The geometry tile is 340 units square. */
+  size?: number;
+  /** stroke-width in geometry units, before `size` scales it. */
+  weight?: number;
+  class?: string;
+}
+
+const { size = 340, weight = 1.1, class: className } = Astro.props;
+
+const id = uid('fd');
+const s = +(size / FIELD.w).toFixed(4);
+---
+
+<svg
+  class:list={['orn-field', className]}
+  fill="none"
+  stroke="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  role="presentation"
+>
+  <defs>
+    {FIELD.motifs.map((d, i) => <path id={`${id}-m${i}`} d={d} />)}
+    <pattern
+      id={`${id}-p`}
+      width={FIELD.w}
+      height={FIELD.h}
+      patternUnits="userSpaceOnUse"
+      patternTransform={`scale(${s})`}
+    >
+      <g fill="none" stroke="currentColor" stroke-width={weight} stroke-linejoin="round">
+        {FIELD.uses.map((u) => <use href={`#${id}-m${u.k}`} transform={u.t} />)}
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${id}-p)`} stroke="none"></rect>
+</svg>
+
+<style>
+  .orn-field {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+</style>

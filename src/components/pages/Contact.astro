@@ -17,6 +17,8 @@ import { SITE, type Lang } from '../../data/site';
 import { PRODUCTS } from '../../data/products';
 import { t, type Key } from '../../data/i18n';
 import EnquiryForm from '../EnquiryForm.astro';
+import LineElement from '../ornament/LineElement.astro';
+import TilePattern from '../ornament/TilePattern.astro';
 
 interface Props {
   lang: Lang;
@@ -43,7 +45,7 @@ const slugs = PRODUCTS.map((p) => p.slug);
     <h1 class="display d1 pgh-h">
       {t('c.h1a', lang)} <span class="acc">{t('c.h1b', lang)}</span>
     </h1>
-    <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="grule" aria-hidden="true"><LineElement /></div>
     <p class="lede">{t('c.lede', lang)}</p>
   </div>
 </section>
@@ -91,6 +93,8 @@ const slugs = PRODUCTS.map((p) => p.slug);
 
     <!-- ---------------- the form ---------------- -->
     <div class="col form-col">
+      <div class="form-orn" aria-hidden="true"><TilePattern size={168} /></div>
+
       <header class="form-head">
         <p class="label">{t('c.form.k', lang)}</p>
         <h2 class="display d3">{t('c.form.h', lang)}</h2>
@@ -133,30 +137,10 @@ const slugs = PRODUCTS.map((p) => p.slug);
     margin-block-start: 26px;
   }
 
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
     margin-block-start: 30px;
-    max-inline-size: 320px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    color: var(--gold);
   }
 
   .sec {
@@ -207,6 +191,12 @@ const slugs = PRODUCTS.map((p) => p.slug);
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .reach-k {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   /* inline-flex, not inline: min-block-size does nothing to an inline box, and the
      coarse-pointer rule in tokens.css would silently fail on these two links */
   .reach-v {
@@ -231,6 +221,11 @@ const slugs = PRODUCTS.map((p) => p.slug);
   }
   :global(html[lang='fa']) .reach-v {
     font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  }
+:global(html[lang='ar']) .reach-v {
+    font-family: var(--font-ar);
     font-weight: 600;
     font-size: clamp(1.05rem, 1.7vw, 1.25rem);
   }
@@ -287,6 +282,10 @@ const slugs = PRODUCTS.map((p) => p.slug);
     content: counter(inc, persian);
     font-family: var(--font-fa);
   }
+:global(html[lang='ar']) .inc-list li::before {
+    content: counter(inc, persian);
+    font-family: var(--font-ar);
+  }
   .inc-k {
     font-family: var(--font-body);
     font-size: 11px;
@@ -302,6 +301,12 @@ const slugs = PRODUCTS.map((p) => p.slug);
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .inc-k {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .inc-b {
     font-size: 15px;
     line-height: 1.7;
@@ -310,9 +315,28 @@ const slugs = PRODUCTS.map((p) => p.slug);
 
   /* ---------------------------------------------------------------- form */
   .form-col {
+    position: relative;
+    isolation: isolate;
     background: var(--surface);
     border: 1px solid var(--hair);
     padding: clamp(24px, 3.4vw, 42px);
+  }
+  /* The identity board's FULL PATTERN plate, used the way it is drawn there —
+     as the ground of a framed panel. Held low enough that the underlined inputs
+     stay the strongest lines in the box. */
+  .form-orn {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: var(--gold);
+    opacity: 0.06;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(200deg, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 88%);
+    mask-image: linear-gradient(200deg, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 88%);
+  }
+  .form-head,
+  .form-col :global(form) {
+    position: relative;
   }
   .form-head {
     display: grid;

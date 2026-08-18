@@ -16,6 +16,8 @@ import { CONTROL_POINTS, SITE, type Lang } from '../../data/site';
 import { PRODUCTS, LIVE_PRODUCTS, PACK_FORMATS } from '../../data/products';
 import { t, href, digits, type Key } from '../../data/i18n';
 import RavomaMark from '../RavomaMark.astro';
+import Arch from '../ornament/Arch.astro';
+import LineElement from '../ornament/LineElement.astro';
 
 interface Props {
   lang: Lang;
@@ -23,8 +25,11 @@ interface Props {
 
 const { lang } = Astro.props;
 const fa = lang === 'fa';
-const counterLang = fa ? 'en' : 'fa';
-const counterDir = fa ? 'ltr' : 'rtl';
+/* Pick a per-language value. Written out rather than left as the `fa ? x : y`
+   ternaries this replaced, because those silently yielded English for Arabic. */
+const pick3 = <T,>(en: T, faV: T, ar: T): T => (lang === 'fa' ? faV : lang === 'ar' ? ar : en);
+const counterLang = lang === 'en' ? 'fa' : 'en';
+const counterDir = counterLang === 'fa' ? 'rtl' : 'ltr';
 
 const FLOW: { t: Key; b: Key }[] = [
   { t: 'flow.1', b: 'flow.1.b' },
@@ -32,19 +37,7 @@ const FLOW: { t: Key; b: Key }[] = [
   { t: 'flow.3', b: 'flow.3.b' },
   { t: 'flow.4', b: 'flow.4.b' },
 ];
-
-const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
 ---
-
-<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
-  <defs>
-    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
-      <path
-        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
-      ></path>
-    </clipPath>
-  </defs>
-</svg>
 
 <!-- ============================ INTRO ============================ -->
 <section class="intro">
@@ -54,25 +47,20 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
       <h1 class="display d1 intro-h1">
         {t('about.h1a', lang)}<br /><span class="acc">{t('about.h1b', lang)}</span>
       </h1>
-      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grule" aria-hidden="true"><LineElement /></div>
       <p class="lede intro-lede">{t('about.lede', lang)}</p>
     </div>
 
-    <figure class="arch intro-arch">
-      <div class="arch-in">
-        <img
+    <Arch class="intro-arch" ratio="3 / 4">
+      <img
           src="/assets/about.webp"
           width="1000"
           height="1250"
           fetchpriority="high"
           decoding="async"
-          alt={fa ? 'کیسه‌های حبوبات درجه‌بندی‌شده در انبار خشک' : 'Jute sacks of graded pulses stacked in dry storage'}
-        />
-      </div>
-      <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path d={ARCH}></path>
-      </svg>
-    </figure>
+        alt={fa ? 'کیسه‌های حبوبات درجه‌بندی‌شده در انبار خشک' : 'Jute sacks of graded pulses stacked in dry storage'}
+      />
+    </Arch>
   </div>
 </section>
 
@@ -129,8 +117,8 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
         CONTROL_POINTS.map((c, i) => (
           <li>
             <span class="cn">{digits(String(i + 1).padStart(2, '0'), lang)}</span>
-            <h3 class="display d3 ch">{fa ? c.fa : c.en}</h3>
-            <p class="cb">{fa ? c.faFixed : c.enFixed}</p>
+            <h3 class="display d3 ch">{pick3(c.en, c.fa, c.ar)}</h3>
+            <p class="cb">{pick3(c.enFixed, c.faFixed, c.arFixed)}</p>
           </li>
         ))
       }
@@ -169,21 +157,16 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
         <RavomaMark width={230} color="var(--ivory)" veinColor="#171513" />
         <p class="markline">{t('pd.ravoma', lang)}</p>
       </div>
-      <figure class="arch brand-arch">
-        <div class="arch-in">
-          <img
+      <Arch class="brand-arch" ratio="5 / 4">
+        <img
             src="/assets/pack-gift.webp"
             width="1200"
             height="960"
             loading="lazy"
             decoding="async"
-            alt={fa ? 'جعبه هدیه ۲۰۰ گرمی زعفران راوما' : 'RAVOMA 200 g saffron gift box'}
-          />
-        </div>
-        <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d={ARCH}></path>
-        </svg>
-      </figure>
+          alt={fa ? 'جعبه هدیه ۲۰۰ گرمی زعفران راوما' : 'RAVOMA 200 g saffron gift box'}
+        />
+      </Arch>
     </div>
   </div>
 </section>
@@ -230,13 +213,6 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
 </section>
 
 <style>
-  .defs {
-    position: absolute;
-    inline-size: 0;
-    block-size: 0;
-    overflow: hidden;
-  }
-
   /* ---------------------------------------------------------------- shared */
   .sec {
     padding-block: var(--rhythm);
@@ -257,78 +233,10 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     flex: none;
   }
 
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    max-inline-size: 320px;
     margin-block-start: 26px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
-  }
-
-  /* ---------------------------------------------------------------- arch */
-  .arch {
-    margin: 0;
-    position: relative;
-    isolation: isolate;
-  }
-  .arch-in {
-    position: relative;
-    overflow: hidden;
-    background: var(--obsidian-700);
-    clip-path: url(#pgArch);
-  }
-  .arch-in img {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    filter: saturate(0.92) contrast(1.04);
-  }
-  .arch-in::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background: linear-gradient(
-      180deg,
-      rgba(12, 11, 10, 0.24) 0%,
-      rgba(12, 11, 10, 0) 38%,
-      rgba(12, 11, 10, 0.34) 100%
-    );
-  }
-  .arch-line {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .arch-line path {
-    fill: none;
-    stroke: var(--gold);
-    stroke-width: 1.4;
-    vector-effect: non-scaling-stroke;
+    color: var(--gold);
   }
 
   /* ---------------------------------------------------------------- buttons */
@@ -360,6 +268,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .btn {
     font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .btn {
+    font-family: var(--font-ar);
     font-size: 13.5px;
     letter-spacing: 0;
     text-transform: none;
@@ -413,15 +327,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   .intro-lede {
     margin-block-start: 24px;
   }
-  .intro-arch {
+  :global(.intro-arch) {
     inline-size: min(320px, 76vw);
     margin-inline: auto;
   }
-  .intro-arch .arch-in {
-    aspect-ratio: 3 / 4;
-  }
   @media (min-width: 900px) {
-    .intro-arch {
+    :global(.intro-arch) {
       inline-size: min(400px, 100%);
       margin-inline: 0;
     }
@@ -477,6 +388,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .tally dt {
+    font-family: var(--font-ar);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .tally dd {
     margin: 8px 0 0;
     font-family: var(--font-display);
@@ -487,6 +404,9 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .tally dd {
     font-family: var(--font-fa);
+  }
+:global(html[lang='ar']) .tally dd {
+    font-family: var(--font-ar);
   }
 
   .flow {
@@ -513,6 +433,9 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   :global(html[lang='fa']) .fn {
     font-family: var(--font-fa);
   }
+:global(html[lang='ar']) .fn {
+    font-family: var(--font-ar);
+  }
   .ft {
     font-family: var(--font-display);
     font-size: clamp(1.15rem, 1.7vw, 1.4rem);
@@ -523,6 +446,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .ft {
     font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.7;
+  }
+:global(html[lang='ar']) .ft {
+    font-family: var(--font-ar);
     font-weight: 600;
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     line-height: 1.7;
@@ -577,6 +506,9 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .cn {
     font-family: var(--font-fa);
+  }
+:global(html[lang='ar']) .cn {
+    font-family: var(--font-ar);
   }
   .ch {
     margin: 0;
@@ -642,6 +574,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .names dt {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .names dd {
     margin: 0;
     font-size: 15.5px;
@@ -675,10 +613,6 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     line-height: 1.7;
     color: var(--text-muted);
   }
-  .brand-arch .arch-in {
-    aspect-ratio: 5 / 4;
-  }
-
   /* ---------------------------------------------------------------- port */
   .port {
     position: relative;

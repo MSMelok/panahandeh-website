@@ -13,14 +13,16 @@
  * changes with it. Nothing here states a fact that site.ts does not already hold.
  */
 import { SITE, TRANSIT, type Lang } from '../data/site';
-import { t, type Key } from '../data/i18n';
+import { t, href, type Key } from '../data/i18n';
 
 const BASE = SITE.url.replace(/\/$/, '');
 
-/** Same canonical rule Seo.astro uses: `/quality` in English, `/fa/quality` in Persian. */
-const pageUrl = (path: string, lang: Lang) => (lang === 'fa' ? `${BASE}/fa${path}` : `${BASE}${path}`);
+/** Same canonical rule Seo.astro uses: `/quality` in English, `/fa/quality` in Persian,
+ *  `/ar/quality` in Arabic. Built through href() so it cannot drift from the routes. */
+const pageUrl = (path: string, lang: Lang) => `${BASE}${href(path, lang)}`;
 
-const inLanguage = (lang: Lang) => (lang === 'fa' ? 'fa-IR' : 'en-AE');
+const IN_LANGUAGE: Record<Lang, string> = { en: 'en-AE', fa: 'fa-IR', ar: 'ar-AE' };
+const inLanguage = (lang: Lang) => IN_LANGUAGE[lang];
 
 /** Question / answer key pairs. Quality.astro renders these; the FAQPage node
  *  quotes the same two strings, so the markup and the structured data match. */
@@ -75,7 +77,7 @@ export function contactSchema(lang: Lang): Record<string, unknown>[] {
         email: SITE.email,
         // The regions we quote a sailing time for, read straight off the transit table.
         areaServed: TRANSIT.map((row) => row.region),
-        availableLanguage: ['en', 'fa'],
+        availableLanguage: ['en', 'fa', 'ar'],
       },
     },
   ];

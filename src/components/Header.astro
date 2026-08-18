@@ -12,8 +12,10 @@
  *    ~400px at full size. The sub-line, then the wordmark tracking, then the wordmark
  *    itself step down so the row still fits a 320px viewport.
  *
- * The language switch is two real links to two real URLs, not a JS toggle — hreflang,
- * the sitemap and answer engines can only see the former.
+ * The language switch is three real links to three real URLs, not a JS toggle — hreflang,
+ * the sitemap and answer engines can only see the former. Three items is the tightest
+ * the row has ever been at 320px; the step-downs at the bottom of the stylesheet are
+ * measured against the widest label, العربية, not against EN.
  */
 import { SITE, type Lang } from '../data/site';
 import { t, href } from '../data/i18n';
@@ -27,7 +29,17 @@ interface Props {
 const { lang, path } = Astro.props;
 
 /** Company sub-line. Not in the shared T map — it belongs to the lockup, not the UI. */
-const SUBLINE = lang === 'fa' ? 'بازرگانی مواد غذایی' : 'FOODSTUFF TRADING L.L.C';
+const SUBLINE =
+  lang === 'fa' ? 'بازرگانی مواد غذایی'
+  : lang === 'ar' ? 'لتجارة المواد الغذائية'
+  : 'FOODSTUFF TRADING L.L.C';
+
+/** The switch itself. Each entry is a real URL in that language for THIS page. */
+const LANGS = [
+  { code: 'en', label: 'EN' },
+  { code: 'fa', label: 'فارسی' },
+  { code: 'ar', label: 'العربية' },
+] as const;
 
 const NAV = [
   { to: '/', key: 'nav.home' },
@@ -81,18 +93,18 @@ const isActive = (to: string) =>
 
       <div class="hdr-end">
         <div class="lang" role="group" aria-label={t('a11y.lang', lang)}>
-          <a
-            href={href(path, 'en')}
-            hreflang="en"
-            lang="en"
-            aria-current={lang === 'en' ? 'page' : undefined}>EN</a
-          >
-          <a
-            href={href(path, 'fa')}
-            hreflang="fa"
-            lang="fa"
-            aria-current={lang === 'fa' ? 'page' : undefined}>فارسی</a
-          >
+          {
+            LANGS.map((l) => (
+              <a
+                href={href(path, l.code)}
+                hreflang={l.code}
+                lang={l.code}
+                aria-current={lang === l.code ? 'page' : undefined}
+              >
+                {l.label}
+              </a>
+            ))
+          }
         </div>
 
         <a class="btn hdr-cta" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
@@ -133,7 +145,7 @@ const isActive = (to: string) =>
       <ul class="sheet-meta">
         <li><a href={`tel:${SITE.phoneHref}`}><bdi dir="ltr">{SITE.phone}</bdi></a></li>
         <li><a href={`mailto:${SITE.email}`}><bdi dir="ltr">{SITE.email}</bdi></a></li>
-        <li>{lang === 'fa' ? 'دبی، امارات متحده عربی' : 'Dubai, United Arab Emirates'}</li>
+        <li>{t('c.officev', lang)}</li>
       </ul>
     </div>
   </div>
@@ -218,6 +230,11 @@ const isActive = (to: string) =>
     font-size: 11px;
     letter-spacing: 0;
   }
+  :global(html[lang='ar']) .lock small {
+    font-family: var(--font-ar);
+    font-size: 11px;
+    letter-spacing: 0;
+  }
 
   /* -- primary nav ----------------------------------------------------- */
   .nav {
@@ -285,6 +302,12 @@ const isActive = (to: string) =>
     font-family: var(--font-fa);
     letter-spacing: 0;
   }
+  /* Tajawal is only fetched on the Arabic pages, so the stack has to fall through to
+     a system Naskh on the English and Persian ones — the label still has to render. */
+  .lang a[lang='ar'] {
+    font-family: var(--font-ar);
+    letter-spacing: 0;
+  }
 
   /* -- CTA ------------------------------------------------------------- */
   .btn {
@@ -312,6 +335,12 @@ const isActive = (to: string) =>
   }
   :global(html[lang='fa']) .btn {
     font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  :global(html[lang='ar']) .btn {
+    font-family: var(--font-ar);
     font-size: 13px;
     letter-spacing: 0;
     text-transform: none;
@@ -411,6 +440,11 @@ const isActive = (to: string) =>
     font-weight: 600;
     font-size: clamp(1.35rem, 5.6vw, 1.9rem);
   }
+  :global(html[lang='ar']) .sheet-nav a {
+    font-family: var(--font-ar-display);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 5.6vw, 1.9rem);
+  }
   .sheet-nav a[aria-current='page'] { color: var(--gold); }
 
   .sheet-cta {
@@ -442,29 +476,33 @@ const isActive = (to: string) =>
   }
 
   /* -- narrow widths ---------------------------------------------------- */
-  /* Measured at 320: seal 34 + gap 12 + wordmark 172 + controls 152 + gutter 40 runs
-     over by ~90px, so the lockup steps down until the row fits exactly. */
-  @media (max-width: 460px) {
+  /* Re-measured with the third switch item in place. العربية is the widest label and
+     sets the floor: the lockup steps down, then the switch does, until the row fits a
+     320px viewport with the wordmark, all three languages and the burger on one line.
+     The lockup gives way before the switch does — the switch is the control. */
+  @media (max-width: 560px) {
     .lock small { display: none; }
     .lock b { font-size: 18px; }
     .hdr-in { gap: 10px; }
   }
-  @media (max-width: 400px) {
+  @media (max-width: 460px) {
     .shell-head { --hdr-h: 66px; }
     .lock b { font-size: 16px; letter-spacing: 0.05em; }
     .seal { inline-size: 28px; block-size: 28px; }
     .lock { gap: 9px; }
     .hdr-end { gap: 8px; }
-    .lang a { padding-inline: 8px; font-size: 10.5px; letter-spacing: 0.08em; }
+    .lang a { padding-inline: 7px; font-size: 10.5px; letter-spacing: 0.06em; }
   }
-  @media (max-width: 345px) {
+  @media (max-width: 400px) {
     .lock b { font-size: 14.5px; letter-spacing: 0.02em; }
-    .lang a { padding-inline: 6px; font-size: 10px; }
+    .lock { gap: 8px; }
+    .hdr-end { gap: 7px; }
+    .lang a { padding-inline: 5px; font-size: 10px; letter-spacing: 0; }
+  }
+  @media (pointer: coarse) and (max-width: 460px) {
+    .lang a { padding-inline: 7px; }
   }
   @media (pointer: coarse) and (max-width: 400px) {
-    .lang a { padding-inline: 8px; }
-  }
-  @media (pointer: coarse) and (max-width: 345px) {
     .lang a { padding-inline: 5px; font-size: 10px; }
   }
 

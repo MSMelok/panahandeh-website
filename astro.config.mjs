@@ -14,7 +14,7 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: 'en',
-        locales: { en: 'en-AE', fa: 'fa-IR' },
+        locales: { en: 'en-AE', fa: 'fa-IR', ar: 'ar-AE' },
       },
       filter: (page) => !page.includes('/404'),
     }),

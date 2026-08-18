@@ -10,7 +10,7 @@
  */
 import { SITE, type Lang } from '../data/site';
 import { PRODUCTS } from '../data/products';
-import { t, href } from '../data/i18n';
+import { t, href, L } from '../data/i18n';
 
 interface Props {
   lang: Lang;
@@ -19,8 +19,17 @@ interface Props {
 const { lang } = Astro.props;
 const year = new Date().getFullYear();
 
-const SUBLINE = lang === 'fa' ? 'بازرگانی مواد غذایی' : 'FOODSTUFF TRADING L.L.C';
-const OFFICE = lang === 'fa' ? 'دبی، امارات متحده عربی' : 'Dubai, United Arab Emirates';
+const SUBLINE =
+  lang === 'fa' ? 'بازرگانی مواد غذایی'
+  : lang === 'ar' ? 'لتجارة المواد الغذائية'
+  : 'FOODSTUFF TRADING L.L.C';
+const OFFICE = t('c.officev', lang);
+/* Persian and Arabic both put the noun first — "port of Jebel Ali" — where English
+   needs the phrase. The port name itself is not translated on either. */
+const PORT =
+  lang === 'fa' ? `بندر ${SITE.port}`
+  : lang === 'ar' ? `ميناء ${t('l.port', lang)}`
+  : `Port of loading — ${SITE.port}`;
 
 const COMPANY = [
   { to: '/about', key: 'nav.about' },
@@ -61,7 +70,7 @@ const RANGE = PRODUCTS.slice(0, 4);
           {
             RANGE.map((p) => (
               <li>
-                <a href={href(`/products/${p.slug}`, lang)}>{lang === 'fa' ? p.fa : p.en}</a>
+                <a href={href(`/products/${p.slug}`, lang)}>{L(p, lang, 'en')}</a>
               </li>
             ))
           }
@@ -75,7 +84,7 @@ const RANGE = PRODUCTS.slice(0, 4);
           <li><a href={`tel:${SITE.phoneHref}`}><bdi dir="ltr">{SITE.phone}</bdi></a></li>
           <li><a href={`mailto:${SITE.email}`}><bdi dir="ltr">{SITE.email}</bdi></a></li>
           <li>{OFFICE}</li>
-          <li>{lang === 'fa' ? `بندر ${SITE.port}` : `Port of loading — ${SITE.port}`}</li>
+          <li>{PORT}</li>
         </ul>
       </div>
     </div>
@@ -130,6 +139,11 @@ const RANGE = PRODUCTS.slice(0, 4);
     font-size: 12.5px;
     letter-spacing: 0;
   }
+  :global(html[lang='ar']) .fsub {
+    font-family: var(--font-ar);
+    font-size: 12.5px;
+    letter-spacing: 0;
+  }
   .fblurb {
     margin: 20px 0 0;
     max-inline-size: 40ch;
@@ -138,6 +152,7 @@ const RANGE = PRODUCTS.slice(0, 4);
     font-weight: 300;
   }
   :global(html[lang='fa']) .fblurb { font-weight: 400; }
+  :global(html[lang='ar']) .fblurb { font-weight: 400; }
 
   /* gold-pale is 11.6:1 on obsidian and is set solid — gold at partial opacity fails */
   .fh {
@@ -152,6 +167,12 @@ const RANGE = PRODUCTS.slice(0, 4);
   }
   :global(html[lang='fa']) .fh {
     font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  :global(html[lang='ar']) .fh {
+    font-family: var(--font-ar);
     font-size: 13px;
     letter-spacing: 0;
     text-transform: none;
@@ -184,6 +205,12 @@ const RANGE = PRODUCTS.slice(0, 4);
   }
   :global(html[lang='fa']) .fbase {
     font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  :global(html[lang='ar']) .fbase {
+    font-family: var(--font-ar);
     font-size: 12.5px;
     letter-spacing: 0;
     text-transform: none;

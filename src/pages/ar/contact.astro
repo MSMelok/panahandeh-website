@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import Contact from '../../components/pages/Contact.astro';
+import { t } from '../../data/i18n';
+import { contactSchema } from '../../lib/pageSchema';
+---
+
+<Base
+  title={t('meta.contact.title', 'ar')}
+  description={t('meta.contact.desc', 'ar')}
+  lang="ar"
+  path="/contact"
+  schema={contactSchema('ar')}
+>
+  <Contact lang="ar" />
+</Base>

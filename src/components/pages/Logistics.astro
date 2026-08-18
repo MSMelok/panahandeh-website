@@ -16,6 +16,7 @@
  */
 import { INCOTERMS, TRANSIT, TRANSIT_MAX, SITE, type Lang } from '../../data/site';
 import { t, href, digits } from '../../data/i18n';
+import LineElement from '../ornament/LineElement.astro';
 
 interface Props {
   lang: Lang;
@@ -23,6 +24,9 @@ interface Props {
 
 const { lang } = Astro.props;
 const fa = lang === 'fa';
+/* Pick a per-language value. Written out rather than left as the `fa ? x : y`
+   ternaries this replaced, because those silently yielded English for Arabic. */
+const pick3 = <T,>(en: T, faV: T, ar: T): T => (lang === 'fa' ? faV : lang === 'ar' ? ar : en);
 
 const loads = [
   { code: 'FCL', name: t('l.cons.fcl', lang), body: t('l.cons.fcl.b', lang) },
@@ -35,11 +39,11 @@ const loads = [
 const terms = INCOTERMS.map((x) => ({
   code: x.code,
   place: x.place ? (fa ? t('l.jebelali', lang) : x.place) : null,
-  gloss: fa ? x.fa : x.en,
+  gloss: pick3(x.en, x.fa, x.ar),
 }));
 
 const rows = TRANSIT.map((r) => ({
-  region: fa ? r.regionFa : r.region,
+  region: pick3(r.region, r.regionFa, r.regionAr),
   range: `${digits(r.min, lang)}–${digits(r.max, lang)}`,
   start: (r.min / TRANSIT_MAX) * 100,
   width: ((r.max - r.min) / TRANSIT_MAX) * 100,
@@ -52,7 +56,7 @@ const rows = TRANSIT.map((r) => ({
     <h1 class="display d1 pgh-h">
       {t('l.h1a', lang)} <span class="acc">{t('l.h1b', lang)}</span>
     </h1>
-    <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="grule" aria-hidden="true"><LineElement /></div>
     <p class="lede">{t('l.lede', lang)}</p>
   </div>
 </section>
@@ -203,30 +207,10 @@ const rows = TRANSIT.map((r) => ({
     margin-block-start: 26px;
   }
 
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
     margin-block-start: 30px;
-    max-inline-size: 320px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    color: var(--gold);
   }
 
   .sec {
@@ -255,6 +239,11 @@ const rows = TRANSIT.map((r) => ({
   }
   :global(html[lang='fa']) .port {
     font-family: var(--font-fa);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+:global(html[lang='ar']) .port {
+    font-family: var(--font-ar);
     font-weight: 700;
     font-size: clamp(1.1rem, 1.7vw, 1.35rem);
   }
@@ -314,6 +303,11 @@ const rows = TRANSIT.map((r) => ({
     font-weight: 700;
     font-size: clamp(1.05rem, 1.6vw, 1.2rem);
   }
+:global(html[lang='ar']) .load-name {
+    font-family: var(--font-ar);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  }
 
   /* ---------------------------------------------------------------- terms */
   .terms {
@@ -361,6 +355,12 @@ const rows = TRANSIT.map((r) => ({
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .term-place {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .term-b {
     margin: 0;
     font-size: 15.5px;
@@ -391,6 +391,12 @@ const rows = TRANSIT.map((r) => ({
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .transit-cap {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .transit th,
   .transit td {
     text-align: start;
@@ -409,6 +415,12 @@ const rows = TRANSIT.map((r) => ({
   }
   :global(html[lang='fa']) .transit thead th {
     font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .transit thead th {
+    font-family: var(--font-ar);
     font-size: 12.5px;
     letter-spacing: 0;
     text-transform: none;
@@ -446,6 +458,10 @@ const rows = TRANSIT.map((r) => ({
   }
   :global(html[lang='fa']) .td-days {
     font-family: var(--font-fa);
+    font-size: 1rem;
+  }
+:global(html[lang='ar']) .td-days {
+    font-family: var(--font-ar);
     font-size: 1rem;
   }
 
@@ -546,6 +562,12 @@ const rows = TRANSIT.map((r) => ({
   }
   :global(html[lang='fa']) .cta {
     font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .cta {
+    font-family: var(--font-ar);
     font-size: 13.5px;
     letter-spacing: 0;
     text-transform: none;

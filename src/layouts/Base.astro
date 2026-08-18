@@ -2,7 +2,11 @@
 /**
  * The shell every page renders into.
  *
- * `dir` is set here and nowhere else. The whole layout mirrors off that one attribute,
+ * `dir` is set here and nowhere else, for BOTH right-to-left languages — Persian and
+ * Arabic. It is keyed on "not English" rather than on a list of RTL codes, so adding a
+ * fourth language cannot ship an Arabic-script page laid out left to right.
+ *
+ * The whole layout mirrors off that one attribute,
  * which only works because every component below uses logical properties —
  * padding-inline, margin-inline, inset-inline, border-inline-*. A single `left` or
  * `right` anywhere in the tree breaks the Persian build silently, because it still
@@ -29,7 +33,7 @@ interface Props {
 }
 
 const { title, description, lang, path, image, type, schema, noindex } = Astro.props;
-const dir = lang === 'fa' ? 'rtl' : 'ltr';
+const dir = lang === 'en' ? 'ltr' : 'rtl';
 ---
 
 <!doctype html>

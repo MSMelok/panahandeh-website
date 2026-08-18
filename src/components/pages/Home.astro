@@ -11,13 +11,19 @@
  * the range, and a buyer who enquires about chickpeas and is told they do not exist
  * yet does not come back.
  *
- * Ornament: the pointed-arch niche from the shipped v3 page, carried onto the obsidian
- * ground. The clip path is declared once at the top of the component with
- * clipPathUnits="objectBoundingBox" so a single definition scales to every frame.
+ * Ornament: the pointed-arch niche and the radiating shamsa, both from
+ * components/ornament. The shamsa is the client's own watermark
+ * (brand/newPattern01.jpeg) — a half medallion anchored on the reading edge,
+ * masked so its density falls away before it reaches the lede and the buttons.
  */
 import { TRANSIT, type Lang } from '../../data/site';
 import { LIVE_PRODUCTS, PRODUCTS, ORIGINS, PACK_FORMATS } from '../../data/products';
 import { t, href, digits, type Key } from '../../data/i18n';
+import Arch from '../ornament/Arch.astro';
+import Shamsa from '../ornament/Shamsa.astro';
+import Field from '../ornament/Field.astro';
+import LineElement from '../ornament/LineElement.astro';
+import BorderRail from '../ornament/BorderRail.astro';
 
 interface Props {
   lang: Lang;
@@ -25,12 +31,15 @@ interface Props {
 
 const { lang } = Astro.props;
 const fa = lang === 'fa';
+/* Pick a per-language value. Written out rather than left as the `fa ? x : y`
+   ternaries this replaced, because those silently yielded English for Arabic. */
+const pick3 = <T,>(en: T, faV: T, ar: T): T => (lang === 'fa' ? faV : lang === 'ar' ? ar : en);
 
 /* The counter-script line under the headline: Persian on the English page, Latin on
    the Persian one. It needs its own lang/dir or the browser shapes it with the wrong
    font and, in the Latin case, draws it into the RTL paragraph direction. */
-const counterLang = fa ? 'en' : 'fa';
-const counterDir = fa ? 'ltr' : 'rtl';
+const counterLang = lang === 'en' ? 'fa' : 'en';
+const counterDir = counterLang === 'fa' ? 'rtl' : 'ltr';
 
 /* Every figure is derived from the data files, never typed in. If a line is added to
    products.ts the stat row moves with it. */
@@ -48,22 +57,12 @@ const FLOW: { t: Key; b: Key }[] = [
   { t: 'flow.3', b: 'flow.3.b' },
   { t: 'flow.4', b: 'flow.4.b' },
 ];
-
-const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
 ---
-
-<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
-  <defs>
-    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
-      <path
-        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
-      ></path>
-    </clipPath>
-  </defs>
-</svg>
 
 <!-- ============================ HERO ============================ -->
 <section class="hero">
+  <div class="hero-orn" aria-hidden="true"><Shamsa half /></div>
+
   <div class="wrap hero-in">
     <div class="hero-copy">
       <p class="label kick"><i aria-hidden="true"></i>{t('home.kicker', lang)}</p>
@@ -79,7 +78,7 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
         <bdi lang={counterLang} dir={counterDir}>{t('home.counter', lang)}</bdi>
       </p>
 
-      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grule" aria-hidden="true"><LineElement /></div>
 
       <p class="lede hero-lede">{t('home.lede', lang)}</p>
 
@@ -89,21 +88,16 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
       </div>
     </div>
 
-    <figure class="arch hero-arch">
-      <div class="arch-in">
-        <img
-          src="/assets/saffron.webp"
-          width="900"
-          height="1200"
-          fetchpriority="high"
-          decoding="async"
-          alt={fa ? 'کلاله‌های زعفران' : 'Saffron stigmas'}
-        />
-      </div>
-      <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path d={ARCH}></path>
-      </svg>
-    </figure>
+    <Arch class="hero-arch" ratio="3 / 4.3">
+      <img
+        src="/assets/saffron.webp"
+        width="900"
+        height="1200"
+        fetchpriority="high"
+        decoding="async"
+        alt={fa ? 'کلاله‌های زعفران' : 'Saffron stigmas'}
+      />
+    </Arch>
   </div>
 </section>
 
@@ -137,7 +131,7 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
         LIVE_PRODUCTS.map((p) => (
           <article class="line">
             <a class="line-fig" href={href(`/products/${p.slug}`, lang)} tabindex="-1" aria-hidden="true">
-              <div class="arch-in">
+              <Arch as="span">
                 <img
                   src={`/assets/${p.img}.webp`}
                   width="900"
@@ -146,10 +140,7 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
                   decoding="async"
                   alt=""
                 />
-              </div>
-              <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <path d={ARCH} />
-              </svg>
+              </Arch>
             </a>
 
             <div class="line-body">
@@ -159,20 +150,20 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
               </p>
 
               <h3 class="display d3 line-name">
-                <a href={href(`/products/${p.slug}`, lang)}>{fa ? p.fa : p.en}</a>
+                <a href={href(`/products/${p.slug}`, lang)}>{pick3(p.en, p.fa, p.ar)}</a>
               </h3>
               <p class="counter sm">
-                <bdi lang={counterLang} dir={counterDir}>{fa ? p.en : p.fa}</bdi>
+                <bdi lang={counterLang} dir={counterDir}>{(lang === 'en' ? p.fa : p.en)}</bdi>
               </p>
 
               <dl class="kv">
                 <div>
                   <dt>{t('label.origin', lang)}</dt>
-                  <dd>{fa ? p.originFa : p.origin}</dd>
+                  <dd>{pick3(p.origin, p.originFa, p.originAr)}</dd>
                 </div>
                 <div>
                   <dt>{t('label.grade', lang)}</dt>
-                  <dd>{fa ? p.gradeFa : p.grade}</dd>
+                  <dd>{pick3(p.grade, p.gradeFa, p.gradeAr)}</dd>
                 </div>
                 <div>
                   <dt>{t('label.format', lang)}</dt>
@@ -209,6 +200,8 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
 
 <!-- ========================= WHAT WE DO ========================= -->
 <section class="sec do">
+  <div class="do-orn" aria-hidden="true"><Field size={300} weight={1.3} /></div>
+
   <div class="wrap do-in">
     <div class="do-copy">
       <p class="label kick"><i aria-hidden="true"></i>{t('home.do.k', lang)}</p>
@@ -256,11 +249,11 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
       {
         ORIGINS.map((o) => (
           <li class="ocity">
-            <span class="oc display">{fa ? o.fa : o.en}</span>
+            <span class="oc display">{pick3(o.en, o.fa, o.ar)}</span>
             <span class="of">
-              <bdi lang={counterLang} dir={counterDir}>{fa ? o.en : o.fa}</bdi>
+              <bdi lang={counterLang} dir={counterDir}>{(lang === 'en' ? o.fa : o.en)}</bdi>
             </span>
-            <span class="op">{fa ? o.pFa : o.pEn}</span>
+            <span class="op">{pick3(o.pEn, o.pFa, o.pAr)}</span>
           </li>
         ))
       }
@@ -280,6 +273,8 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     loading="lazy"
     decoding="async"
   />
+  <div class="close-rail" aria-hidden="true"><BorderRail height={34} /></div>
+
   <div class="wrap">
     {/* The measure lives on this inner block, never on .wrap — .wrap carries
         margin-inline:auto, so narrowing it centres the column instead of holding
@@ -299,13 +294,6 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
 </section>
 
 <style>
-  .defs {
-    position: absolute;
-    inline-size: 0;
-    block-size: 0;
-    overflow: hidden;
-  }
-
   /* ---------------------------------------------------------------- shared */
   .sec {
     padding-block: var(--rhythm);
@@ -332,31 +320,10 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     flex: none;
   }
 
-  /* girih rule: a gold hairline broken by three khatam diamonds */
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    max-inline-size: 320px;
     margin-block-start: 26px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    color: var(--gold);
   }
 
   /* the counter-script echo — Persian under English, Latin under Persian */
@@ -374,61 +341,16 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     line-height: 1.25;
     letter-spacing: 0.01em;
   }
+:global(html[lang='ar']) .counter {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
   .counter.sm {
     font-size: 1.05rem;
     margin-block-start: 6px;
     line-height: 1.6;
-  }
-
-  /* ---------------------------------------------------------------- arch */
-  .arch {
-    margin: 0;
-    position: relative;
-    isolation: isolate;
-  }
-  .arch-in {
-    position: relative;
-    overflow: hidden;
-    background: var(--obsidian-700);
-    clip-path: url(#pgArch);
-  }
-  /* Absolutely positioned inside a fixed-ratio frame. In normal flow height:100%
-     cannot resolve against a flex-sized parent and the image drives the row height. */
-  .arch-in img {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    filter: saturate(0.92) contrast(1.04);
-    transition: transform 1.1s var(--ease);
-  }
-  .arch-in::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background: linear-gradient(
-      180deg,
-      rgba(12, 11, 10, 0.24) 0%,
-      rgba(12, 11, 10, 0) 38%,
-      rgba(12, 11, 10, 0.34) 100%
-    );
-  }
-  .arch-line {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .arch-line path {
-    fill: none;
-    stroke: var(--gold);
-    stroke-width: 1.4;
-    vector-effect: non-scaling-stroke;
   }
 
   /* ---------------------------------------------------------------- buttons */
@@ -460,6 +382,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .btn {
     font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .btn {
+    font-family: var(--font-ar);
     font-size: 13.5px;
     letter-spacing: 0;
     text-transform: none;
@@ -511,6 +439,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .inline-cta {
+    font-family: var(--font-ar);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .inline-cta:hover {
     color: var(--gold-pale);
     border-block-end-color: var(--gold);
@@ -531,10 +465,60 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
 
   /* ---------------------------------------------------------------- hero */
   .hero {
+    position: relative;
+    isolation: isolate;
     padding-block: clamp(44px, 6vw, 88px) clamp(52px, 7vw, 100px);
     overflow: hidden;
   }
+
+  /* The shamsa watermark. Its centre sits on the reading edge, so what falls on
+     the page is the outer, airier half of the medallion — which is how the
+     client's own artwork is cropped. The mask holds it at full strength for the
+     first third and takes it to nothing before the lede and the buttons; the
+     ornament is illumination behind the display line, never texture under body
+     copy. Mirrored rather than repositioned in RTL: every radial band is
+     symmetric about its own ray and the ray angles are closed under reflection,
+     so the flipped figure is the same figure. */
+  .hero-orn {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    z-index: -1;
+    block-size: min(1180px, 122%);
+    aspect-ratio: 1 / 2;
+    transform: translateY(-50%);
+    transform-origin: center;
+    color: var(--gold);
+    /* 0.22 is the ceiling, measured off the render rather than the token: the
+       brightest ornament pixel then sits at #302718, where the 11px gold kicker
+       label still measures 4.60:1. At 0.24 it drops to 4.47:1 and fails AA. */
+    opacity: 0.22;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(
+      118% 88% at 0% 50%,
+      #000 0%,
+      #000 44%,
+      rgba(0, 0, 0, 0.5) 72%,
+      transparent 96%
+    );
+    mask-image: radial-gradient(
+      118% 88% at 0% 50%,
+      #000 0%,
+      #000 44%,
+      rgba(0, 0, 0, 0.5) 72%,
+      transparent 96%
+    );
+  }
+  :global(html[dir='rtl']) .hero-orn {
+    transform: translateY(-50%) scaleX(-1);
+  }
+  .hero-orn > :global(svg) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
   .hero-in {
+    position: relative;
     display: grid;
     gap: clamp(40px, 5vw, 64px);
     align-items: center;
@@ -551,15 +535,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   .hero-lede {
     margin-block-start: 24px;
   }
-  .hero-arch {
+  :global(.hero-arch) {
     inline-size: min(340px, 78vw);
     margin-inline: auto;
   }
-  .hero-arch .arch-in {
-    aspect-ratio: 3 / 4.3;
-  }
   @media (min-width: 900px) {
-    .hero-arch {
+    :global(.hero-arch) {
       inline-size: min(420px, 100%);
       margin-inline: 0;
     }
@@ -616,6 +597,10 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     font-family: var(--font-fa);
     font-weight: 600;
   }
+:global(html[lang='ar']) .sv {
+    font-family: var(--font-ar);
+    font-weight: 600;
+  }
   .sl {
     font-family: var(--font-body);
     font-size: 10.5px;
@@ -627,6 +612,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .sl {
     font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .sl {
+    font-family: var(--font-ar);
     font-size: 13px;
     letter-spacing: 0;
     text-transform: none;
@@ -663,7 +654,7 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     border-color: var(--hair-strong);
     background: var(--obsidian-900);
   }
-  .line:hover .arch-in img {
+  .line:hover :global(.pg-arch-in img) {
     transform: scale(1.045);
   }
 
@@ -677,10 +668,6 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
       inline-size: 100%;
     }
   }
-  .line-fig .arch-in {
-    aspect-ratio: 3 / 4;
-  }
-
   .line-body {
     min-inline-size: 0;
   }
@@ -728,6 +715,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .kv dt {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .kv dd {
     margin: 0;
     font-size: 14.5px;
@@ -765,6 +758,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .tag {
+    font-family: var(--font-ar);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   /* the only circle on the page — a status dot, per the radius rule */
   .tag i {
     inline-size: 6px;
@@ -776,10 +775,26 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
 
   /* -------------------------------------------------------------- what we do */
   .do {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     background: var(--surface);
     border-block: 1px solid var(--hair);
   }
+  /* The all-over floral, held to a whisper. It is a change of surface, not a
+     pattern you are meant to read — the flow list sits on top of it. */
+  .do-orn {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: var(--gold);
+    opacity: 0.07;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.35) 62%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.35) 62%, transparent 100%);
+  }
   .do-in {
+    position: relative;
     display: grid;
     gap: clamp(38px, 4.4vw, 60px);
   }
@@ -822,6 +837,9 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   :global(html[lang='fa']) .fn {
     font-family: var(--font-fa);
   }
+:global(html[lang='ar']) .fn {
+    font-family: var(--font-ar);
+  }
   .ft {
     font-family: var(--font-display);
     font-size: clamp(1.15rem, 1.7vw, 1.4rem);
@@ -832,6 +850,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .ft {
     font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.7;
+  }
+:global(html[lang='ar']) .ft {
+    font-family: var(--font-ar);
     font-weight: 600;
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     line-height: 1.7;
@@ -897,6 +921,11 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
     font-size: 1.05rem;
     line-height: 1.4;
   }
+:global(html[lang='ar']) .of {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
   .op {
     margin-block-start: 10px;
     font-family: var(--font-body);
@@ -909,6 +938,12 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
   :global(html[lang='fa']) .op {
     font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .op {
+    font-family: var(--font-ar);
     font-size: 13px;
     letter-spacing: 0;
     text-transform: none;
@@ -943,7 +978,19 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
       rgba(12, 11, 10, 0.94) 100%
     );
   }
+  /* The vine band closes the page. It sits above the scrim so it reads as an
+     edge on the photograph rather than a line in it. */
+  .close-rail {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 0;
+    color: var(--gold);
+    opacity: 0.55;
+    pointer-events: none;
+  }
   .close-in {
+    position: relative;
     padding-block: clamp(64px, 8vw, 116px);
     max-inline-size: 46rem;
   }
@@ -968,7 +1015,6 @@ const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .arch-in img,
     .btn,
     .btn::after {
       transition: none;

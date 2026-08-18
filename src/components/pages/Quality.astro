@@ -16,6 +16,8 @@
 import { CERTIFICATIONS, CONTROL_POINTS, type Lang } from '../../data/site';
 import { t, href, digits, type Key } from '../../data/i18n';
 import { FAQ_KEYS } from '../../lib/pageSchema';
+import LineElement from '../ornament/LineElement.astro';
+import Field from '../ornament/Field.astro';
 
 interface Props {
   lang: Lang;
@@ -23,11 +25,14 @@ interface Props {
 
 const { lang } = Astro.props;
 const fa = lang === 'fa';
+/* Pick a per-language value. Written out rather than left as the `fa ? x : y`
+   ternaries this replaced, because those silently yielded English for Arabic. */
+const pick3 = <T,>(en: T, faV: T, ar: T): T => (lang === 'fa' ? faV : lang === 'ar' ? ar : en);
 
 const certs = CERTIFICATIONS.map((c) => ({
   id: c.id,
-  name: fa ? c.fa : c.en,
-  body: fa ? c.faBody : c.enBody,
+  name: pick3(c.en, c.fa, c.ar),
+  body: pick3(c.enBody, c.faBody, c.arBody),
 }));
 
 /* The "where" line is the only thing added to a control point, and each one is
@@ -36,8 +41,8 @@ const WHERE: readonly Key[] = ['q.where.1', 'q.where.2', 'q.where.3', 'q.where.4
 const points = CONTROL_POINTS.map((p, i) => ({
   n: digits(String(i + 1).padStart(2, '0'), lang),
   where: t(WHERE[i], lang),
-  name: fa ? p.fa : p.en,
-  body: fa ? p.faFixed : p.enFixed,
+  name: pick3(p.en, p.fa, p.ar),
+  body: pick3(p.enFixed, p.faFixed, p.arFixed),
 }));
 
 const TRACE: readonly Key[] = [
@@ -56,7 +61,7 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
     <h1 class="display d1 pgh-h">
       {t('q.h1a', lang)} <span class="acc">{t('q.h1b', lang)}</span>
     </h1>
-    <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="grule" aria-hidden="true"><LineElement /></div>
     <p class="lede">{t('q.lede', lang)}</p>
   </div>
 </section>
@@ -85,7 +90,9 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 </section>
 
 <!-- ===================== where each thing is settled ===================== -->
-<section class="sec sec-alt" aria-labelledby="q-ctrl">
+<section class="sec sec-alt has-orn" aria-labelledby="q-ctrl">
+  <div class="ctrl-orn" aria-hidden="true"><Field size={300} weight={1.3} /></div>
+
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('q.ctrl.k', lang)}</p>
@@ -191,32 +198,10 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
     margin-block-start: 26px;
   }
 
-  /* a gold hairline broken by three khatam diamonds — the one piece of ornament
-     these pages carry, and the reason the ground is dark */
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
     margin-block-start: 30px;
-    max-inline-size: 320px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    color: var(--gold);
   }
 
   .sec {
@@ -224,6 +209,26 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
   }
   .sec-alt {
     background: var(--surface);
+  }
+  .has-orn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .has-orn > .wrap {
+    position: relative;
+  }
+  /* The all-over floral, kept to a change of surface rather than a pattern the
+     reader is meant to follow. It fades out before the control-point rows. */
+  .ctrl-orn {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: var(--gold);
+    opacity: 0.07;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 92%);
+    mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.3) 55%, transparent 92%);
   }
   .sec-head {
     display: grid;
@@ -289,6 +294,11 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
     font-weight: 700;
     font-size: clamp(1.05rem, 1.6vw, 1.2rem);
   }
+:global(html[lang='ar']) .cert-name {
+    font-family: var(--font-ar);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  }
 
   /* ---------------------------------------------------------------- control */
   .ctrl {
@@ -347,13 +357,27 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
     font-family: var(--font-fa);
     font-weight: 700;
   }
+:global(html[lang='ar']) .ctrl-n,
+  :global(html[lang='ar']) .ctrl-name {
+    font-family: var(--font-ar);
+    font-weight: 700;
+  }
   :global(html[lang='fa']) .ctrl-where {
     font-family: var(--font-fa);
     font-size: 13px;
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .ctrl-where {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   :global(html[lang='fa']) .ctrl-name {
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+:global(html[lang='ar']) .ctrl-name {
     font-size: clamp(1.1rem, 1.7vw, 1.35rem);
   }
   @media (min-width: 860px) {
@@ -445,8 +469,17 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
   :global(html[lang='fa']) .trace-n {
     font-family: var(--font-fa);
   }
+:global(html[lang='ar']) .trace-n {
+    font-family: var(--font-ar);
+  }
   :global(html[lang='fa']) .trace-t {
     font-family: var(--font-fa);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .trace-t {
+    font-family: var(--font-ar);
     font-size: 14px;
     letter-spacing: 0;
     text-transform: none;
@@ -487,6 +520,12 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
   }
   :global(html[lang='fa']) .faq-q {
     font-family: var(--font-fa);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.6;
+  }
+:global(html[lang='ar']) .faq-q {
+    font-family: var(--font-ar);
     font-weight: 700;
     font-size: clamp(1.05rem, 1.6vw, 1.25rem);
     line-height: 1.6;
@@ -548,6 +587,12 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
   }
   :global(html[lang='fa']) .cta {
     font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .cta {
+    font-family: var(--font-ar);
     font-size: 13.5px;
     letter-spacing: 0;
     text-transform: none;

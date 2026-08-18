@@ -47,8 +47,16 @@
   /* -- type ------------------------------------------------------------ */
   --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-body:    Jost, Montserrat, system-ui, -apple-system, sans-serif;
+  /* Persian and Arabic share a script but not letterforms: ک/ك and ی/ي differ, and
+     Persian needs گ چ پ ژ that many Arabic faces render badly or not at all. So they
+     get separate stacks rather than one "Arabic font". */
   --font-fa:      Vazirmatn, 'Segoe UI', Tahoma, sans-serif;
   --font-fa-display: Gulzar, Vazirmatn, serif;
+  /* Amiri is a revival of the Bulaq press Naskh — historical rather than a modern face
+     dressed up, which is the same argument Cormorant makes on the Latin side. Tajawal
+     keeps UI text legible where Amiri turns fussy at small sizes. */
+  --font-ar:      Tajawal, 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
+  --font-ar-display: Amiri, 'Noto Naskh Arabic', Georgia, serif;
   --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
   --step--1: clamp(12.5px, .9vw, 13.5px);
@@ -100,6 +108,9 @@ body {
 
 /* Persian sets on a steeper diagonal and needs more room vertically. */
 html[lang='fa'] body { font-family: var(--font-fa); line-height: 1.95; font-weight: 400; }
+/* Arabic Naskh sits on a shallower baseline than Persian Nastaliq, so it needs less
+   leading than fa but still more than Latin. */
+html[lang='ar'] body { font-family: var(--font-ar); line-height: 1.85; font-weight: 400; }
 
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -137,6 +148,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
   text-wrap: balance;
 }
 html[lang='fa'] .display { font-family: var(--font-fa); font-weight: 700; line-height: 1.5; }
+html[lang='ar'] .display { font-family: var(--font-ar-display); font-weight: 700; line-height: 1.45; }
 
 .d1 { font-size: var(--step-4) }
 .d2 { font-size: var(--step-3) }
@@ -156,6 +168,7 @@ html[lang='fa'] .display { font-family: var(--font-fa); font-weight: 700; line-h
   color: var(--accent); margin: 0;
 }
 html[lang='fa'] .label { font-family: var(--font-fa); letter-spacing: 0; text-transform: none; font-size: 13px; }
+html[lang='ar'] .label { font-family: var(--font-ar); letter-spacing: 0; text-transform: none; font-size: 13px; }
 
 .mono {
   font-family: var(--font-mono);

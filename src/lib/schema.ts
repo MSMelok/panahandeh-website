@@ -15,7 +15,7 @@
  */
 import { SITE, type Lang } from '../data/site';
 import type { Product } from '../data/products';
-import { t, type Key } from '../data/i18n';
+import { t, href, L, type Key } from '../data/i18n';
 
 const BASE = SITE.url.replace(/\/$/, '');
 
@@ -25,24 +25,27 @@ const CATEGORY: Record<Product['category'], Key> = {
   pulses: 'cat.pulses',
 };
 
-const pageUrl = (path: string, lang: Lang) =>
-  lang === 'fa' ? `${BASE}/fa${path}` : `${BASE}${path}`;
+/* Same rule Seo.astro applies to the canonical: the language lives in the URL. Built
+   through href() rather than a second `lang === 'fa'` ternary, so a third language
+   cannot silently emit the English @id and collide with the English page's node. */
+const pageUrl = (path: string, lang: Lang) => `${BASE}${href(path, lang)}`;
+
+const IN_LANGUAGE: Record<Lang, string> = { en: 'en-AE', fa: 'fa-IR', ar: 'ar-AE' };
 
 export function productSchema(p: Product, lang: Lang): Record<string, unknown> {
-  const fa = lang === 'fa';
   const url = pageUrl(`/products/${p.slug}`, lang);
 
   return {
     '@type': 'Product',
     '@id': `${url}#product`,
-    name: fa ? p.fa : p.en,
-    alternateName: fa ? p.en : p.fa,
-    description: fa ? p.blurbFa : p.blurbEn,
+    name: L(p, lang, 'en'),
+    alternateName: lang === 'en' ? p.fa : p.en,
+    description: L(p, lang, 'blurb'),
     category: t(CATEGORY[p.category], lang),
     sku: p.slug,
     url,
     image: `${BASE}/assets/${p.img}.webp`,
-    inLanguage: fa ? 'fa-IR' : 'en-AE',
+    inLanguage: IN_LANGUAGE[lang],
     /* RAVOMA is the brand on the saffron packs. Every other line ships under the
        company itself — merging the two names has already caused one correction. */
     brand: p.slug === 'saffron'
@@ -50,8 +53,8 @@ export function productSchema(p: Product, lang: Lang): Record<string, unknown> {
       : { '@type': 'Organization', '@id': `${BASE}/#organization`, name: SITE.legalName },
     additionalProperty: [
       { '@type': 'PropertyValue', name: 'HS code', value: p.hs },
-      { '@type': 'PropertyValue', name: 'Origin', value: fa ? p.originFa : p.origin },
-      { '@type': 'PropertyValue', name: 'Grade', value: fa ? p.gradeFa : p.grade },
+      { '@type': 'PropertyValue', name: 'Origin', value: L(p, lang, 'origin') },
+      { '@type': 'PropertyValue', name: 'Grade', value: L(p, lang, 'grade') },
       { '@type': 'PropertyValue', name: 'Retail formats', value: p.formats.join(', ') },
       { '@type': 'PropertyValue', name: 'Port of loading', value: SITE.port },
     ],
@@ -66,7 +69,6 @@ export function productSchema(p: Product, lang: Lang): Record<string, unknown> {
 }
 
 export function productBreadcrumb(p: Product, lang: Lang): Record<string, unknown> {
-  const fa = lang === 'fa';
   return {
     '@type': 'BreadcrumbList',
     '@id': `${pageUrl(`/products/${p.slug}`, lang)}#breadcrumb`,
@@ -83,14 +85,13 @@ export function productBreadcrumb(p: Product, lang: Lang): Record<string, unknow
         name: t('nav.products', lang),
         item: pageUrl('/products', lang),
       },
-      { '@type': 'ListItem', position: 3, name: fa ? p.fa : p.en },
+      { '@type': 'ListItem', position: 3, name: L(p, lang, 'en') },
     ],
   };
 }
 
 /** The products index, as an ItemList of the nine lines in catalogue order. */
 export function productListSchema(products: Product[], lang: Lang): Record<string, unknown> {
-  const fa = lang === 'fa';
   return {
     '@type': 'ItemList',
     '@id': `${pageUrl('/products', lang)}#list`,
@@ -100,7 +101,7 @@ export function productListSchema(products: Product[], lang: Lang): Record<strin
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      name: fa ? p.fa : p.en,
+      name: L(p, lang, 'en'),
       url: pageUrl(`/products/${p.slug}`, lang),
     })),
   };

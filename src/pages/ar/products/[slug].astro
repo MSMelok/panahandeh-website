@@ -1,0 +1,26 @@
+---
+/** Arabic product detail. Same component and the same schema builders, `lang="ar"`. */
+import Base from '../../../layouts/Base.astro';
+import ProductDetail from '../../../components/pages/ProductDetail.astro';
+import { PRODUCTS, type Product } from '../../../data/products';
+import { productSchema, productBreadcrumb } from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return PRODUCTS.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const lang = 'ar' as const;
+const { product } = Astro.props as { product: Product };
+---
+
+<Base
+  title={`${product.ar} — ${product.gradeAr}`}
+  description={product.blurbAr}
+  lang={lang}
+  path={`/products/${product.slug}`}
+  image={`/assets/${product.img}.webp`}
+  type="product"
+  schema={[productSchema(product, lang), productBreadcrumb(product, lang)]}
+>
+  <ProductDetail lang={lang} product={product} />
+</Base>

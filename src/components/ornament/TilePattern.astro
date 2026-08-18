@@ -1,0 +1,73 @@
+---
+/**
+ * TilePattern — the framed 8-fold star-floral tile from the identity board's
+ * FULL PATTERN plate (brand/landingPattern.jpeg).
+ *
+ * One wedge drawn once and rotated eight times, one corner spandrel rotated
+ * four times, a rosette at the centre and a double keyline frame. Every element
+ * sits inside the 200-unit square, so the tile repeats without overflow — unlike
+ * the rail, this one needs no padding or neighbouring copies.
+ *
+ * Fills whatever box it is given: no viewBox, pattern units are user units.
+ */
+import { TILE } from './geometry';
+import { uid } from './uid';
+
+interface Props {
+  /** Rendered tile edge in px. The geometry tile is 200 units square. */
+  size?: number;
+  class?: string;
+}
+
+const { size = 200, class: className } = Astro.props;
+
+const id = uid('tl');
+const c = TILE.size / 2;
+const s = +(size / TILE.size).toFixed(4);
+const wedges = Array.from({ length: 8 }, (_, i) => `rotate(${i * 45} ${c} ${c})`);
+const corners = Array.from({ length: 4 }, (_, i) => `rotate(${i * 90} ${c} ${c})`);
+---
+
+<svg
+  class:list={['orn-tile', className]}
+  fill="none"
+  stroke="currentColor"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  role="presentation"
+>
+  <defs>
+    <path id={`${id}-w`} d={TILE.wedge}></path>
+    <path id={`${id}-c`} d={TILE.corner}></path>
+    <g id={`${id}-t`} fill="none" stroke="currentColor" stroke-linejoin="round">
+      <path d={TILE.frame} stroke-width="1.6"></path>
+      <g stroke-width="1.5">
+        {wedges.map((t) => <use href={`#${id}-w`} transform={t} />)}
+      </g>
+      <g stroke-width="1.3">
+        {corners.map((t) => <use href={`#${id}-c`} transform={t} />)}
+      </g>
+      <path d={TILE.centre} stroke-width="1.5" stroke-linecap="round"></path>
+    </g>
+    <pattern
+      id={`${id}-p`}
+      width={TILE.size}
+      height={TILE.size}
+      patternUnits="userSpaceOnUse"
+      patternTransform={`scale(${s})`}
+    >
+      <use href={`#${id}-t`}></use>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${id}-p)`} stroke="none"></rect>
+</svg>
+
+<style>
+  .orn-tile {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+</style>

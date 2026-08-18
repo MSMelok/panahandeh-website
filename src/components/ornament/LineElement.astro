@@ -1,0 +1,45 @@
+---
+/**
+ * LineElement — the identity board's line element: a rule with arrow terminals,
+ * two khatam lozenges and a four-lobed rosette at the centre.
+ *
+ * Unlike the other ornaments this one sits in the flow, under a heading, so it
+ * takes no absolute positioning. It is horizontally symmetric, so it needs no
+ * mirroring in RTL.
+ */
+import { FLOURISH } from './geometry';
+
+interface Props {
+  /** Rendered inline-size, any CSS length. */
+  width?: string;
+  class?: string;
+}
+
+const { width, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['orn-line', className]}
+  viewBox={`0 0 ${FLOURISH.w} ${FLOURISH.h}`}
+  fill="none"
+  stroke="currentColor"
+  stroke-linejoin="round"
+  stroke-linecap="round"
+  aria-hidden="true"
+  focusable="false"
+  role="presentation"
+  style={width ? `--orn-line-w:${width}` : undefined}
+>
+  <path d={FLOURISH.main} stroke-width="1.6"></path>
+  <path d={FLOURISH.fine} stroke-width="1.2"></path>
+</svg>
+
+<style>
+  .orn-line {
+    display: block;
+    inline-size: var(--orn-line-w, 300px);
+    max-inline-size: 100%;
+    block-size: auto;
+    pointer-events: none;
+  }
+</style>

@@ -8,6 +8,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { t, href } from '../data/i18n';
+import LineElement from '../components/ornament/LineElement.astro';
 ---
 
 <Base
@@ -23,7 +24,7 @@ import { t, href } from '../data/i18n';
       <h1 class="display d1 nf-h">
         {t('nf.h1a', 'en')} <span class="acc">{t('nf.h1b', 'en')}</span>
       </h1>
-      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grule" aria-hidden="true"><LineElement /></div>
       <p class="lede">{t('nf.p', 'en')}</p>
 
       <div class="nf-cta">
@@ -51,30 +52,10 @@ import { t, href } from '../data/i18n';
     margin-block: 0;
   }
 
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    margin-block: 30px;
-    max-inline-size: 320px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    margin-block-start: 26px;
+    color: var(--gold);
   }
 
   .nf-cta {

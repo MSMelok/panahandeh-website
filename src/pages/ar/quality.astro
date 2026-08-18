@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import Quality from '../../components/pages/Quality.astro';
+import { t } from '../../data/i18n';
+import { qualitySchema } from '../../lib/pageSchema';
+---
+
+<Base
+  title={t('meta.quality.title', 'ar')}
+  description={t('meta.quality.desc', 'ar')}
+  lang="ar"
+  path="/quality"
+  schema={qualitySchema('ar')}
+>
+  <Quality lang="ar" />
+</Base>

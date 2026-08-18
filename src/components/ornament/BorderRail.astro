@@ -1,0 +1,74 @@
+---
+/**
+ * BorderRail — a seamless horizontal band.
+ *
+ * A sine-stem vine that is exactly periodic at the tile edge, split palmettes,
+ * a fine keyline and a bead row whose spacing divides the tile width.
+ *
+ * The vine's terminal curls straddle the tile edge, and SVG clips pattern
+ * content to the tile, so the group is laid down three times at -w, 0 and +w:
+ * the part clipped off one side is drawn back by the neighbouring copy. Without
+ * that the seam shows as a half-drawn spiral every 180 units.
+ *
+ * The split palmettes also reach 5 units past the top and bottom of the band,
+ * so the tile is padded vertically and the content pushed down by the same
+ * amount. Without the padding the palmette tips are shaved off — there is no
+ * neighbouring copy to draw them back, because the band is one tile tall.
+ */
+import { RAIL } from './geometry';
+import { uid } from './uid';
+
+interface Props {
+  /** Rendered band height in px, terminals included. */
+  height?: number;
+  class?: string;
+}
+
+const { height = 46, class: className } = Astro.props;
+
+const PAD = 6;
+const th = RAIL.h + 2 * PAD;
+
+const id = uid('rl');
+const s = +(height / th).toFixed(4);
+---
+
+<svg
+  class:list={['orn-rail', className]}
+  fill="none"
+  stroke="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  role="presentation"
+  style={`--orn-rail-h:${height}px`}
+>
+  <defs>
+    <g id={`${id}-g`} fill="none" stroke="currentColor" stroke-linejoin="round">
+      <path d={RAIL.stem} stroke-width="1.3"></path>
+      <path d={RAIL.orn} stroke-width="1.2"></path>
+      <path d={RAIL.key} stroke-width="1"></path>
+      <path d={RAIL.beads} stroke-width="3" stroke-linecap="round"></path>
+    </g>
+    <pattern
+      id={`${id}-p`}
+      width={RAIL.w}
+      height={th}
+      patternUnits="userSpaceOnUse"
+      patternTransform={`scale(${s})`}
+    >
+      <use href={`#${id}-g`} transform={`translate(${-RAIL.w} ${PAD})`}></use>
+      <use href={`#${id}-g`} transform={`translate(0 ${PAD})`}></use>
+      <use href={`#${id}-g`} transform={`translate(${RAIL.w} ${PAD})`}></use>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${id}-p)`} stroke="none"></rect>
+</svg>
+
+<style>
+  .orn-rail {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--orn-rail-h, 46px);
+    pointer-events: none;
+  }
+</style>

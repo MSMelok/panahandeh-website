@@ -14,6 +14,8 @@ import type { Lang } from '../../data/site';
 import { LIVE_PRODUCTS, UPCOMING_PRODUCTS, PACK_FORMATS, type Product } from '../../data/products';
 import { t, href } from '../../data/i18n';
 import RavomaMark from '../RavomaMark.astro';
+import Arch from '../ornament/Arch.astro';
+import LineElement from '../ornament/LineElement.astro';
 
 interface Props {
   lang: Lang;
@@ -21,15 +23,16 @@ interface Props {
 
 const { lang } = Astro.props;
 const fa = lang === 'fa';
-const counterLang = fa ? 'en' : 'fa';
-const counterDir = fa ? 'ltr' : 'rtl';
+/* Pick a per-language value. Written out rather than left as the `fa ? x : y`
+   ternaries this replaced, because those silently yielded English for Arabic. */
+const pick3 = <T,>(en: T, faV: T, ar: T): T => (lang === 'fa' ? faV : lang === 'ar' ? ar : en);
+const counterLang = lang === 'en' ? 'fa' : 'en';
+const counterDir = counterLang === 'fa' ? 'rtl' : 'ltr';
 
-const name = (p: Product) => (fa ? p.fa : p.en);
-const counterName = (p: Product) => (fa ? p.en : p.fa);
-const origin = (p: Product) => (fa ? p.originFa : p.origin);
-const grade = (p: Product) => (fa ? p.gradeFa : p.grade);
-
-const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
+const name = (p: Product) => (pick3(p.en, p.fa, p.ar));
+const counterName = (p: Product) => ((lang === 'en' ? p.fa : p.en));
+const origin = (p: Product) => (pick3(p.origin, p.originFa, p.originAr));
+const grade = (p: Product) => (pick3(p.grade, p.gradeFa, p.gradeAr));
 
 /* Intrinsic sizes of the packaging renders. They differ per sheet, and a wrong pair
    here would give the browser a false aspect ratio before the stylesheet lands. */
@@ -42,16 +45,6 @@ const PACK_SIZE: Record<string, [number, number]> = {
 };
 ---
 
-<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
-  <defs>
-    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
-      <path
-        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
-      ></path>
-    </clipPath>
-  </defs>
-</svg>
-
 <!-- ============================ INTRO ============================ -->
 <section class="intro">
   <div class="wrap">
@@ -63,7 +56,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
       <h1 class="display d1 intro-h1">
         {t('products.h1a', lang)}<br /><span class="acc">{t('products.h1b', lang)}</span>
       </h1>
-      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grule" aria-hidden="true"><LineElement /></div>
       <p class="lede intro-lede">{t('products.lede', lang)}</p>
     </div>
   </div>
@@ -86,21 +79,16 @@ const PACK_SIZE: Record<string, [number, number]> = {
           <li>
             <article class="card">
               <a class="card-link" href={href(`/products/${p.slug}`, lang)}>
-                <span class="fig">
-                  <span class="arch-in">
-                    <img
-                      src={`/assets/${p.img}.webp`}
-                      width="900"
-                      height="1200"
-                      loading="eager"
-                      decoding="async"
-                      alt=""
-                    />
-                  </span>
-                  <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path d={ARCH} />
-                  </svg>
-                </span>
+                <Arch as="span">
+                  <img
+                    src={`/assets/${p.img}.webp`}
+                    width="900"
+                    height="1200"
+                    loading="eager"
+                    decoding="async"
+                    alt=""
+                  />
+                </Arch>
 
                 <span class="cbody">
                   <span class="cname display d3">{name(p)}</span>
@@ -144,21 +132,16 @@ const PACK_SIZE: Record<string, [number, number]> = {
           <li>
             <article class="card muted">
               <a class="card-link" href={href(`/products/${p.slug}`, lang)}>
-                <span class="fig">
-                  <span class="arch-in">
-                    <img
-                      src={`/assets/${p.img}.webp`}
-                      width="900"
-                      height="1200"
-                      loading="lazy"
-                      decoding="async"
-                      alt=""
-                    />
-                  </span>
-                  <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                    <path d={ARCH} />
-                  </svg>
-                </span>
+                <Arch as="span" muted>
+                  <img
+                    src={`/assets/${p.img}.webp`}
+                    width="900"
+                    height="1200"
+                    loading="lazy"
+                    decoding="async"
+                    alt=""
+                  />
+                </Arch>
 
                 <span class="cbody">
                   <span class="cname display d3">{name(p)}</span>
@@ -209,7 +192,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
               />
             </span>
             <span class="pk-name">
-              <bdi dir={fa ? 'rtl' : 'ltr'}>{fa ? f.fa : f.en}</bdi>
+              <bdi dir={lang === 'en' ? 'ltr' : 'rtl'}>{pick3(f.en, f.fa, f.ar)}</bdi>
             </span>
           </li>
         ))
@@ -236,13 +219,6 @@ const PACK_SIZE: Record<string, [number, number]> = {
 </section>
 
 <style>
-  .defs {
-    position: absolute;
-    inline-size: 0;
-    block-size: 0;
-    overflow: hidden;
-  }
-
   /* ---------------------------------------------------------------- shared */
   .sec {
     padding-block: clamp(52px, 6.4vw, 92px);
@@ -257,30 +233,10 @@ const PACK_SIZE: Record<string, [number, number]> = {
     background: currentColor;
     flex: none;
   }
+  /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    max-inline-size: 320px;
     margin-block-start: 26px;
-  }
-  .grule::before,
-  .grule::after {
-    content: '';
-    flex: 1;
-    block-size: 1px;
-    background: var(--hair-strong);
-  }
-  .grule i {
-    inline-size: 5px;
-    block-size: 5px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex: none;
-  }
-  .grule i:nth-child(2) {
-    inline-size: 8px;
-    block-size: 8px;
+    color: var(--gold);
   }
 
   .counter {
@@ -296,58 +252,10 @@ const PACK_SIZE: Record<string, [number, number]> = {
     font-size: 1.1rem;
     line-height: 1.4;
   }
-
-  /* ---------------------------------------------------------------- arch */
-  .fig {
-    display: block;
-    position: relative;
-    isolation: isolate;
-  }
-  .arch-in {
-    display: block;
-    position: relative;
-    overflow: hidden;
-    background: var(--obsidian-700);
-    clip-path: url(#pgArch);
-    aspect-ratio: 3 / 4;
-  }
-  /* Fixed-ratio frame, image absolutely positioned. In normal flow block-size:100%
-     cannot resolve against a flex-sized parent and the image drives the row height. */
-  .arch-in img {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    filter: saturate(0.92) contrast(1.04);
-    transition: transform 1.1s var(--ease);
-  }
-  .arch-in::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background: linear-gradient(
-      180deg,
-      rgba(12, 11, 10, 0.22) 0%,
-      rgba(12, 11, 10, 0) 38%,
-      rgba(12, 11, 10, 0.36) 100%
-    );
-  }
-  .arch-line {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .arch-line path {
-    fill: none;
-    stroke: var(--gold);
-    stroke-width: 1.4;
-    vector-effect: non-scaling-stroke;
+:global(html[lang='ar']) .counter {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.4;
   }
 
   /* ---------------------------------------------------------------- intro */
@@ -387,6 +295,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
   }
 
   /* ---------------------------------------------------------------- tags */
+  /* nowrap pushed the 2- and 4-up card grids 9-10px past the viewport at 320px.
+     The tag is two words; letting it wrap is cheaper than shrinking the grid. */
   .tag {
     display: inline-flex;
     align-items: center;
@@ -399,10 +309,19 @@ const PACK_SIZE: Record<string, [number, number]> = {
     letter-spacing: 0.22em;
     line-height: 1.4;
     text-transform: uppercase;
-    white-space: nowrap;
+    /* nowrap here made the tag's min-content 144px, which a grid column cannot go
+       below — it widened both cards and pushed the 2-up row 9px past a 320px
+       viewport. The tag is two short words; wrapping them is the cheaper loss. */
+    white-space: normal;
   }
   :global(html[lang='fa']) .tag {
     font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+:global(html[lang='ar']) .tag {
+    font-family: var(--font-ar);
     font-size: 12.5px;
     letter-spacing: 0;
     text-transform: none;
@@ -470,6 +389,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   }
   .card-link {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-content: start;
     block-size: 100%;
     padding: clamp(14px, 1.6vw, 20px);
@@ -483,7 +403,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   .card-link:hover {
     border-color: var(--hair-strong);
   }
-  .card-link:hover .arch-in img {
+  .card-link:hover :global(.pg-arch-in img) {
     transform: scale(1.045);
   }
 
@@ -515,6 +435,12 @@ const PACK_SIZE: Record<string, [number, number]> = {
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .cmeta {
+    font-family: var(--font-ar);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .cgrade {
     display: block;
     margin-block-start: 8px;
@@ -533,15 +459,13 @@ const PACK_SIZE: Record<string, [number, number]> = {
   :global(html[lang='fa']) .cformats {
     font-family: var(--font-mono);
   }
+:global(html[lang='ar']) .cformats {
+    font-family: var(--font-mono);
+  }
 
   /* The muted treatment: desaturated photograph, dimmed keyline, dimmed type. It is
-     never the only signal — the dashed tag and the section heading both say so. */
-  .card.muted .arch-in img {
-    filter: saturate(0.32) contrast(1.02) brightness(0.92);
-  }
-  .card.muted .arch-line path {
-    stroke: var(--hair-strong);
-  }
+     never the only signal — the dashed tag and the section heading both say so.
+     The photograph and the keyline are the Arch component's `muted` prop. */
   .card.muted .cname {
     color: var(--text-muted);
   }
@@ -551,7 +475,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   .card.muted .cmeta {
     color: var(--text-dim);
   }
-  .card.muted .card-link:hover .arch-in img {
+  .card.muted .card-link:hover :global(.pg-arch-in img) {
     filter: saturate(0.5) contrast(1.02) brightness(0.96);
   }
 
@@ -640,6 +564,12 @@ const PACK_SIZE: Record<string, [number, number]> = {
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .pk-name {
+    font-family: var(--font-ar);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
 
   /* ---------------------------------------------------------------- close */
   .close {
@@ -683,6 +613,12 @@ const PACK_SIZE: Record<string, [number, number]> = {
     letter-spacing: 0;
     text-transform: none;
   }
+:global(html[lang='ar']) .btn {
+    font-family: var(--font-ar);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
   .btn::after {
     content: '';
     position: absolute;
@@ -717,7 +653,6 @@ const PACK_SIZE: Record<string, [number, number]> = {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .arch-in img,
     .btn,
     .btn::after {
       transition: none;

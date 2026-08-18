@@ -24,10 +24,6 @@ dist/
 # Client packaging design sheets. The cropped product shots in public/assets are on the
 # live site anyway, but the full sheets add dimensions, materials, finishes and the retail
 # barcode — unreleased commercial detail that does not belong in a public repo.
-brand/pack-source-*.jpg
-brand/pack2.jpeg
-brand/newBrandID.png
-brand/landingPattern.jpeg
-brand/landingPattern.png
-brand/newPattern01.jpeg
-brand/newPattern02.jpeg
+
+# Client artwork — unreleased commercial material. Never committed.
+brand/

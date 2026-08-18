@@ -1,0 +1,130 @@
+---
+/**
+ * Arch — the four-centred pointed niche.
+ *
+ * One definition, two coordinate systems: ARCH_CLIP is in objectBoundingBox
+ * units so a single clipPath scales to any frame, and ARCH_LINE is the same
+ * curve in a 0-100 viewBox for the keyline. The keyline carries
+ * vector-effect="non-scaling-stroke" because the svg is stretched with
+ * preserveAspectRatio="none" — without it the sides and the crown come out at
+ * different weights on any frame that is not square.
+ *
+ * The clipPath id is generated per instance, so no two arches on a page can
+ * collide. It lives in the keyline svg's own <defs> rather than a separate
+ * hidden svg, which keeps the component to three elements.
+ *
+ * Slot content is the image (or anything else) the arch clips.
+ */
+import { ARCH_CLIP, ARCH_LINE } from './geometry';
+import { uid } from './uid';
+
+interface Props {
+  /** aspect-ratio for the frame, e.g. '3 / 4.3'. */
+  ratio?: string;
+  /** Root element. `span` where the arch sits inside an anchor. */
+  as?: 'figure' | 'div' | 'span';
+  /** The "coming soon" treatment: desaturated image, dimmed keyline. */
+  muted?: boolean;
+  class?: string;
+}
+
+const { ratio, as = 'figure', muted = false, class: className } = Astro.props;
+
+const Tag = as;
+const id = uid('arch');
+---
+
+<Tag
+  class:list={['pg-arch', muted && 'is-muted', className]}
+  style={ratio ? `--pg-arch-ratio:${ratio}` : undefined}
+>
+  <span class="pg-arch-in" style={`clip-path:url(#${id})`}>
+    <slot />
+  </span>
+  <svg
+    class="pg-arch-line"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+    role="presentation"
+  >
+    <defs>
+      <clipPath id={id} clipPathUnits="objectBoundingBox">
+        <path d={ARCH_CLIP}></path>
+      </clipPath>
+    </defs>
+    <path d={ARCH_LINE} vector-effect="non-scaling-stroke"></path>
+  </svg>
+</Tag>
+
+<style>
+  .pg-arch {
+    display: block;
+    position: relative;
+    isolation: isolate;
+    margin: 0;
+  }
+
+  .pg-arch-in {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--obsidian-700);
+    aspect-ratio: var(--pg-arch-ratio, 3 / 4);
+  }
+
+  /* Absolutely positioned inside a fixed-ratio frame. In normal flow
+     block-size:100% cannot resolve against a flex-sized parent during intrinsic
+     sizing, so the image would fall back to its own ratio and drive the row. */
+  .pg-arch-in :global(img) {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.04);
+    transition: transform 1.1s var(--ease);
+  }
+
+  .pg-arch-in::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 11, 10, 0.23) 0%,
+      rgba(12, 11, 10, 0) 38%,
+      rgba(12, 11, 10, 0.35) 100%
+    );
+  }
+
+  .pg-arch-line {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+    z-index: 2;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.4;
+  }
+
+  /* The muted treatment is never the only signal — the dashed tag and the
+     section heading both say the line is not shipping yet. */
+  .pg-arch.is-muted .pg-arch-in :global(img) {
+    filter: saturate(0.32) contrast(1.02) brightness(0.92);
+  }
+  .pg-arch.is-muted .pg-arch-line {
+    stroke: var(--hair-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pg-arch-in :global(img) {
+      transition: none;
+    }
+  }
+</style>

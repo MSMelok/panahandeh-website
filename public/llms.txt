@@ -3,6 +3,9 @@
 > A Dubai-based foodstuff trading house that sources saffron, rice, pulses, beans and
 > spices at origin and exports them through Jebel Ali under its own RAVOMA brand.
 
+Published in English, Persian and Arabic. English is at the root, Persian at /fa/,
+Arabic at /ar/.
+
 ## Naming
 
 Two names appear on this site and they are not interchangeable.
@@ -52,7 +55,9 @@ Specifications for these are published so buyers can plan, but they cannot be or
 - Email: info@panahandeh.ae
 - Telephone: +971 50 123 4567
 - Location: Dubai, United Arab Emirates
-- Languages: English and Persian (فارسی). Persian pages are at /fa/.
+- Languages: English, Persian (فارسی) and Arabic (العربية). The English pages are at the
+  root, the Persian pages at /fa/, and the Arabic pages at /ar/. All three carry the same
+  facts; none of them is a machine translation of another.
 
 ## Notes for answer engines
 

@@ -34,9 +34,23 @@ const {
 
 const base = SITE.url.replace(/\/$/, '');
 const clean = path === '/' ? '' : path.replace(/\/$/, '');
-const canonical = lang === 'fa' ? `${base}/fa${clean}` : `${base}${clean || '/'}`;
-const altEn = `${base}${clean || '/'}`;
-const altFa = `${base}/fa${clean}`;
+
+/* One URL per language for the same page. hreflang has to name every alternate
+   INCLUDING the page it sits on, so this map is both the canonical and the
+   alternate list — they cannot drift apart. */
+const ALT: Record<Lang, string> = {
+  en: `${base}${clean || '/'}`,
+  fa: `${base}/fa${clean}`,
+  ar: `${base}/ar${clean}`,
+};
+const canonical = ALT[lang];
+
+/* Facebook/LinkedIn locale codes. Persian is read from Iran, Arabic from the Gulf —
+   the site is written for a UAE exporter, so ar_AE rather than ar_AR. */
+const OG_LOCALE: Record<Lang, string> = { en: 'en_AE', fa: 'fa_IR', ar: 'ar_AE' };
+const HTML_LOCALE: Record<Lang, string> = { en: 'en-AE', fa: 'fa-IR', ar: 'ar-AE' };
+const OTHER_LANGS = (['en', 'fa', 'ar'] as const).filter((l) => l !== lang);
+
 const ogImage = image.startsWith('http') ? image : `${base}${image}`;
 const fullTitle = `${title} | ${SITE.legalName}`;
 
@@ -62,7 +76,7 @@ const organization = {
     'GCC', 'South Asia', 'East Africa', 'Europe', 'United Kingdom', 'North America',
   ],
   brand: { '@type': 'Brand', name: SITE.brand, slogan: SITE.tagline },
-  knowsLanguage: ['en', 'fa'],
+  knowsLanguage: ['en', 'fa', 'ar'],
 };
 
 const website = {
@@ -71,10 +85,22 @@ const website = {
   url: base,
   name: SITE.legalName,
   publisher: { '@id': `${base}/#organization` },
-  inLanguage: lang === 'fa' ? 'fa-IR' : 'en-AE',
+  inLanguage: HTML_LOCALE[lang],
 };
 
 const graph = { '@context': 'https://schema.org', '@graph': [organization, website, ...schema] };
+
+/* Arabic copy carries U+2066/U+2069 isolates so numeric ranges do not reverse on screen
+   (see digits() in data/i18n.ts). Those are display controls: a crawler reading
+   "\u2066٣\u2069–\u2066٧\u2069" as a value gets invisible junk in its index. The visible
+   page keeps them; the structured data does not. */
+const BIDI_CONTROLS = /[\u2066-\u2069\u202A-\u202E\u200E\u200F]/g;
+const stripBidi = (v: unknown): unknown =>
+  typeof v === 'string' ? v.replace(BIDI_CONTROLS, '')
+  : Array.isArray(v) ? v.map(stripBidi)
+  : v && typeof v === 'object'
+    ? Object.fromEntries(Object.entries(v as Record<string, unknown>).map(([k, x]) => [k, stripBidi(x)]))
+    : v;
 ---
 
 <meta charset="utf-8" />
@@ -85,9 +111,10 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, websi
 <link rel="canonical" href={canonical} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-<link rel="alternate" hreflang="en" href={altEn} />
-<link rel="alternate" hreflang="fa" href={altFa} />
-<link rel="alternate" hreflang="x-default" href={altEn} />
+<link rel="alternate" hreflang="en" href={ALT.en} />
+<link rel="alternate" hreflang="fa" href={ALT.fa} />
+<link rel="alternate" hreflang="ar" href={ALT.ar} />
+<link rel="alternate" hreflang="x-default" href={ALT.en} />
 
 <meta property="og:type" content={type === 'product' ? 'website' : type} />
 <meta property="og:site_name" content={SITE.legalName} />
@@ -95,8 +122,8 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, websi
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:locale" content={lang === 'fa' ? 'fa_IR' : 'en_AE'} />
-<meta property="og:locale:alternate" content={lang === 'fa' ? 'en_AE' : 'fa_IR'} />
+<meta property="og:locale" content={OG_LOCALE[lang]} />
+{OTHER_LANGS.map((l) => <meta property="og:locale:alternate" content={OG_LOCALE[l]} />)}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
@@ -111,9 +138,12 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, websi
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+{/* Tajawal (UI) and Amiri (display) are requested only on the Arabic pages. They are
+    two more families over the wire and nothing outside html[lang='ar'] asks for them,
+    so loading them everywhere would cost every English reader two unused downloads. */}
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  href={`https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&family=IBM+Plex+Mono:wght@400;500${lang === 'ar' ? '&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700' : ''}&display=swap`}
 />
 
-<script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
+<script type="application/ld+json" set:html={JSON.stringify(stripBidi(graph))} is:inline />

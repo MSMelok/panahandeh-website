@@ -1,0 +1,87 @@
+---
+/**
+ * Shamsa — the radiating medallion from brand/newPattern01.jpeg.
+ *
+ * Twenty concentric bands: bead rings, petal rays, cusped lobes and radial
+ * khatai motifs. Bands tagged `kind: 'radial'` carry one motif that is defined
+ * once in <defs> and replayed with <use transform="rotate(...)">, which is what
+ * keeps the inlined markup small — the outermost band alone is twenty copies of
+ * a 100-character path.
+ *
+ * `half` draws only the half that reads on the page, for the edge-anchored
+ * watermark. The figure is mirror-symmetric about its vertical axis (every
+ * radial band's motif is symmetric about its own ray, and the ray angles are
+ * closed under reflection), so an RTL page can simply mirror the element.
+ *
+ * Decorative only: aria-hidden, focusable="false", no pointer events.
+ */
+import { SHAMSA } from './geometry';
+import { uid } from './uid';
+
+interface Props {
+  /** Edge-anchored semicircle rather than the full medallion. */
+  half?: boolean;
+  /** Rendered inline-size, any CSS length. Defaults to 100% of the parent. */
+  size?: string;
+  /** Band density 1-6. Bands whose `level` exceeds this are dropped. */
+  rings?: number;
+  class?: string;
+}
+
+const { half = false, size, rings = 6, class: className } = Astro.props;
+
+/* The geometry's stated radius is 498, but the outermost lobes and their half
+   stroke reach 525. 528 keeps the whole figure inside the viewBox. */
+const R = 528;
+const vb = half ? `0 ${-R} ${R} ${2 * R}` : `${-R} ${-R} ${2 * R} ${2 * R}`;
+
+const id = uid('sh');
+const bands = SHAMSA.bands
+  .filter((b) => b.level <= rings)
+  .map((b, i) => ({ ...b, id: `${id}-b${i}` }));
+const radial = bands.filter((b) => b.kind === 'radial');
+---
+
+<svg
+  class:list={['orn-shamsa', className]}
+  viewBox={vb}
+  fill="none"
+  stroke="currentColor"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  role="presentation"
+  style={size ? `--orn-size:${size}` : undefined}
+>
+  {
+    radial.length > 0 && (
+      <defs>
+        {radial.map((b) => (
+          <path id={b.id} d={b.d} />
+        ))}
+      </defs>
+    )
+  }
+  {
+    bands.map((b) =>
+      b.kind === 'path' ? (
+        <path d={b.d} stroke-width={b.w} stroke-linecap={b.cap ? 'round' : undefined} />
+      ) : (
+        <g stroke-width={b.w} stroke-linecap={b.cap ? 'round' : undefined}>
+          {Array.from({ length: b.n }, (_, k) => (
+            <use href={`#${b.id}`} transform={`rotate(${((360 * k) / b.n).toFixed(3)})`} />
+          ))}
+        </g>
+      )
+    )
+  }
+</svg>
+
+<style>
+  .orn-shamsa {
+    display: block;
+    inline-size: var(--orn-size, 100%);
+    block-size: auto;
+    pointer-events: none;
+  }
+</style>

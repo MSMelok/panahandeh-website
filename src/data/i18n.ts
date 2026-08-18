@@ -330,18 +330,344 @@ export const T = {
 
 export type Key = keyof typeof T;
 
+/**
+ * Arabic. Formal Modern Standard Arabic in a trade register — the register a Gulf
+ * importer's purchasing desk reads, not dialect and not marketing English translated
+ * word for word. Where the English is elaborate the Arabic is plain: a simple
+ * construction we are confident in beats an ornate one we are not.
+ *
+ * Two mechanical rules hold this file together:
+ *
+ * 1. **Latin runs that carry digits are isolated.** `\u2066` is LEFT-TO-RIGHT ISOLATE
+ *    and `\u2069` is POP DIRECTIONAL ISOLATE — the character-level equivalent of
+ *    `<bdi dir="ltr">`, which is the only form available here because these strings
+ *    are rendered as text nodes, not markup. Without it "ISO 3632" can pick up the
+ *    surrounding right-to-left run at its edges.
+ * 2. **Numerals are Arabic-Indic (U+0660 ٠١٢٣), never Persian (U+06F0 ۰۱۲۳).** They
+ *    look alike and are different codepoints; Persian numerals in Arabic copy read as
+ *    an error. Ranges are written with "من … إلى …" rather than an en-dash, because a
+ *    dash between two Arabic-Indic numerals is bidi-neutral and reverses the pair.
+ *
+ * Not translated: RAVOMA (the mark printed on the packs), ISO 3632, ASTA, HS codes,
+ * and the Incoterm letter codes. The company is written بناهنده throughout — پناهنده
+ * is the Persian spelling and the letter پ does not belong to Arabic orthography.
+ */
+export const AR: Partial<Record<Key, string>> = {
+  'nav.home':        'الرئيسية',
+  'nav.about':       'من نحن',
+  'nav.products':    'المنتجات',
+  'nav.quality':     'الجودة',
+  'nav.logistics':   'الشحن والنقل',
+  'nav.contact':     'اتصل بنا',
+
+  'cta.quote':       'اطلب عرض سعر',
+  'cta.products':    'تصفّح المنتجات',
+  'cta.all':         'عرض جميع المنتجات',
+  'cta.enquire':     'استفسر عن هذا الصنف',
+
+  'status.live':     'يُشحن الآن',
+  'status.soon':     'قريباً',
+
+  'label.origin':    'المنشأ',
+  'label.grade':     'الدرجة',
+  'label.format':    'العبوة',
+  'label.hs':        'الرمز الجمركي المنسق',
+  'label.category':  'الفئة',
+
+  'foot.company':    'الشركة',
+  'foot.range':      'المنتجات',
+  'foot.reach':      'تواصل معنا',
+  'foot.rights':     'جميع الحقوق محفوظة',
+  'foot.brandline':  'زعفران وبقوليات وفاصولياء وتوابل — تُشترى من المنشأ، وتُعبّأ تحت علامة RAVOMA، وتُشحن من دبي.',
+
+  'a11y.skip':       'تخطَّ إلى المحتوى',
+  'a11y.home':       'بناهنده — الصفحة الرئيسية',
+  'a11y.menu':       'فتح القائمة',
+  'a11y.lang':       'اللغة',
+
+  'transit.title':   'مدة الشحن التقديرية',
+  'transit.region':  'منطقة الوجهة',
+  'transit.days':    'أيام',
+  'transit.note':    'تقديرية فقط. هي مدة الإبحار من ميناء إلى ميناء انطلاقاً من جبل علي، وتُعطى نطاقاً لأنها تتغيّر بتغيّر الناقل وخط السير. ولا تشمل مهلة الحجز ولا التخليص الجمركي في الوجهة، وليست تاريخ تسليم تعاقدياً.',
+
+  'form.name':       'الاسم الكامل',
+  'form.company':    'الشركة',
+  'form.email':      'البريد الإلكتروني',
+  'form.port':       'ميناء الوصول',
+  'form.product':    'الصنف',
+  'form.message':    'الكمية والمواصفات',
+  'form.send':       'إرسال الطلب',
+  'form.sending':    'جارٍ الإرسال…',
+  'form.sent':       'شكراً لك — تم إرسال طلبك. وسيرد عليك أحد تجّارنا خلال يوم عمل واحد.',
+  'form.failed':     'تعذّر الإرسال. يرجى مراسلتنا مباشرة على \u2066info@panahandeh.ae\u2069.',
+  'form.select':     'اختر صنفاً…',
+  'form.err.name':   'يرجى إدخال اسمك.',
+  'form.err.email':  'يرجى إدخال بريد إلكتروني صحيح.',
+  'form.err.msg':    'يرجى إضافة بعض التفاصيل.',
+
+  /* -- shared calls to action ----------------------------------------- */
+  'cta.line':        'عرض هذا الصنف',
+  'cta.about':       'عن الشركة',
+
+  /* -- the four stages ------------------------------------------------- */
+  'flow.1':          'الشراء في الموسم ومن المنشأ',
+  'flow.1.b':        'يُقيَّم المحصول في موسمه مع المزارع أو مع منشأة التنقية، وتُسحب العيّنات قبل أي التزام.',
+  'flow.2':          'التدريج قبل التعبئة لا بعدها',
+  'flow.2.b':        'غربلة ونزع للحصى وفرز لوني وفق المعايرة المنصوص عليها في العقد، مع حدود للرطوبة وللمواد الغريبة مثبتة كتابةً.',
+  'flow.3':          'التجميع في جبل علي',
+  'flow.3.b':        'تُجهَّز الحاويات وتُجمَّع في دبي، فتكون الدفعة التي تغادر الميناء هي نفسها الدفعة التي اشتُريت من المنشأ.',
+  'flow.4':          'إصدار المستندات وفق الوجهة',
+  'flow.4.b':        'تُحرَّر المستندات وفق متطلبات سوق الوجهة لا وفق نموذج جاهز، وتُسلَّم مع رموز الدفعات.',
+
+  /* -- stat row -------------------------------------------------------- */
+  'stat.origins':    'مناطق التوريد',
+  'stat.lines':      'أصناف السلع',
+  'stat.live':       'تُشحن اليوم',
+  'stat.markets':    'مناطق الوجهة',
+  'stat.formats':    'عبوات التجزئة من RAVOMA',
+
+  /* -- home ------------------------------------------------------------ */
+  'home.kicker':     'دبي · الإمارات العربية المتحدة',
+  'home.h1a':        'من الهضبة',
+  'home.h1b':        'إلى الميناء.',
+  /** The opposite-script echo under the headline. Latin under the Arabic page, the
+   *  same line the Persian page carries. Deliberately not a translation pair. */
+  'home.counter':    'From the plateau to the port',
+  'home.lede':       'تشتري بناهنده الزعفران والأرز والبقوليات والفاصولياء والتوابل من المناطق التي تجود بزراعتها، وتُدرِّجها في المنشأ، وتُعبّئها تحت علامتها RAVOMA، وتشحنها من جبل علي.',
+  'home.now.k':      'تُشحن اليوم',
+  'home.now.h1':     'صنفان يُشحنان اليوم.',
+  'home.now.h2':     'وسبعة في الطريق.',
+  'home.now.p':      'الزعفران والأرز يُشحنان الآن، معبّأين تحت علامة RAVOMA وبمستندات صادرة من جبل علي. أما الأصناف السبعة الأخرى فذُكرت هنا لأنها التالية في التشكيلة، لا لأنها معروضة اليوم.',
+  'home.do.k':       'ما نقوم به',
+  'home.do.h1':      'بيت تجاري،',
+  'home.do.h2':      'لا وسيط.',
+  'home.do.p':       'تنتقل الدفعة من الحقل إلى السفينة دون أن تتداولها الأيدي مرتين.',
+
+  /* -- origins --------------------------------------------------------- */
+  'origins.k':       'مناطق التوريد',
+  'origins.h1':      'من أين يأتي',
+  'origins.h2':      'كل صنف.',
+  'origins.p':       'اثنتا عشرة منطقة زراعية، والعلاقات نفسها موسماً بعد موسم.',
+
+  /* -- closing band ----------------------------------------------------- */
+  'close.k':         'الاستفسارات',
+  'close.h1':        'أخبرنا بما تحتاجه',
+  'close.h2':        'وأين يصل.',
+  'close.p':         'الصنف والدرجة والعبوة وميناء الوصول والكمية المستهدفة. ويرد أحد تجّارنا خلال يوم عمل واحد.',
+
+  /* -- about ------------------------------------------------------------ */
+  'about.k':         'البيت التجاري',
+  'about.h1a':       'نشتري من المنشأ.',
+  'about.h1b':       'ونشحن من دبي.',
+  'about.lede':      'شركة بناهنده لتجارة المواد الغذائية ش.ذ.م.م بيت تجاري في دبي. نشتري الزعفران والأرز والبقوليات والفاصولياء والتوابل من المنشأ، ونُدرِّجها قبل تعبئتها، ونُجمِّعها في جبل علي، ونُصدر المستندات التي يطلبها سوق الوجهة.',
+  'about.p1':        'زعفران من خراسان، وحمص من الأناضول، وعدس من سهوب كازاخستان. نشتري في الموسم ومن المنشأ، لأن تلك هي النقطة الوحيدة التي تبقى فيها الجودة اختياراً.',
+  'about.p2':        'تعمل الشركة من دبي، على بُعد ساعة بالسيارة من جبل علي، فتُدرَّج الدفعة المشتراة من المنشأ وتُعبّأ وتُحمَّل دون أن تتداولها الأيدي مرتين.',
+  'about.p3':        'تسعة أصناف مذكورة في هذا الموقع. الزعفران والأرز يُشحنان اليوم؛ أما السبعة الباقية فمدرجة لأنها التالية في التشكيلة.',
+  'about.control.k': 'نقاط الضبط',
+  'about.control.h1':'خمس مراحل بين',
+  'about.control.h2':'المحصول والسفينة.',
+  'about.brand.k':   'الشركة والعلامة',
+  'about.brand.h1':  'بناهنده هي الشركة.',
+  'about.brand.h2':  'و RAVOMA هي العبوة.',
+  'about.brand.p':   'شركة بناهنده لتجارة المواد الغذائية ش.ذ.م.م هي الشركة: تشتري الدفعة وتُدرِّجها وتشحنها وتوقّع مستنداتها. أما RAVOMA فهي العلامة المطبوعة على عبوات التجزئة، وتحتها تُعبّأ أصناف الزعفران. والاسمان لا يحلّ أحدهما محلّ الآخر.',
+  'about.port.k':    'ميناء الشحن',
+  'about.port.h':    'جبل علي، دبي.',
+  'about.port.p':    'تُجهَّز كل حاوية وتُجمَّع في جبل علي. وتُسلَّم رموز الدفعات ومستندات الشحن معاً، حتى تصف الأوراق والحاوية البضاعة نفسها.',
+
+  /* -- products index ---------------------------------------------------- */
+  'products.k':      'التشكيلة',
+  'products.h1a':    'تسعة أصناف.',
+  'products.h1b':    'اثنان يُشحنان اليوم.',
+  'products.lede':   'الزعفران والأرز معبّآن ويُشحنان الآن. أما الأصناف السبعة الأخرى فتحمل منشأها ودرجتها ورمزها الجمركي المنسق ليتمكّن المشتري من تحديد مواصفاته على أساسها، غير أنها ليست معروضة بعد.',
+  'products.now.h':  'يُشحن الآن',
+  'products.soon.h': 'التالي في التشكيلة',
+  'products.soon.p': 'مذكورة ومحدَّدة المواصفات ومعروفة المنشأ — غير أنها ليست معروضة بعد. أرسل استفساراً ونُخبرك متى يُفتح الصنف.',
+  'products.packs.k':'عبوات RAVOMA',
+  'products.packs.h':'خمس عبوات للتجزئة.',
+  'products.packs.p':'عبوات زعفران RAVOMA، من موزّع الجيب إلى علبة التقديم. وتُجهَّز العبوات السائبة وعبوات العلامة الخاصة من الدفعات نفسها.',
+
+  /* -- product detail ----------------------------------------------------- */
+  'pd.spec':         'المواصفات',
+  'pd.overview':     'هذا الصنف',
+  'pd.related':      'أصناف أخرى',
+  'pd.availability': 'التوافر',
+  'pd.live.note':    'يُشحن هذا الصنف اليوم. يُعبّأ بالعبوات المذكورة أعلاه ويُجمَّع في جبل علي، وتُسلَّم رموز الدفعات ومستندات الشحن معاً.',
+  'pd.soon.note':    'هذا الصنف ليس معروضاً بعد. والمنشأ والدرجة والمعايرة المذكورة أعلاه هي المواصفات التي نورّد على أساسها؛ أرسل استفساراً ونُخبرك متى يُفتح.',
+  'pd.ravoma':       'يُعبّأ تحت علامة RAVOMA.',
+  'cat.spices':      'التوابل',
+  'cat.grains':      'الحبوب',
+  'cat.pulses':      'البقوليات',
+
+  /* -- page metadata ------------------------------------------------------ */
+  'meta.home.title': 'زعفران وأرز وبقوليات وتوابل من دبي',
+  'meta.home.desc':  'تشتري شركة بناهنده لتجارة المواد الغذائية ش.ذ.م.م الزعفران والأرز والبقوليات والفاصولياء والتوابل من المنشأ، وتُصدّرها من جبل علي تحت علامة RAVOMA. الزعفران والأرز يُشحنان اليوم، وسبعة أصناف أخرى في الطريق.',
+  'meta.about.title':'عن البيت التجاري',
+  'meta.about.desc': 'كيف تشتري بناهنده من المنشأ، وتُدرِّج قبل التعبئة، وتُجمِّع في جبل علي، وتُصدر مستندات الوجهة — وما علاقة علامة RAVOMA بالشركة.',
+  'meta.products.title': 'المنتجات — تسعة أصناف',
+  'meta.products.desc':  'زعفران وأرز وحمص وعدس أخضر وبازلاء صفراء مجروشة وفاصولياء حمراء وكركم وفلفل أسود وبذور كزبرة، لكل منها منشأ ودرجة وعبوة تجزئة ورمز جمركي منسق. الزعفران والأرز يُشحنان اليوم.',
+
+  /* -- Quality ---------------------------------------------------------- */
+  'meta.quality.title': 'الجودة والشهادات',
+  'meta.quality.desc':  'زعفران من الفئة الأولى وفق \u2066ISO 3632\u2069، وشهادة صحية نباتية وشهادة منشأ، وشهادة حلال حيثما اشترطتها الوجهة، وتعبئة بمواد صالحة لملامسة الأغذية، ورمز دفعة على كل كيس تجزئة يقود إلى المنشأ وفترة الحصاد وخط التنقية وتاريخ التعبئة.',
+  'q.kicker':        'الجودة',
+  'q.h1a':           'كل شيء يُحسم',
+  'q.h1b':           'قبل الشحن.',
+  'q.lede':          'يُتَّفق على الدرجة والرطوبة والمواد الغريبة والمستندات قبل شراء الدفعة، لا عند وصول الحاوية. وتبيّن هذه الصفحة ما يرافق البضاعة وأين يُحسم كل أمر.',
+
+  'q.certs.k':       'ما يرافق البضاعة',
+  'q.certs.h':       'ما يستلمه المشتري.',
+  'q.certs.p':       'تُعدّ الشهادات للسوق الذي تقصده الحاوية. ولا شيء هنا مأخوذ عن نموذج جاهز.',
+
+  'q.ctrl.k':        'أين يُحسم كل أمر',
+  'q.ctrl.h':        'خمس نقاط بين المحصول والسفينة.',
+  'q.ctrl.p':        'لكل واحدة منها موضع تُثبَّت فيه: في المنشأ، وعلى خط التنقية، وفي العقد، وقبل إبحار السفينة، وعلى الكيس نفسه.',
+  'q.where.1':       'في المنشأ، في الموسم',
+  'q.where.2':       'على خط التنقية',
+  'q.where.3':       'في نص العقد',
+  'q.where.4':       'قبل إبحار السفينة',
+  'q.where.5':       'على الكيس',
+
+  'q.trace.k':       'التتبّع',
+  'q.trace.h':       'رمز واحد، أربع إجابات.',
+  'q.trace.p':       'يحمل كل كيس تجزئة رمز دفعة. وهذا الرمز وحده يقود إلى المنشأ الذي اشتُريت منه الدفعة، وفترة الحصاد التي خرجت منها، وخط التنقية الذي مرّت به، وتاريخ تعبئتها.',
+  'q.trace.origin':  'المنشأ',
+  'q.trace.harvest': 'فترة الحصاد',
+  'q.trace.line':    'خط التنقية',
+  'q.trace.packed':  'تاريخ التعبئة',
+
+  'q.faq.k':         'أسئلة يطرحها المشترون',
+  'q.faq.h':         'إجابات من المواصفات.',
+  'q.faq.q1':        'هل زعفران بناهنده حاصل على شهادة \u2066ISO 3632\u2069؟',
+  'q.faq.a1':        'نعم. يُدرَّج الزعفران في الفئة الأولى وفق \u2066ISO 3632\u2069، مع نتيجة مختبرية لكل دفعة. وتُذكر قوة التلوين ذكراً، لا تقديراً.',
+  'q.faq.q2':        'ما الشهادات التي ترافق الشحنة؟',
+  'q.faq.a2':        'تُصدر لكل شحنة شهادة صحية نباتية وفق اشتراطات الصحة النباتية في سوق الوجهة. وتوثّق شهادة المنشأ بلد الإنتاج لأغراض التخليص الجمركي والرسوم التفضيلية حيثما انطبقت. وتُقدَّم شهادة حلال حيثما اشترطها سوق الوجهة.',
+  'q.faq.q3':        'هل يمكن تتبّع الكيس حتى حصاده؟',
+  'q.faq.a3':        'نعم. يحمل كل كيس تجزئة رمز دفعة يقود إلى المنشأ وفترة الحصاد وخط التنقية وتاريخ التعبئة.',
+  'q.faq.q4':        'أين يُتَّفق على حدود الرطوبة والمواد الغريبة؟',
+  'q.faq.a4':        'في العقد. تُثبَّت الحدود في العقد، ولا يُتفاوض عليها عند الوصول.',
+  'q.faq.q5':        'هل تُفحص الشحنة قبل مغادرتها؟',
+  'q.faq.a5':        'نعم. يُجرى الفحص قبل الشحن وفق اشتراطات سوق الوجهة قبل إبحار السفينة.',
+  'q.faq.q6':        'في أي تعبئة يُشحن المنتج؟',
+  'q.faq.a6':        'كل التعبئة الأولية من مواد صالحة لملامسة الأغذية، وتُحكم على خط التعبئة.',
+
+  /* -- Logistics -------------------------------------------------------- */
+  'meta.logistics.title': 'الشحن وشروط التسليم',
+  'meta.logistics.desc':  'حاويات كاملة وجزئية ومختلطة الأصناف تُجمَّع في جبل علي، وتُباع تسليم ظهر السفينة أو الكلفة وأجرة الشحن أو الكلفة والتأمين وأجرة الشحن، مع مدد إبحار تقديرية من ميناء إلى ميناء نحو دول الخليج وجنوب آسيا وشرق أفريقيا وأوروبا والمملكة المتحدة وأمريكا الشمالية.',
+  'l.kicker':        'الشحن والنقل',
+  'l.h1a':           'من جبل علي إلى',
+  'l.h1b':           'مينائك.',
+  'l.lede':          'تُجهَّز كل حاوية وتُجمَّع في جبل علي، فتكون الدفعة التي تغادر الميناء هي نفسها الدفعة التي اشتُريت من المنشأ. وفيما يلي كيف تُبنى الحمولة، وبأي شروط تُباع، وكم تستغرق رحلة البحر.',
+  'l.port':          'جبل علي، دبي',
+  'l.jebelali':      'جبل علي',
+
+  'l.cons.k':        'تجميع الحمولة',
+  'l.cons.h':        'تُبنى الحمولات في دبي.',
+  'l.cons.p':        'تُجهَّز الحاويات في جبل علي. ونتعامل مع الحمولة الكاملة ومع الحمولة الجزئية معاً، ويمكن للحاوية الواحدة أن تحمل أكثر من صنف.',
+  'l.cons.fcl':      'حمولة حاوية كاملة',
+  'l.cons.fcl.b':    'الحاوية كلها لك، تُجهَّز وتُجمَّع في جبل علي.',
+  'l.cons.lcl':      'أقل من حمولة حاوية',
+  'l.cons.lcl.b':    'جزء من حاوية، للكميات دون الحمولة الكاملة.',
+  'l.cons.mix':      'حاوية مختلطة الأصناف',
+  'l.cons.mix.b':    'أكثر من صنف في الحاوية نفسها، ليتمكّن المشتري الأصغر من شحن حمولة كاملة.',
+
+  'l.terms.k':       'شروط التسليم',
+  'l.terms.h':       'الشروط التي نبيع بها.',
+  'l.terms.p':       'إنكوترمز ٢٠٢٠. وهذه تصف الشروط نفسها؛ أما ما ينطبق على شحنة بعينها فيُؤكَّد في عرض السعر.',
+
+  'l.transit.h':     'كم تستغرق رحلة البحر.',
+  'l.transit.p':     'مدة الإبحار من ميناء إلى ميناء انطلاقاً من جبل علي، مرسومة على مقياس واحد مشترك ليمكن قياس المناطق بعضها ببعض.',
+  'l.transit.scale': 'أيام من جبل علي',
+  'l.note.k':        'نطاق، لا تاريخ',
+
+  /* -- Contact ---------------------------------------------------------- */
+  'meta.contact.title': 'اتصل بنا',
+  'meta.contact.desc':  'استفسارات الزعفران والأرز والبقوليات والفاصولياء والتوابل من شركة بناهنده لتجارة المواد الغذائية ش.ذ.م.م، دبي. هاتف وبريد إلكتروني ونموذج استفسار.',
+  'c.kicker':        'اتصل بنا',
+  'c.h1a':           'أخبرنا بما تحتاجه',
+  'c.h1b':           'وأين يصل.',
+  'c.lede':          'الصنف والدرجة والعبوة وميناء الوصول والكمية المستهدفة. أرسل هذه ونعود إليك بمؤشّر سعر ومهلة تجهيز.',
+  'c.tel':           'الهاتف',
+  'c.office':        'المكتب',
+  'c.officev':       'دبي، الإمارات العربية المتحدة',
+  'c.reply':         'يرد أحد تجّارنا خلال يوم عمل واحد.',
+  'c.inc.k':         'ما ينبغي ذكره',
+  'c.inc.h':         'خمسة أمور تمنحك جواباً دقيقاً.',
+  'c.inc.commodity': 'أي صنف — زعفران أو أرز أو بقوليات أو توابل.',
+  'c.inc.grade':     'الدرجة أو المعايرة التي تشتري على أساسها.',
+  'c.inc.format':    'عبوة تجزئة أم سائب، والوزن.',
+  'c.inc.port':      'أين يجب أن تصل البضاعة، ليُعرض عليك الشرط المناسب.',
+  'c.inc.volume':    'الكمية المستهدفة',
+  'c.inc.volume.b':  'لكل شحنة، وهل تتكرّر أم لا.',
+  'c.form.k':        'استفسار',
+  'c.form.h':        'أرسله من هنا.',
+
+  /* -- 404 -------------------------------------------------------------- */
+  'nf.title':        'الصفحة غير موجودة',
+  'nf.h1a':          'هذه الصفحة ليست',
+  'nf.h1b':          'في التشكيلة.',
+  'nf.p':            'الرابط معطوب، أو أن الصفحة قد نُقلت. أما التشكيلة والشركة فما زالتا هنا.',
+};
+
 export function t(key: Key, lang: Lang): string {
+  if (lang === 'ar') {
+    const v = (AR as Partial<Record<Key, string>>)[key];
+    // Fall back to English rather than rendering an empty string. A visible English
+    // word tells us a key is missing; an empty node hides the gap.
+    return v ?? T[key][0];
+  }
   return T[key][lang === 'fa' ? 1 : 0];
+}
+
+/**
+ * Pick a language variant off a data object. Fields are named `x`, `xFa`, `xAr`
+ * (or plain `en`/`fa`/`ar` on products), so callers stop writing
+ * `lang === 'fa' ? o.fa : o.en` ternaries that silently fall to English for Arabic.
+ */
+export function L(o: Record<string, any>, lang: Lang, base: string): string {
+  if (lang === 'fa') return o[base === 'en' ? 'fa' : base + 'Fa'] ?? o[base];
+  if (lang === 'ar') return o[base === 'en' ? 'ar' : base + 'Ar'] ?? o[base === 'en' ? 'fa' : base + 'Fa'] ?? o[base];
+  return o[base];
 }
 
 /** `/about` in English, `/fa/about` in Persian. */
 export function href(path: string, lang: Lang): string {
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return lang === 'fa' ? `/fa${clean === '/' ? '' : clean}` : clean;
+  if (lang === 'en') return clean;
+  return `/${lang}${clean === '/' ? '' : clean}`;
 }
 
-/** Latin digits to Persian, for numerals shown in Persian copy. */
+/**
+ * Latin digits to the locale's own numerals.
+ *
+ * Persian and Arabic use DIFFERENT codepoints for the same-looking digits:
+ * Persian is U+06F0 ۰۱۲۳۴۵۶۷۸۹, Arabic is U+0660 ٠١٢٣٤٥٦٧٨٩. Rendering Persian
+ * numerals inside Arabic copy is a visible error to a native reader, so they are
+ * kept apart rather than sharing one map.
+ */
+const NUMERALS: Record<string, string> = {
+  fa: '۰۱۲۳۴۵۶۷۸۹',
+  ar: '٠١٢٣٤٥٦٧٨٩',
+};
+
 export function digits(input: string | number, lang: Lang): string {
   const s = String(input);
-  return lang === 'fa' ? s.replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]) : s;
+  const map = NUMERALS[lang];
+  if (!map) return s;
+  const out = s.replace(/\d/g, (d) => map[Number(d)]);
+
+  /* MEASURED, not assumed. Persian numerals are bidi class EN and Arabic-Indic ones
+     are AN, and the two are not interchangeable to the bidi algorithm:
+     
+       - Inside <bdi dir="ltr"> the isolate's start-of-sequence is L, so rule W7 turns
+         a Persian EN run into L and "۳–۷" keeps its written order.
+       - W7 does not apply to AN. The en-dash between two Arabic-Indic numbers resolves
+         to R under N1 (numbers count as R for neutral resolution), the numbers go to a
+         higher level than the dash, and L2 reverses the pair — "٣–٧ أيام" was drawn
+         "٧–٣", i.e. seven to three days. <bdi dir="ltr"> alone does NOT prevent this.
+
+     Isolating each Arabic number in U+2066 … U+2069 — the character form of
+     <bdi dir="ltr">, and the only form available to a plain string — leaves the dash
+     sitting between two neutrals instead of between two numbers, and the range keeps
+     its order. Around a single number it is a no-op. */
+  return lang === 'ar' ? `\u2066${out}\u2069` : out;
 }
