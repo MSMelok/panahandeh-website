@@ -145,6 +145,12 @@ const S = {
       const busy = state === 'sending';
       button.disabled = busy || state === 'sent';
       button.textContent = busy ? S.sending : S.send;
+      /* On a phone the send button ends up at the bottom edge, which puts this
+         message off-screen exactly when it matters. #eq-status inherits
+         scroll-margin-top from tokens.css, so it clears the sticky header. */
+      if (state === 'sent' || state === 'failed') {
+        status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
     };
 
     form.addEventListener('input', (e) => {

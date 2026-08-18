@@ -121,8 +121,8 @@ export const T = {
   'origins.k':       ['Origins', 'مناطق تأمین'],
   'origins.h1':      ['Where each line', 'هر قلم'],
   'origins.h2':      ['comes from.', 'از کجا می‌آید.'],
-  'origins.p':       ['Twelve growing regions, and the same relationships season after season.',
-                      'دوازده منطقه کشت و همان روابط، فصل پس از فصل.'],
+  'origins.p':       ['Every line is sourced in Iran, and from the same growers season after season.',
+                      'همه اقلام از ایران تأمین می‌شود، و از همان کشاورزان، فصل پس از فصل.'],
 
   /* -- closing band ----------------------------------------------------- */
   'close.k':         ['Enquiries', 'استعلام'],
@@ -447,7 +447,7 @@ export const AR: Partial<Record<Key, string>> = {
   'origins.k':       'مناطق التوريد',
   'origins.h1':      'من أين يأتي',
   'origins.h2':      'كل صنف.',
-  'origins.p':       'اثنتا عشرة منطقة زراعية، والعلاقات نفسها موسماً بعد موسم.',
+  'origins.p':       'تُورَّد جميع الأصناف من إيران، ومن المزارعين أنفسهم موسماً بعد موسم.',
 
   /* -- closing band ----------------------------------------------------- */
   'close.k':         'الاستفسارات',

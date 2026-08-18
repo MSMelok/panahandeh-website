@@ -195,6 +195,15 @@ const RANGE = PRODUCTS.slice(0, 4);
     text-transform: none;
   }
 
+  /* Only the contact column is a <div>; the nav columns are <nav>, so this underlines
+     the two real links without touching the site navigation. */
+  div.fcol a {
+    text-decoration: underline;
+    text-decoration-color: var(--hair-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
   .fcol ul {
     list-style: none;
     margin: 0;
@@ -234,9 +243,11 @@ const RANGE = PRODUCTS.slice(0, 4);
   }
 
   @media (pointer: coarse) {
-    .fcol ul { gap: 2px; }
+    /* inline-flex shrink-wraps the box to the text, so "أرز" became a 13.5px-wide
+       target. flex makes each link a full-column row, which is what the global
+       nav rule in tokens.css was already asking for. */
     .fcol a {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       min-block-size: 44px;
     }

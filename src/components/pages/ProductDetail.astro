@@ -4,7 +4,7 @@
  *
  * Content lives here once; /products/[slug] and /fa/products/[slug] are thin wrappers
  * that pass `lang` and the product record. These pages are the SEO argument for the
- * whole site, so each one carries real specification — origin, grade, retail formats,
+ * whole site, so each one carries real specification — grade, retail formats,
  * HS code, category and availability — rather than a paragraph of adjectives.
  *
  * Every numeral that sits inside Persian prose is isolated in <bdi dir="ltr">. Without
@@ -71,7 +71,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
           height="1200"
           fetchpriority="high"
           decoding="async"
-          alt={`${name} — ${pick3(p.origin, p.originFa, p.originAr)}`}
+          alt={`${name} — ${pick3(p.grade, p.gradeFa, p.gradeAr)}`}
         />
       </Arch>
 
@@ -91,7 +91,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
         {
           p.slug === 'saffron' && (
             <div class="ravoma">
-              <RavomaMark width={168} color="var(--ivory)" veinColor="#171513" />
+              <RavomaMark width={168} />
               <p>{t('pd.ravoma', lang)}</p>
             </div>
           )
@@ -115,10 +115,6 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
         <h2 class="display d3 spec-h" id="h-spec">{t('pd.spec', lang)}</h2>
         <table>
           <tbody>
-            <tr>
-              <th scope="row">{t('label.origin', lang)}</th>
-              <td>{pick3(p.origin, p.originFa, p.originAr)}</td>
-            </tr>
             <tr>
               <th scope="row">{t('label.grade', lang)}</th>
               <td>{pick3(p.grade, p.gradeFa, p.gradeAr)}</td>
@@ -184,7 +180,6 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
                 </Arch>
                 <span class="cbody">
                   <span class="cname display d3">{pick3(r.en, r.fa, r.ar)}</span>
-                  <span class="cmeta">{pick3(r.origin, r.originFa, r.originAr)}</span>
                   <span class={`tag cardtag ${r.live ? 'on' : 'off'}`}>
                     <i aria-hidden="true" />
                     {r.live ? t('status.live', lang) : t('status.soon', lang)}

@@ -201,6 +201,18 @@ const slugs = PRODUCTS.map((p) => p.slug);
   }
   /* inline-flex, not inline: min-block-size does nothing to an inline box, and the
      coarse-pointer rule in tokens.css would silently fail on these two links */
+  /* Scoped to the anchor so the static office line keeps its plain treatment. The rule
+     is a 1px gold hairline, not gold text, so the light-ground constraint does not
+     apply — and this is on obsidian regardless. */
+  a.reach-v {
+    text-decoration: underline;
+    text-decoration-color: var(--hair-strong);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+  a.reach-v:hover {
+    text-decoration-color: var(--gold-light);
+  }
   .reach-v {
     display: inline-flex;
     align-items: center;

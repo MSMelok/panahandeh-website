@@ -2,97 +2,52 @@
 /**
  * RAVOMA wordmark — the product brand, never the company.
  *
- * The letters are two <text> runs with the saffron-stigma leaf drawn between them in
- * place of the O. The x-positions are measured from a real Cormorant Garamond render
- * rather than computed at runtime, because runtime font metrics are unavailable before
- * the webfont loads and the ornament would land in the wrong slot on first paint.
+ * This is the client's own artwork (supplied 19 Aug 2026), not a typeset reconstruction:
+ * gold letterforms with the leaf set into the O and the rule beneath. It replaces an SVG
+ * that rebuilt the wordmark from Cormorant Garamond with a drawn leaf, which was always a
+ * stand-in for exactly this file.
  *
- * Measured headless (chrome-headless-shell, Cormorant Garamond 600, font-size 100,
- * letter-spacing 8), via getStartPositionOfChar on the string "RAVOMA":
- *
- *   R   0        A   76.94      V  147.58
- *   O  219.03    M  303.63      A  396.59     end 475.70
- *
- * So the second run starts at x=303.6 and the O slot spans 219.03 → 295.63 (the glyph
- * advance is 76.6; the remaining 8 is letter-spacing). Slot centre 257.3.
- * The Cinzel figures do NOT transfer — Cinzel puts M at 322.4 and the O slot 8px wider.
- *
- * Vertically the leaf is centred on the cap band: baseline y=100, cap height 63.6
- * (canvas actualBoundingBoxAscent for O), so the band centre is y≈68.4. The leaf is
- * left at scale 1, which gives the same leaf-height : cap-height ratio the Cinzel
- * lockup used at scale 1.12.
- *
- * The vein is knocked out in the GROUND colour, not in a brand colour — it reads as a
- * gap in the gold, so it has to match whatever sits behind the mark. Pass `veinColor`
- * for any surface that is not the page ground.
+ * Being a raster costs the old version's one trick — the letterforms took `color` and the
+ * leaf vein was knocked out in whatever ground sat behind it, so the mark could be ivory
+ * on one surface and gold on another. The supplied mark is gold, full stop. That is fine
+ * everywhere it appears, because all three placements sit on obsidian, where the brand
+ * gold measures 5.71:1. It would NOT be fine on a light ground: gold on warm ivory is
+ * 2.36:1. If the mark is ever needed on a light surface, ask the client for a dark
+ * version rather than filtering this one.
  */
 interface Props {
-  /** Rendered width in px. Height follows the 476 × 113 viewBox, so there is no CLS. */
+  /** Rendered width in px. Height follows the 1733:546 aspect, so there is no CLS. */
   width?: number;
-  /** Letterform colour. */
-  color?: string;
-  /** MUST equal the surface behind the mark. */
-  veinColor?: string;
+  /** Accessible name. Empty by default: every placement already names the brand in
+   *  adjacent text, so announcing it again is noise for a screen reader. */
+  alt?: string;
   class?: string;
 }
 
-const {
-  width = 220,
-  color = 'currentColor',
-  veinColor = '#0C0B0A',
-  class: klass = '',
-} = Astro.props;
+const { width = 220, alt = '', class: className } = Astro.props;
 
-const VB_W = 476;
-const VB_H = 113;
-const height = Math.round((width * VB_H) / VB_W);
+/* Intrinsic size of the exported asset. The rendered height is derived rather than
+   guessed so the box is reserved before the image decodes. */
+const NATURAL_W = 720;
+const NATURAL_H = 227;
+const height = Math.round((width * NATURAL_H) / NATURAL_W);
 ---
 
-<svg
-  class:list={['ravoma', klass]}
+<img
+  class:list={['rv-mark', className]}
+  src="/assets/ravoma-wordmark.png"
   width={width}
   height={height}
-  viewBox="0 12 476 113"
-  role="img"
-  aria-label="RAVOMA"
-  style={`--leafvein:${veinColor};color:${color}`}
->
-  <g
-    fill="currentColor"
-    stroke="none"
-    font-family="'Cormorant Garamond',Georgia,serif"
-    font-weight="600"
-    font-size="100"
-    letter-spacing="8"
-  >
-    <text x="0" y="100">RAV</text><text x="303.6" y="100">MA</text>
-  </g>
-  <g transform="translate(257.3 68.4) scale(1) translate(-52.95 -52)">
-    <path
-      d="M64,4 C88,30 90,60 69,80 C59,90 49,90 43,100 C45,84 30,74 24,57 C16,34 40,16 64,4 Z"
-      fill="#B08A4A"
-      stroke="none"
-    ></path>
-    <path
-      d="M62,20 C70,42 67,60 53,76"
-      fill="none"
-      stroke="var(--leafvein)"
-      stroke-width="5.5"
-      stroke-linecap="round"
-    ></path>
-  </g>
-</svg>
+  alt={alt}
+  aria-hidden={alt === '' ? 'true' : undefined}
+  loading="lazy"
+  decoding="async"
+/>
 
 <style>
-  /* The wordmark is a Latin lockup with hard-coded x positions. In an RTL document the
-     <text> runs inherit direction:rtl, the anchor flips to the right edge and both runs
-     draw leftwards out of the viewBox — measured at -88px on a 320px Persian page. The
-     mark is a graphic, not copy, so it is pinned to LTR regardless of the page. */
-  .ravoma {
+  .rv-mark {
     display: block;
-    max-inline-size: 100%;
     block-size: auto;
-    direction: ltr;
-    unicode-bidi: isolate;
+    max-inline-size: 100%;
   }
 </style>

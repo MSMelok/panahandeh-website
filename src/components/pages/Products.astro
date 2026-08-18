@@ -32,7 +32,6 @@ const counterDir = counterLang === 'fa' ? 'rtl' : 'ltr';
 
 const name = (p: Product) => (pick3(p.en, p.fa, p.ar));
 const counterName = (p: Product) => ((lang === 'en' ? p.fa : p.en));
-const origin = (p: Product) => (pick3(p.origin, p.originFa, p.originAr));
 const grade = (p: Product) => (pick3(p.grade, p.gradeFa, p.gradeAr));
 
 /* Intrinsic sizes of the packaging renders. They differ per sheet, and a wrong pair
@@ -98,7 +97,6 @@ const PACK_SIZE: Record<string, [number, number]> = {
                   <span class="counter">
                     <bdi lang={counterLang} dir={counterDir}>{counterName(p)}</bdi>
                   </span>
-                  <span class="cmeta">{origin(p)}</span>
                   <span class="cgrade">{grade(p)}</span>
                   <span class="cformats">
                     <bdi dir="ltr">{p.formats.join(' · ')}</bdi>
@@ -152,7 +150,6 @@ const PACK_SIZE: Record<string, [number, number]> = {
                   <span class="counter">
                     <bdi lang={counterLang} dir={counterDir}>{counterName(p)}</bdi>
                   </span>
-                  <span class="cmeta">{origin(p)}</span>
                   <span class="tag off cardtag">
                     <i aria-hidden="true" />
                     {t('status.soon', lang)}
@@ -178,7 +175,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
         <p class="lede packs-lede">{t('products.packs.p', lang)}</p>
       </div>
       <div class="packs-mark">
-        <RavomaMark width={210} color="var(--ivory)" veinColor="#171513" />
+        <RavomaMark width={210} />
       </div>
     </div>
 

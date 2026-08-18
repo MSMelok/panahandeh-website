@@ -17,13 +17,19 @@ Two names appear on this site and they are not interchangeable.
 
 There is no entity called "RAVOMA Foodstuff Trading".
 
+## Origin
+
+Every line Panahandeh sells is sourced in Iran. Named growing regions include Mashhad,
+Qazvin and Kerman. The goods are consolidated and shipped out of Jebel Ali in Dubai,
+which is the port of loading, not the origin.
+
 ## What is actually available
 
 Two lines ship today:
 
-- **Saffron** — Sargol, ISO 3632 category I, from Khorasan in Iran and from Afghanistan.
+- **Saffron** — Sargol, ISO 3632 category I, grown in Iran.
   Retail formats: 10 g, 20 g, 100 g, 200 g, 300 g. HS code 0910.20.
-- **Rice** — Basmati, sella and steam processed, from Pakistan and India.
+- **Rice** — Basmati, sella and steam processed, grown in Iran.
   Formats: 1 kg, 5 kg, 25 kg. HS code 1006.30.
 
 Seven further lines are in development and are **not yet available**: chickpeas, green

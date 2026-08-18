@@ -51,9 +51,11 @@ export function productSchema(p: Product, lang: Lang): Record<string, unknown> {
     brand: p.slug === 'saffron'
       ? { '@type': 'Brand', name: SITE.brand }
       : { '@type': 'Organization', '@id': `${BASE}/#organization`, name: SITE.legalName },
+    /* Every line is sourced in Iran, so origin is a fact about the product itself
+       rather than a per-item property. Stated once, in the field crawlers read. */
+    countryOfOrigin: { '@type': 'Country', name: 'Iran' },
     additionalProperty: [
       { '@type': 'PropertyValue', name: 'HS code', value: p.hs },
-      { '@type': 'PropertyValue', name: 'Origin', value: L(p, lang, 'origin') },
       { '@type': 'PropertyValue', name: 'Grade', value: L(p, lang, 'grade') },
       { '@type': 'PropertyValue', name: 'Retail formats', value: p.formats.join(', ') },
       { '@type': 'PropertyValue', name: 'Port of loading', value: SITE.port },

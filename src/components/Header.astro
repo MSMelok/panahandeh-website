@@ -125,7 +125,7 @@ const isActive = (to: string) =>
     </div>
   </header>
 
-  <div class="sheet" id="sheet" data-open="false" dir="ltr">
+  <div class="sheet" id="sheet" data-open="false" dir="ltr" role="dialog" aria-modal="true" aria-label={t('a11y.menu', lang)}>
     <div class="wrap sheet-in">
       <nav class="sheet-nav" aria-label={t('a11y.menu', lang)}>
         {
@@ -284,6 +284,9 @@ const isActive = (to: string) =>
     border: 1px solid var(--hair-strong);
     flex: none;
   }
+  .lang a + a {
+    box-shadow: inset 1px 0 0 var(--hair-strong);
+  }
   .lang a {
     display: inline-flex;
     align-items: center;
@@ -410,6 +413,9 @@ const isActive = (to: string) =>
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     background: var(--obsidian-deep);
+    /* The fade is the only thing telling a reader the sheet continues past the fold. */
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 46px), transparent 100%);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 46px), transparent 100%);
     visibility: hidden;
     opacity: 0;
     transform: translateY(-10px);
@@ -425,6 +431,7 @@ const isActive = (to: string) =>
   @media (min-width: 1080px) {
     .sheet { display: none; }
   }
+
   .sheet-in { padding-block: 22px 48px; }
 
   /* THE bug that has bitten three times: these are inline elements. Without both of
@@ -476,8 +483,8 @@ const isActive = (to: string) =>
     .burger { min-block-size: 44px; min-inline-size: 44px; padding: 14px 11px; margin-inline-end: -11px; }
     .lock { min-block-size: 44px; }
     .sheet-nav a { min-block-size: 44px; }
-    .sheet-meta a { display: inline-flex; align-items: center; min-block-size: 44px; }
-    .sheet-meta { gap: 0; }
+    .sheet-meta a { display: flex; align-items: center; min-block-size: 44px; }
+    .sheet-meta { gap: 8px; }
   }
 
   /* -- narrow widths ---------------------------------------------------- */
@@ -511,6 +518,24 @@ const isActive = (to: string) =>
     .lang a { padding-inline: 5px; font-size: 10px; }
   }
 
+  /* A landscape phone is wide and short: the width-based clamps above all resolve to
+     their maximum in the viewport that has the least room. Height is the constraint
+     here, so it is the one the query asks about. */
+  @media (max-height: 520px) {
+    .shell-head { --hdr-h: 56px; }
+    .sheet-in { padding-block: 10px 18px; }
+    .sheet-nav a { font-size: 1.1rem; padding-block: 4px; }
+    :global(html[lang='fa']) .sheet-nav a,
+    :global(html[lang='ar']) .sheet-nav a { font-size: 1.05rem; }
+    .sheet-cta { margin-block-start: 12px; }
+    .sheet-meta { margin-block-start: 12px; font-size: 12.5px; }
+    /* A shallower fade here: the sheet is short, and a 46px wash would eat the CTA. */
+    .sheet {
+      -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 22px), transparent 100%);
+      mask-image: linear-gradient(180deg, #000 calc(100% - 22px), transparent 100%);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .sheet { transition: none; }
   }
@@ -527,10 +552,24 @@ const isActive = (to: string) =>
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    /* The sheet covers the page, so everything under it has to leave the tab order.
+       Without this, tabbing past the last menu link lands on a link that is both
+       invisible and unreachable, because the scroll lock is on. */
+    const behind = [document.querySelector('main'), document.querySelector('footer')];
+
     const set = (open: boolean) => {
       sheet.dataset.open = String(open);
       burger.setAttribute('aria-expanded', String(open));
       document.documentElement.style.overflow = open ? 'hidden' : '';
+      behind.forEach((el) => {
+        if (!el) return;
+        if (open) el.setAttribute('inert', '');
+        else el.removeAttribute('inert');
+      });
+      if (open) {
+        const first = sheet.querySelector<HTMLElement>('a, button');
+        first?.focus({ preventScroll: true });
+      }
     };
 
     burger.addEventListener('click', () => set(sheet.dataset.open !== 'true'));
