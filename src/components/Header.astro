@@ -8,6 +8,11 @@
  * 1. The mobile sheet's links are block-level. They are <a>, i.e. inline by default, and
  *    without `display:block` (plus `display:grid` on the nav) they flow onto shared lines
  *    and the menu renders as a paragraph of run-together words.
+ * The bar is pinned dir="ltr" in every language. The page below it still mirrors, but
+ * the chrome does not: the mark stays on the left, the nav reads left to right, and the
+ * language switch keeps one position across all three sites. Arabic and Persian labels
+ * inside it still shape and order correctly, because bidi resolves each run on its own.
+ *
  * 2. The header lockup, the language switch and the burger do not share one line below
  *    ~400px at full size. The sub-line, then the wordmark tracking, then the wordmark
  *    itself step down so the row still fits a 320px viewport.
@@ -56,7 +61,7 @@ const isActive = (to: string) =>
 ---
 
 <div class="shell-head">
-  <header class="hdr" id="hdr">
+  <header class="hdr" id="hdr" dir="ltr">
     <div class="wrap hdr-in">
       <a class="lock" href={href('/', lang)} aria-label={t('a11y.home', lang)}>
         <img
@@ -120,7 +125,7 @@ const isActive = (to: string) =>
     </div>
   </header>
 
-  <div class="sheet" id="sheet" data-open="false">
+  <div class="sheet" id="sheet" data-open="false" dir="ltr">
     <div class="wrap sheet-in">
       <nav class="sheet-nav" aria-label={t('a11y.menu', lang)}>
         {
