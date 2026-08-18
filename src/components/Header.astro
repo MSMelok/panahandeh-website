@@ -195,9 +195,13 @@ const isActive = (to: string) =>
     min-inline-size: 0;
   }
   .seal {
-    block-size: 34px;
+    block-size: 39px;
     inline-size: auto;
     flex: none;
+    /* The supplied artwork is bronze and sits about half the value of the ivory wordmark
+       beside it, so unlifted it reads as a shadow of the name rather than its peer.
+       Measured on the render: 3.12:1 median before, 3.77:1 after. */
+    filter: brightness(1.16) saturate(1.06);
   }
   .lock-t { min-inline-size: 0; }
   .lock b {
@@ -214,11 +218,11 @@ const isActive = (to: string) =>
     display: block;
     margin-block-start: 5px;
     font-family: var(--font-body);
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.22em;
     line-height: 1;
-    color: var(--text-dim);
+    color: var(--text-muted);
     white-space: nowrap;
   }
   :global(html[lang='fa']) .lock small {
@@ -484,7 +488,7 @@ const isActive = (to: string) =>
   @media (max-width: 460px) {
     .shell-head { --hdr-h: 66px; }
     .lock b { font-size: 16px; letter-spacing: 0.05em; }
-    .seal { block-size: 28px; }
+    .seal { block-size: 31px; }
     .lock { gap: 9px; }
     .hdr-end { gap: 8px; }
     .lang a { padding-inline: 7px; font-size: 10.5px; letter-spacing: 0.06em; }

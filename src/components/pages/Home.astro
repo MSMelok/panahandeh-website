@@ -24,6 +24,7 @@ import Shamsa from '../ornament/Shamsa.astro';
 import Field from '../ornament/Field.astro';
 import LineElement from '../ornament/LineElement.astro';
 import BorderRail from '../ornament/BorderRail.astro';
+import TilePattern from '../ornament/TilePattern.astro';
 
 interface Props {
   lang: Lang;
@@ -103,6 +104,7 @@ const FLOW: { t: Key; b: Key }[] = [
 
 <!-- ============================ STATS ============================ -->
 <div class="stats">
+  <div class="stats-orn" aria-hidden="true"><BorderRail height={26} /></div>
   <div class="wrap stats-in">
     {
       STATS.map((s) => (
@@ -117,6 +119,7 @@ const FLOW: { t: Key; b: Key }[] = [
 
 <!-- ======================= SHIPPING TODAY ======================= -->
 <section class="sec now">
+  <div class="now-orn" aria-hidden="true"><TilePattern size={228} /></div>
   <div class="wrap">
     <div class="sec-head">
       <p class="label kick"><i aria-hidden="true"></i>{t('home.now.k', lang)}</p>
@@ -236,6 +239,7 @@ const FLOW: { t: Key; b: Key }[] = [
 
 <!-- ========================== ORIGINS =========================== -->
 <section class="sec origins">
+  <div class="origins-orn" aria-hidden="true"><Shamsa half rings={5} /></div>
   <div class="wrap">
     <div class="sec-head">
       <p class="label kick"><i aria-hidden="true"></i>{t('origins.k', lang)}</p>
@@ -298,6 +302,48 @@ const FLOW: { t: Key; b: Key }[] = [
   .sec {
     padding-block: var(--rhythm);
   }
+
+  /* Every band on the landing page carries ornament, and no two neighbours carry the
+     same kind: medallion, tessellation, field, medallion again, rail. Each layer is
+     -1 in its own stacking context, so content never has to out-specify it. */
+  .now,
+  .origins {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .now-orn {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: var(--gold);
+    /* Quieter than the field on .do — this band already carries product photography,
+       and a tessellation at full strength competes with it. */
+    opacity: 0.075;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%, rgba(0, 0, 0, 0.4) 74%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 26%, rgba(0, 0, 0, 0.4) 74%, transparent 100%);
+  }
+
+  .origins-orn {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 0;
+    z-index: -1;
+    block-size: min(880px, 112%);
+    aspect-ratio: 1 / 2;
+    /* The hero anchors its half-medallion to the inline start; this one answers from
+       the opposite edge, so the page reads as a spread rather than a repeat. The
+       mirror is what puts the flat side against that edge. */
+    transform: translateY(-50%) scaleX(-1);
+    color: var(--gold);
+    opacity: 0.15;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(112% 86% at 0% 50%, #000 0%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 96%);
+    mask-image: radial-gradient(112% 86% at 0% 50%, #000 0%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 96%);
+  }
+
 
   .sec-head {
     max-inline-size: 62ch;
@@ -548,8 +594,26 @@ const FLOW: { t: Key; b: Key }[] = [
 
   /* ---------------------------------------------------------------- stats */
   .stats {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     border-block: 1px solid var(--hair);
     background: var(--surface);
+  }
+  /* A rail rather than a medallion: this band is a single row of figures, and a
+     horizontal element is the one that belongs under a horizontal reading. */
+  .stats-orn {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: -1;
+    color: var(--gold);
+    /* No text sits over this one — it runs under the figures, not behind them — so it
+       can carry more than the 0.22 ceiling the medallion answers to. */
+    opacity: 0.28;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
   }
   .stats-in {
     display: grid;
