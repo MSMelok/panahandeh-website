@@ -55,12 +55,12 @@ export const TRANSIT_MAX = 35;
 export const CERTIFICATIONS = [
   {
     id: 'iso3632',
-    en: 'ISO 3632 category I',
+    en: 'ISO 3632 category I',
     fa: 'ایزو ۳۶۳۲ درجه یک',
-    enBody: 'Saffron graded to category I under ISO 3632, with a laboratory result for every lot. Colouring strength is stated, never estimated.',
+    enBody: 'Saffron graded to category I under ISO 3632, with a laboratory result for every lot. Colouring strength is stated, never estimated.',
     faBody: 'زعفران بر پایه ایزو ۳۶۳۲ در درجه یک، همراه با نتیجه آزمایشگاه برای هر محموله. قدرت رنگی اعلام می‌شود، نه تخمین زده.',
-    ar: 'الفئة الأولى وفق \u2066ISO 3632\u2069',
-    arBody: 'زعفران مُدرَّج في الفئة الأولى وفق \u2066ISO 3632\u2069، مع نتيجة مختبرية لكل دفعة. وتُذكر قوة التلوين ذكراً، لا تقديراً.',
+    ar: 'الفئة الأولى وفق \u2066ISO 3632\u2069',
+    arBody: 'زعفران مُدرَّج في الفئة الأولى وفق \u2066ISO 3632\u2069، مع نتيجة مختبرية لكل دفعة. وتُذكر قوة التلوين ذكراً، لا تقديراً.',
   },
   {
     id: 'phyto',

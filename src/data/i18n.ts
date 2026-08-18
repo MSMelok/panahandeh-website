@@ -152,6 +152,12 @@ export const T = {
   'about.brand.p':   ['Panahandeh Foodstuff Trading L.L.C is the company: it buys the lot, grades it, ships it and signs the documents. RAVOMA is the brand printed on the retail packs, and the saffron formats are packed under it. The two names are not interchangeable.',
                       'شرکت بازرگانی مواد غذایی پناهنده، شرکت است: محموله را می‌خرد، درجه‌بندی می‌کند، حمل می‌کند و اسناد را امضا می‌کند. راوما نشانی است که روی بسته‌های خرده‌فروشی چاپ می‌شود و بسته‌بندی‌های زعفران با آن عرضه می‌شود. این دو نام جای یکدیگر را نمی‌گیرند.'],
   'about.port.k':    ['Port of loading', 'بندر بارگیری'],
+  'about.name.company': ['The company', 'شرکت'],
+  'home.alt.stigmas':   ['Saffron stigmas', 'کلاله‌های زعفران'],
+  'about.name.brand':   ['The pack brand', 'نشان بسته‌بندی'],
+  'about.alt.sacks':    ['Jute sacks of graded pulses stacked in dry storage',
+                         'کیسه‌های حبوبات درجه‌بندی‌شده در انبار خشک'],
+  'about.alt.giftbox':  ['RAVOMA 200 g saffron gift box', 'جعبه هدیه ۲۰۰ گرمی زعفران راوما'],
   'about.port.h':    ['Jebel Ali, Dubai.', 'جبل‌علی، دبی.'],
   'about.port.p':    ['Every container is built and consolidated at Jebel Ali. Lot codes and shipping documents are released together, so the paperwork and the container describe the same goods.',
                       'هر کانتینر در جبل‌علی بارگیری و تجمیع می‌شود. کد محموله و اسناد حمل با هم تحویل داده می‌شود تا اسناد و کانتینر یک کالا را توصیف کنند.'],
@@ -206,7 +212,7 @@ export const T = {
 
   /* -- Quality ---------------------------------------------------------- */
   'meta.quality.title': ['Quality & certification', 'کیفیت و گواهی‌ها'],
-  'meta.quality.desc':  ['ISO 3632 category I saffron, phytosanitary and origin certificates, halal where the destination requires it, food-grade packing, and a lot code on every retail pouch that resolves to origin, harvest window, cleaning line and packing date.',
+  'meta.quality.desc':  ['ISO 3632 category I saffron, phytosanitary and origin certificates, halal where the destination requires it, food-grade packing, and a lot code on every retail pouch that resolves to origin, harvest window, cleaning line and packing date.',
                          'زعفران درجه یک ایزو ۳۶۳۲، گواهی بهداشت گیاهی و گواهی مبدأ، حلال در صورت الزام بازار مقصد، بسته‌بندی مواد غذایی، و کد محموله روی هر بسته خرده‌فروشی که به مبدأ، بازه برداشت، خط بوجاری و تاریخ بسته‌بندی می‌رسد.'],
   'q.kicker':        ['Quality', 'کیفیت'],
   'q.h1a':           ['Everything is settled', 'هر چیز پیش از حمل'],
@@ -240,8 +246,8 @@ export const T = {
 
   'q.faq.k':         ['Questions buyers ask', 'پرسش‌های خریداران'],
   'q.faq.h':         ['Answered from the specification.', 'پاسخ بر پایه مشخصات.'],
-  'q.faq.q1':        ['Is Panahandeh saffron ISO 3632 certified?', 'آیا زعفران پناهنده گواهی ایزو ۳۶۳۲ دارد؟'],
-  'q.faq.a1':        ['Yes. Saffron is graded to category I under ISO 3632, with a laboratory result for every lot. Colouring strength is stated, never estimated.',
+  'q.faq.q1':        ['Is Panahandeh saffron ISO 3632 certified?', 'آیا زعفران پناهنده گواهی ایزو ۳۶۳۲ دارد؟'],
+  'q.faq.a1':        ['Yes. Saffron is graded to category I under ISO 3632, with a laboratory result for every lot. Colouring strength is stated, never estimated.',
                       'بله. زعفران بر پایه ایزو ۳۶۳۲ در درجه یک است، همراه با نتیجه آزمایشگاه برای هر محموله. قدرت رنگی اعلام می‌شود، نه تخمین زده.'],
   'q.faq.q2':        ['What certificates come with a shipment?', 'چه گواهی‌هایی همراه محموله ارسال می‌شود؟'],
   'q.faq.a2':        ['A phytosanitary certificate is issued for every consignment against the plant-health requirements of the destination market. A certificate of origin documents the country of production for customs clearance and preferential duty where it applies. Halal certification is provided where the destination market requires it.',
@@ -341,14 +347,14 @@ export type Key = keyof typeof T;
  * 1. **Latin runs that carry digits are isolated.** `\u2066` is LEFT-TO-RIGHT ISOLATE
  *    and `\u2069` is POP DIRECTIONAL ISOLATE — the character-level equivalent of
  *    `<bdi dir="ltr">`, which is the only form available here because these strings
- *    are rendered as text nodes, not markup. Without it "ISO 3632" can pick up the
+ *    are rendered as text nodes, not markup. Without it "ISO 3632" can pick up the
  *    surrounding right-to-left run at its edges.
  * 2. **Numerals are Arabic-Indic (U+0660 ٠١٢٣), never Persian (U+06F0 ۰۱۲۳).** They
  *    look alike and are different codepoints; Persian numerals in Arabic copy read as
  *    an error. Ranges are written with "من … إلى …" rather than an en-dash, because a
  *    dash between two Arabic-Indic numerals is bidi-neutral and reverses the pair.
  *
- * Not translated: RAVOMA (the mark printed on the packs), ISO 3632, ASTA, HS codes,
+ * Not translated: RAVOMA (the mark printed on the packs), ISO 3632, ASTA, HS codes,
  * and the Incoterm letter codes. The company is written بناهنده throughout — پناهنده
  * is the Persian spelling and the letter پ does not belong to Arabic orthography.
  */
@@ -471,6 +477,11 @@ export const AR: Partial<Record<Key, string>> = {
   'about.brand.h2':  'و RAVOMA هي العبوة.',
   'about.brand.p':   'شركة بناهنده لتجارة المواد الغذائية ش.ذ.م.م هي الشركة: تشتري الدفعة وتُدرِّجها وتشحنها وتوقّع مستنداتها. أما RAVOMA فهي العلامة المطبوعة على عبوات التجزئة، وتحتها تُعبّأ أصناف الزعفران. والاسمان لا يحلّ أحدهما محلّ الآخر.',
   'about.port.k':    'ميناء الشحن',
+  'about.name.company': 'الشركة',
+  'home.alt.stigmas':   'مياسم الزعفران',
+  'about.name.brand':   'علامة التعبئة',
+  'about.alt.sacks':    'أكياس خيش من البقوليات المدرَّجة مرصوصة في مخزن جاف',
+  'about.alt.giftbox':  'علبة هدايا زعفران RAVOMA زنة ٢٠٠ غم',
   'about.port.h':    'جبل علي، دبي.',
   'about.port.p':    'تُجهَّز كل حاوية وتُجمَّع في جبل علي. وتُسلَّم رموز الدفعات ومستندات الشحن معاً، حتى تصف الأوراق والحاوية البضاعة نفسها.',
 
@@ -508,7 +519,7 @@ export const AR: Partial<Record<Key, string>> = {
 
   /* -- Quality ---------------------------------------------------------- */
   'meta.quality.title': 'الجودة والشهادات',
-  'meta.quality.desc':  'زعفران من الفئة الأولى وفق \u2066ISO 3632\u2069، وشهادة صحية نباتية وشهادة منشأ، وشهادة حلال حيثما اشترطتها الوجهة، وتعبئة بمواد صالحة لملامسة الأغذية، ورمز دفعة على كل كيس تجزئة يقود إلى المنشأ وفترة الحصاد وخط التنقية وتاريخ التعبئة.',
+  'meta.quality.desc':  'زعفران من الفئة الأولى وفق \u2066ISO 3632\u2069، وشهادة صحية نباتية وشهادة منشأ، وشهادة حلال حيثما اشترطتها الوجهة، وتعبئة بمواد صالحة لملامسة الأغذية، ورمز دفعة على كل كيس تجزئة يقود إلى المنشأ وفترة الحصاد وخط التنقية وتاريخ التعبئة.',
   'q.kicker':        'الجودة',
   'q.h1a':           'كل شيء يُحسم',
   'q.h1b':           'قبل الشحن.',
@@ -537,8 +548,8 @@ export const AR: Partial<Record<Key, string>> = {
 
   'q.faq.k':         'أسئلة يطرحها المشترون',
   'q.faq.h':         'إجابات من المواصفات.',
-  'q.faq.q1':        'هل زعفران بناهنده حاصل على شهادة \u2066ISO 3632\u2069؟',
-  'q.faq.a1':        'نعم. يُدرَّج الزعفران في الفئة الأولى وفق \u2066ISO 3632\u2069، مع نتيجة مختبرية لكل دفعة. وتُذكر قوة التلوين ذكراً، لا تقديراً.',
+  'q.faq.q1':        'هل زعفران بناهنده حاصل على شهادة \u2066ISO 3632\u2069؟',
+  'q.faq.a1':        'نعم. يُدرَّج الزعفران في الفئة الأولى وفق \u2066ISO 3632\u2069، مع نتيجة مختبرية لكل دفعة. وتُذكر قوة التلوين ذكراً، لا تقديراً.',
   'q.faq.q2':        'ما الشهادات التي ترافق الشحنة؟',
   'q.faq.a2':        'تُصدر لكل شحنة شهادة صحية نباتية وفق اشتراطات الصحة النباتية في سوق الوجهة. وتوثّق شهادة المنشأ بلد الإنتاج لأغراض التخليص الجمركي والرسوم التفضيلية حيثما انطبقت. وتُقدَّم شهادة حلال حيثما اشترطها سوق الوجهة.',
   'q.faq.q3':        'هل يمكن تتبّع الكيس حتى حصاده؟',

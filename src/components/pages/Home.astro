@@ -96,7 +96,7 @@ const FLOW: { t: Key; b: Key }[] = [
         height="1200"
         fetchpriority="high"
         decoding="async"
-        alt={fa ? 'کلاله‌های زعفران' : 'Saffron stigmas'}
+        alt={t('home.alt.stigmas', lang)}
       />
     </Arch>
   </div>
@@ -160,8 +160,6 @@ const FLOW: { t: Key; b: Key }[] = [
               </p>
 
               <dl class="kv">
-                <div>
-                </div>
                 <div>
                   <dt>{t('label.grade', lang)}</dt>
                   <dd>{pick3(p.grade, p.gradeFa, p.gradeAr)}</dd>
@@ -732,6 +730,25 @@ const FLOW: { t: Key; b: Key }[] = [
   }
   .line-body {
     min-inline-size: 0;
+    /* A column that fills the card, so the call to action can be pushed to the foot.
+       Both cards are the same height, so both actions then land on one line however
+       the specification above them wraps. */
+    display: grid;
+    align-content: start;
+    block-size: 100%;
+  }
+  .line-body .inline-cta {
+    margin-block-start: auto;
+    justify-self: start;
+  }
+
+  @media (min-width: 900px) {
+    /* Side by side, a two-line grade in one card pushed its next row and its action
+       out of step with the other. A floor on the row — not a cap — brings a one-line
+       value up to the same height, and a longer value is still free to grow. */
+    .kv > div {
+      min-block-size: 76px;
+    }
   }
   .line-name {
     margin: 14px 0 0;

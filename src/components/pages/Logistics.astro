@@ -39,7 +39,7 @@ const loads = [
    so the Persian rendering takes the translated port name rather than transliterating. */
 const terms = INCOTERMS.map((x) => ({
   code: x.code,
-  place: x.place ? (fa ? t('l.jebelali', lang) : x.place) : null,
+  place: x.place ? (lang === 'en' ? x.place : t('l.jebelali', lang)) : null,
   gloss: pick3(x.en, x.fa, x.ar),
 }));
 
@@ -72,7 +72,7 @@ const rows = TRANSIT.map((r) => ({
       <h2 class="display d2" id="l-cons">{t('l.cons.h', lang)}</h2>
       <p class="lede">{t('l.cons.p', lang)}</p>
       {/* English takes the port straight off site.ts; Persian takes the translation. */}
-      <p class="port">{fa ? t('l.port', lang) : SITE.port}</p>
+      <p class="port">{lang === 'en' ? SITE.port : t('l.port', lang)}</p>
     </header>
 
     <ul class="loads">

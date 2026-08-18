@@ -60,7 +60,7 @@ const FLOW: { t: Key; b: Key }[] = [
           height="1250"
           fetchpriority="high"
           decoding="async"
-        alt={fa ? 'کیسه‌های حبوبات درجه‌بندی‌شده در انبار خشک' : 'Jute sacks of graded pulses stacked in dry storage'}
+        alt={t('about.alt.sacks', lang)}
       />
     </Arch>
   </div>
@@ -143,15 +143,15 @@ const FLOW: { t: Key; b: Key }[] = [
 
       <dl class="names">
         <div>
-          <dt>{fa ? 'شرکت' : 'The company'}</dt>
+          <dt>{t('about.name.company', lang)}</dt>
           <dd>{SITE.legalName}</dd>
         </div>
         <div>
-          <dt>{fa ? 'نشان بسته‌بندی' : 'The pack brand'}</dt>
+          <dt>{t('about.name.brand', lang)}</dt>
           <dd>{SITE.brand}</dd>
         </div>
         <div>
-          <dt>{fa ? 'بندر بارگیری' : 'Port of loading'}</dt>
+          <dt>{t('about.port.k', lang)}</dt>
           <dd>{SITE.port}</dd>
         </div>
       </dl>
@@ -169,7 +169,7 @@ const FLOW: { t: Key; b: Key }[] = [
             height="960"
             loading="lazy"
             decoding="async"
-          alt={fa ? 'جعبه هدیه ۲۰۰ گرمی زعفران راوما' : 'RAVOMA 200 g saffron gift box'}
+          alt={t('about.alt.giftbox', lang)}
         />
       </Arch>
     </div>

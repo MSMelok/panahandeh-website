@@ -506,16 +506,19 @@ const isActive = (to: string) =>
     .lang a { padding-inline: 7px; font-size: 10.5px; letter-spacing: 0.06em; }
   }
   @media (max-width: 400px) {
-    .lock b { font-size: 14.5px; letter-spacing: 0.02em; }
+    /* The switch is a control, not a caption — at 10px the marks separating ک/ك and
+       ی/ي stop being legible. It holds 11px and the wordmark gives up the width,
+       because the wordmark is not the thing being operated. */
+    .lock b { font-size: 13px; letter-spacing: 0.02em; }
     .lock { gap: 8px; }
     .hdr-end { gap: 7px; }
-    .lang a { padding-inline: 5px; font-size: 10px; letter-spacing: 0; }
+    .lang a { padding-inline: 5px; font-size: 11px; letter-spacing: 0; }
   }
   @media (pointer: coarse) and (max-width: 460px) {
     .lang a { padding-inline: 7px; }
   }
   @media (pointer: coarse) and (max-width: 400px) {
-    .lang a { padding-inline: 5px; font-size: 10px; }
+    .lang a { padding-inline: 5px; font-size: 11px; }
   }
 
   /* A landscape phone is wide and short: the width-based clamps above all resolve to
