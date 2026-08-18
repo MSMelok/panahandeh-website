@@ -18,11 +18,11 @@
     }
   ],
   "redirects": [
-    { "source": "/v1", "destination": "/", "permanent": false },
-    { "source": "/v1/(.*)", "destination": "/", "permanent": false },
-    { "source": "/v2", "destination": "/", "permanent": false },
-    { "source": "/v2/(.*)", "destination": "/", "permanent": false },
-    { "source": "/v3", "destination": "/", "permanent": false },
-    { "source": "/v3/(.*)", "destination": "/", "permanent": false }
+    { "source": "/v1", "destination": "/", "permanent": true },
+    { "source": "/v1/(.*)", "destination": "/", "permanent": true },
+    { "source": "/v2", "destination": "/", "permanent": true },
+    { "source": "/v2/(.*)", "destination": "/", "permanent": true },
+    { "source": "/v3", "destination": "/", "permanent": true },
+    { "source": "/v3/(.*)", "destination": "/", "permanent": true }
   ]
 }

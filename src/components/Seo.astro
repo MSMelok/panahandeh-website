@@ -134,16 +134,22 @@ const stripBidi = (v: unknown): unknown =>
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 {/* Tajawal (UI) and Amiri (display) are requested only on the Arabic pages. They are
     two more families over the wire and nothing outside html[lang='ar'] asks for them,
-    so loading them everywhere would cost every English reader two unused downloads. */}
+    so loading them everywhere would cost every English reader two unused downloads.
+
+    Two things were dropped after an audit of what the pages actually use: Gulzar, which
+    was fetched on all 45 pages while the Persian display line is set in Vazirmatn, and
+    Cormorant's italic axis, which nothing on the site asks for. Vazirmatn stays on the
+    English pages on purpose — the product cards print each name in the other language. */}
 <link
   rel="stylesheet"
-  href={`https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&family=IBM+Plex+Mono:wght@400;500${lang === 'ar' ? '&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700' : ''}&display=swap`}
+  href={`https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500${lang === 'ar' ? '&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700' : ''}&display=swap`}
 />
 
 <script type="application/ld+json" set:html={JSON.stringify(stripBidi(graph))} is:inline />

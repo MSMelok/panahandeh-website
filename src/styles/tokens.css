@@ -52,7 +52,9 @@
      Persian needs گ چ پ ژ that many Arabic faces render badly or not at all. So they
      get separate stacks rather than one "Arabic font". */
   --font-fa:      Vazirmatn, 'Segoe UI', Tahoma, sans-serif;
-  --font-fa-display: Gulzar, Vazirmatn, serif;
+  /* Persian display is Vazirmatn at 700, not a Nastaliq face. Gulzar was declared here
+     and never used, while still being fetched on every page. If a calligraphic display
+     line is wanted, wire it up deliberately and add it back to the font request. */
   /* Amiri is a revival of the Bulaq press Naskh — historical rather than a modern face
      dressed up, which is the same argument Cormorant makes on the Latin side. Tajawal
      keeps UI text legible where Amiri turns fussy at small sizes. */
