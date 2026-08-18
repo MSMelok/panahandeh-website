@@ -13,7 +13,7 @@ colors:
   gold-text-on-ivory: '#7A4A1E'
   deep-burgundy: '#5A171B'
   saffron-red: '#8F1D24'
-  warm-ivory: '#E8DCC8'
+  ivory: '#FFFFF0'
   ivory-2: '#DCCDB4'
   ivory-3: '#C9B694'
   body-on-ivory: '#3E362E'
@@ -95,11 +95,11 @@ Five colours from the client's board, with a stated usage ratio of 60 / 20 / 15 
 | Antique Gold | `#B08A4A` | Accent, 20%. **Text-safe on obsidian only.** |
 | Deep Burgundy | `#5A171B` | 15%. Accent text on light grounds, 9.9:1 on ivory. |
 | Saffron Red | `#8F1D24` | Fills and secondary accent. 6.5:1 on ivory. |
-| Warm Ivory | `#E8DCC8` | 5% in the dark mix; the ground itself in design 02. |
+| Ivory | `#FFFFF0` | The text colour on the dark ground. 19.49:1 on `#0C0B0A`. Changed from warm ivory `#E8DCC8` on 19 Aug 2026 at the client's direction. |
 
 **Two constraints, both measured, both learned the hard way:**
 
-1. **Antique gold cannot carry text on a light ground.** `#B08A4A` on `#E8DCC8` is **2.36:1** —
+1. **Antique gold cannot carry text on a light ground.** `#B08A4A` on `#FFFFF0` is **3.16:1** —
    it fails AA for text and fails 3:1 for UI boundaries. On light surfaces gold is ornament only:
    rules, the stigma leaf, hairlines. The accent role goes to deep burgundy.
 2. **Antique gold at partial opacity fails on obsidian.** Solid gold on obsidian is 5.71:1, but at
