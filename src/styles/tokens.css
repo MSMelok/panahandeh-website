@@ -122,6 +122,15 @@ button, input, textarea, select { font: inherit; color: inherit; }
   outline-offset: 3px;
 }
 
+/* A section hosting an ornament ground layer. The layer is z-index -1 inside its own
+   stacking context, so content never has to out-specify it and the pattern cannot
+   escape the section's box. */
+.has-ground {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
 /* Anchor targets must clear the sticky header. */
 :where(section, h1, h2, h3, [id]) { scroll-margin-top: 96px; }
 

@@ -15,6 +15,7 @@ import { LIVE_PRODUCTS, UPCOMING_PRODUCTS, PACK_FORMATS, type Product } from '..
 import { t, href } from '../../data/i18n';
 import RavomaMark from '../RavomaMark.astro';
 import Arch from '../ornament/Arch.astro';
+import Ground from '../ornament/Ground.astro';
 import LineElement from '../ornament/LineElement.astro';
 
 interface Props {
@@ -46,7 +47,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
 ---
 
 <!-- ============================ INTRO ============================ -->
-<section class="intro">
+<section class="intro has-ground">
+  <Ground kind="medallion" side="end" />
   <div class="wrap">
     {/* The measure sits on the inner block. .wrap carries margin-inline:auto, so
         narrowing .wrap itself would centre the column rather than hold it on the
@@ -63,7 +65,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
 </section>
 
 <!-- ========================= SHIPPING NOW ======================== -->
-<section class="sec live" aria-labelledby="h-now">
+<section class="sec live has-ground" aria-labelledby="h-now">
+  <Ground kind="tile" />
   <div class="wrap">
     <div class="group-head">
       <h2 class="display d2" id="h-now">{t('products.now.h', lang)}</h2>
@@ -115,7 +118,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
 </section>
 
 <!-- ======================= NEXT IN THE RANGE ===================== -->
-<section class="sec soon" aria-labelledby="h-soon">
+<section class="sec soon has-ground" aria-labelledby="h-soon">
+  <Ground kind="field" />
   <div class="wrap">
     <div class="group-head">
       <h2 class="display d2" id="h-soon">{t('products.soon.h', lang)}</h2>
@@ -164,7 +168,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
 </section>
 
 <!-- ========================= RAVOMA PACKS ======================== -->
-<section class="sec packs">
+<section class="sec packs has-ground">
+  <Ground kind="medallion" side="start" />
   <div class="wrap">
     <div class="packs-head">
       <div>
@@ -202,7 +207,8 @@ const PACK_SIZE: Record<string, [number, number]> = {
 </section>
 
 <!-- ========================== CLOSING =========================== -->
-<section class="sec close">
+<section class="sec close has-ground">
+  <Ground kind="rail" edge="start" />
   <div class="wrap">
     <div class="close-in">
       <p class="label kick"><i aria-hidden="true"></i>{t('close.k', lang)}</p>

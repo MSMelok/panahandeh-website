@@ -17,6 +17,7 @@
 import { INCOTERMS, TRANSIT, TRANSIT_MAX, SITE, type Lang } from '../../data/site';
 import { t, href, digits } from '../../data/i18n';
 import LineElement from '../ornament/LineElement.astro';
+import Ground from '../ornament/Ground.astro';
 
 interface Props {
   lang: Lang;
@@ -50,7 +51,8 @@ const rows = TRANSIT.map((r) => ({
 }));
 ---
 
-<section class="pgh">
+<section class="pgh has-ground">
+  <Ground kind="medallion" side="end" />
   <div class="wrap">
     <p class="label">{t('l.kicker', lang)}</p>
     <h1 class="display d1 pgh-h">
@@ -62,7 +64,8 @@ const rows = TRANSIT.map((r) => ({
 </section>
 
 <!-- ===================== consolidation ===================== -->
-<section class="sec" aria-labelledby="l-cons">
+<section class="sec has-ground" aria-labelledby="l-cons">
+  <Ground kind="field" />
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('l.cons.k', lang)}</p>
@@ -95,7 +98,8 @@ const rows = TRANSIT.map((r) => ({
 </section>
 
 <!-- ===================== incoterms ===================== -->
-<section class="sec sec-alt" aria-labelledby="l-terms">
+<section class="sec sec-alt has-ground" aria-labelledby="l-terms">
+  <Ground kind="tile" />
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('l.terms.k', lang)}</p>
@@ -122,7 +126,8 @@ const rows = TRANSIT.map((r) => ({
 </section>
 
 <!-- ===================== indicative transit ===================== -->
-<section class="sec" aria-labelledby="l-transit">
+<section class="sec has-ground" aria-labelledby="l-transit">
+  <Ground kind="medallion" side="start" />
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('transit.title', lang)}</p>
@@ -179,7 +184,8 @@ const rows = TRANSIT.map((r) => ({
 </section>
 
 <!-- ===================== closing band ===================== -->
-<section class="close">
+<section class="close has-ground">
+  <Ground kind="rail" edge="start" />
   <div class="wrap close-in">
     <p class="label">{t('close.k', lang)}</p>
     <h2 class="display d2">

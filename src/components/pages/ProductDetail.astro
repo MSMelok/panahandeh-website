@@ -16,6 +16,7 @@ import { PRODUCTS, type Product } from '../../data/products';
 import { t, href, type Key } from '../../data/i18n';
 import RavomaMark from '../RavomaMark.astro';
 import Arch from '../ornament/Arch.astro';
+import Ground from '../ornament/Ground.astro';
 
 interface Props {
   lang: Lang;
@@ -107,7 +108,8 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   </div>
 
   <!-- ========================= SPECIFICATION ======================== -->
-  <section class="sec spec" aria-labelledby="h-spec">
+  <section class="sec spec has-ground" aria-labelledby="h-spec">
+    <Ground kind="tile" />
     <div class="wrap spec-in">
       <div class="spec-table">
         <h2 class="display d3 spec-h" id="h-spec">{t('pd.spec', lang)}</h2>
@@ -160,7 +162,8 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   </section>
 
   <!-- =========================== RELATED =========================== -->
-  <section class="sec related" aria-labelledby="h-rel">
+  <section class="sec related has-ground" aria-labelledby="h-rel">
+    <Ground kind="field" />
     <div class="wrap">
       <h2 class="display d2 rel-h" id="h-rel">{t('pd.related', lang)}</h2>
 

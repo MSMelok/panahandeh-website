@@ -17,6 +17,7 @@ import { CERTIFICATIONS, CONTROL_POINTS, type Lang } from '../../data/site';
 import { t, href, digits, type Key } from '../../data/i18n';
 import { FAQ_KEYS } from '../../lib/pageSchema';
 import LineElement from '../ornament/LineElement.astro';
+import Ground from '../ornament/Ground.astro';
 import Field from '../ornament/Field.astro';
 
 interface Props {
@@ -55,7 +56,8 @@ const TRACE: readonly Key[] = [
 const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 ---
 
-<section class="pgh">
+<section class="pgh has-ground">
+  <Ground kind="medallion" side="end" />
   <div class="wrap">
     <p class="label">{t('q.kicker', lang)}</p>
     <h1 class="display d1 pgh-h">
@@ -67,7 +69,8 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 </section>
 
 <!-- ===================== what a buyer receives ===================== -->
-<section class="sec" aria-labelledby="q-certs">
+<section class="sec has-ground" aria-labelledby="q-certs">
+  <Ground kind="tile" />
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('q.certs.k', lang)}</p>
@@ -120,7 +123,8 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 </section>
 
 <!-- ===================== traceability ===================== -->
-<section class="sec" aria-labelledby="q-trace">
+<section class="sec has-ground" aria-labelledby="q-trace">
+  <Ground kind="medallion" side="start" />
   <div class="wrap">
     <div class="trace">
       <div class="trace-copy">
@@ -146,7 +150,8 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 </section>
 
 <!-- ===================== questions buyers ask ===================== -->
-<section class="sec sec-alt" aria-labelledby="q-faq">
+<section class="sec sec-alt has-ground" aria-labelledby="q-faq">
+  <Ground kind="tile" />
   <div class="wrap">
     <header class="sec-head">
       <p class="label">{t('q.faq.k', lang)}</p>
@@ -170,7 +175,8 @@ const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
 </section>
 
 <!-- ===================== closing band ===================== -->
-<section class="close">
+<section class="close has-ground">
+  <Ground kind="field" />
   <div class="wrap close-in">
     <p class="label">{t('close.k', lang)}</p>
     <h2 class="display d2">

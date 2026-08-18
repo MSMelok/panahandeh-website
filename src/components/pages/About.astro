@@ -17,6 +17,7 @@ import { PRODUCTS, LIVE_PRODUCTS, PACK_FORMATS } from '../../data/products';
 import { t, href, digits, type Key } from '../../data/i18n';
 import RavomaMark from '../RavomaMark.astro';
 import Arch from '../ornament/Arch.astro';
+import Ground from '../ornament/Ground.astro';
 import LineElement from '../ornament/LineElement.astro';
 
 interface Props {
@@ -40,7 +41,8 @@ const FLOW: { t: Key; b: Key }[] = [
 ---
 
 <!-- ============================ INTRO ============================ -->
-<section class="intro">
+<section class="intro has-ground">
+  <Ground kind="medallion" side="end" />
   <div class="wrap intro-in">
     <div class="intro-copy">
       <p class="label kick"><i aria-hidden="true"></i>{t('about.k', lang)}</p>
@@ -65,7 +67,8 @@ const FLOW: { t: Key; b: Key }[] = [
 </section>
 
 <!-- ============================ STORY ============================ -->
-<section class="sec story">
+<section class="sec story has-ground">
+  <Ground kind="field" />
   <div class="wrap story-in">
     <div class="story-copy">
       <p class="body-p">{t('about.p1', lang)}</p>
@@ -103,7 +106,8 @@ const FLOW: { t: Key; b: Key }[] = [
 </section>
 
 <!-- ======================= CONTROL POINTS ======================= -->
-<section class="sec points">
+<section class="sec points has-ground">
+  <Ground kind="tile" />
   <div class="wrap">
     <div class="sec-head">
       <p class="label kick"><i aria-hidden="true"></i>{t('about.control.k', lang)}</p>
@@ -127,7 +131,8 @@ const FLOW: { t: Key; b: Key }[] = [
 </section>
 
 <!-- ==================== COMPANY AND BRAND ======================= -->
-<section class="sec brand">
+<section class="sec brand has-ground">
+  <Ground kind="medallion" side="start" />
   <div class="wrap brand-in">
     <div class="brand-copy">
       <p class="label kick"><i aria-hidden="true"></i>{t('about.brand.k', lang)}</p>
@@ -172,7 +177,8 @@ const FLOW: { t: Key; b: Key }[] = [
 </section>
 
 <!-- ============================ PORT ============================ -->
-<section class="port">
+<section class="port has-ground">
+  <Ground kind="rail" edge="start" />
   <img
     class="port-bg"
     src="/assets/skyline.webp"
@@ -196,7 +202,8 @@ const FLOW: { t: Key; b: Key }[] = [
 </section>
 
 <!-- ========================== CLOSING =========================== -->
-<section class="sec close">
+<section class="sec close has-ground">
+  <Ground kind="field" />
   <div class="wrap">
     <div class="close-in">
       <p class="label kick"><i aria-hidden="true"></i>{t('close.k', lang)}</p>
