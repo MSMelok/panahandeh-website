@@ -141,14 +141,6 @@ export const LIVE_PRODUCTS = PRODUCTS.filter((p) => p.live);
 export const UPCOMING_PRODUCTS = PRODUCTS.filter((p) => !p.live);
 
 /** Sourcing regions, carried over from the shipped site. */
-/** Growing regions. Every line is sourced in Iran, so this names the regions inside
- *  that one country rather than a spread of countries. Only regions the client has
- *  confirmed appear here — nothing is inferred from what a country is known to grow. */
-export const ORIGINS = [
-  { en: 'Mashhad', fa: 'مشهد', pEn: 'Saffron', pFa: 'زعفران', ar: 'مشهد', pAr: 'زعفران' },
-  { en: 'Qazvin', fa: 'قزوین', pEn: 'Pulses', pFa: 'حبوبات', ar: 'قزوين', pAr: 'بقوليات' },
-  { en: 'Kerman', fa: 'کرمان', pEn: 'Cumin', pFa: 'زیره', ar: 'كرمان', pAr: 'كمّون' },
-];
 
 /** The five real RAVOMA retail formats, from the client's packaging renders. */
 export const PACK_FORMATS = [

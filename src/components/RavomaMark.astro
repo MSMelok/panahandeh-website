@@ -7,6 +7,11 @@
  * that rebuilt the wordmark from Cormorant Garamond with a drawn leaf, which was always a
  * stand-in for exactly this file.
  *
+ * Trimmed on a threshold rather than on any non-zero alpha: the supplied file carries
+ * stray alpha-1 pixels along its top and right edges, and trusting those left 134px of
+ * invisible padding above the letterforms and 113px beside them, which pushed the mark
+ * low and left inside every frame it sat in.
+ *
  * Being a raster costs the old version's one trick — the letterforms took `color` and the
  * leaf vein was knocked out in whatever ground sat behind it, so the mark could be ivory
  * on one surface and gold on another. The supplied mark is gold, full stop. That is fine
@@ -16,7 +21,7 @@
  * version rather than filtering this one.
  */
 interface Props {
-  /** Rendered width in px. Height follows the 1733:546 aspect, so there is no CLS. */
+  /** Rendered width in px. Height follows the 1619:412 aspect, so there is no CLS. */
   width?: number;
   /** Accessible name. Empty by default: every placement already names the brand in
    *  adjacent text, so announcing it again is noise for a screen reader. */
@@ -28,8 +33,8 @@ const { width = 220, alt = '', class: className } = Astro.props;
 
 /* Intrinsic size of the exported asset. The rendered height is derived rather than
    guessed so the box is reserved before the image decodes. */
-const NATURAL_W = 720;
-const NATURAL_H = 227;
+const NATURAL_W = 1100;
+const NATURAL_H = 280;
 const height = Math.round((width * NATURAL_H) / NATURAL_W);
 ---
 

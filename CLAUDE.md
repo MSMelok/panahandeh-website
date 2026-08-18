@@ -15,8 +15,11 @@ In QA, flag any code that does not match `DESIGN.md`.
 
 Three things in that file are load-bearing and easy to get wrong:
 
-- **Antique gold `#B08A4A` cannot carry text on a light ground** — 3.16:1 on ivory. On
-  light surfaces gold is ornament only; the accent role goes to deep burgundy.
+- **The ground is `#FFFFF0` and the site is light.** It inverted from obsidian on
+  19 Aug 2026. Brand colours kept their names; only the semantic tokens flipped.
+- **Antique gold `#B08A4A` cannot carry text** — 3.16:1 on the ground. Gold is
+  ornament and borders. Accent text is burgundy `#5A171B`; anything that must read as
+  gold uses `#7A4A1E`. The RAVOMA wordmark is gold artwork, so it keeps a dark field.
 - **Persian and Arabic do not share a typeface.** Same script, different letterforms — ک/ك
   and ی/ي — and Persian needs گ چ پ ژ, which many Arabic faces render badly. Persian uses
   Vazirmatn/Gulzar, Arabic uses Tajawal/Amiri. Never collapse them into one stack.

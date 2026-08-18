@@ -239,7 +239,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
     margin-block-start: 26px;
-    color: var(--gold);
+    color: var(--ornament);
   }
 
   .counter {
@@ -248,7 +248,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.8;
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
   :global(html[lang='fa']) .counter {
     font-family: var(--font-display);
@@ -338,7 +338,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   }
   .tag.on {
     border: 1px solid var(--gold);
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   .tag.on i {
     background: currentColor;
@@ -418,7 +418,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
   }
   .cname {
     display: block;
-    color: var(--ivory);
+    color: var(--text);
     line-height: 1.2;
   }
   .cmeta {
@@ -501,7 +501,10 @@ const PACK_SIZE: Record<string, [number, number]> = {
   .packs-mark {
     padding: 22px 26px;
     border: 1px solid var(--hair);
-    background: var(--obsidian);
+    /* Deliberately dark on a light page. The supplied wordmark is gold, and gold on
+       #FFFFF0 is 3.16:1 — it needs an obsidian field to sit on, exactly as it does
+       on the client's own packaging. */
+    background: var(--obsidian-deep);
     justify-self: start;
   }
 
@@ -540,7 +543,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: var(--obsidian-700);
+    background: var(--surface-raised);
     margin-block-end: 16px;
   }
   .pk-fig img {
@@ -627,7 +630,7 @@ const PACK_SIZE: Record<string, [number, number]> = {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--obsidian-deep);
+    background: var(--ground);
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.45s var(--snap);
@@ -636,11 +639,11 @@ const PACK_SIZE: Record<string, [number, number]> = {
     transform: scaleY(1);
   }
   .btn:hover {
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   .btn.ghost {
     background: transparent;
-    color: var(--ivory);
+    color: var(--text);
   }
   .btn.ghost::after {
     background: var(--gold);

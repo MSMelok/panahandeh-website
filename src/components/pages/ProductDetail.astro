@@ -240,7 +240,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     text-transform: none;
   }
   .crumbs a:hover {
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
   .crumbs svg {
     inline-size: 15px;
@@ -287,7 +287,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     font-size: clamp(1.2rem, 2.2vw, 1.6rem);
     font-weight: 400;
     line-height: 1.8;
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
   :global(html[lang='fa']) .counter {
     font-family: var(--font-display);
@@ -313,7 +313,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     margin-block-start: 28px;
     padding: 20px 24px;
     border: 1px solid var(--hair);
-    background: var(--obsidian);
+    background: var(--surface);
   }
   .ravoma p {
     margin: 0;
@@ -359,7 +359,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   }
   .tag.on {
     border: 1px solid var(--gold);
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   .tag.on i {
     background: currentColor;
@@ -417,7 +417,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--obsidian-deep);
+    background: var(--ground);
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.45s var(--snap);
@@ -426,11 +426,11 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     transform: scaleY(1);
   }
   .btn:hover {
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   .btn.ghost {
     background: transparent;
-    color: var(--ivory);
+    color: var(--text);
   }
   .btn.ghost::after {
     background: var(--gold);
@@ -449,7 +449,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent-strong);
     padding-block: 6px;
     border-block-end: 1px solid var(--hair-strong);
     transition: color 0.3s var(--snap), border-color 0.3s var(--snap);
@@ -467,8 +467,8 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
     text-transform: none;
   }
   .inline-cta:hover {
-    color: var(--gold-pale);
-    border-block-end-color: var(--gold);
+    color: var(--accent-strong);
+    border-block-end-color: var(--accent-strong);
   }
   .inline-cta svg {
     inline-size: 15px;
@@ -503,7 +503,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   }
   .spec-h {
     margin: 0 0 20px;
-    color: var(--ivory);
+    color: var(--text);
   }
 
   .spec table {
@@ -548,12 +548,12 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   .spec td {
     font-size: 15.5px;
     line-height: 1.7;
-    color: var(--ivory);
+    color: var(--text);
     overflow-wrap: anywhere;
   }
   .hs {
     font-size: var(--step--1);
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
 
   .avail {
@@ -617,7 +617,7 @@ const related = PRODUCTS.filter((x) => x.slug !== p.slug)
   .cname {
     display: block;
     overflow-wrap: anywhere;
-    color: var(--ivory);
+    color: var(--text);
     line-height: 1.2;
   }
   .cmeta {

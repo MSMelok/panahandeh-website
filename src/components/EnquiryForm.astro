@@ -261,9 +261,9 @@ const S = {
   .field textarea {
     inline-size: 100%;
     max-inline-size: 100%;
-    background: var(--obsidian);
+    background: var(--surface);
     border: 1px solid var(--hair-ivory);
-    color: var(--ivory);
+    color: var(--text);
     padding: 13px 15px;
     font-family: inherit;
     font-size: 16px; /* below 16px iOS zooms the page on focus */
@@ -277,7 +277,7 @@ const S = {
      logical keywords, so an image would sit on the wrong edge in Persian. */
   .sel { position: relative; display: grid; min-inline-size: 0; }
   .field select { appearance: none; padding-inline-end: 42px; }
-  .field select option { background: var(--obsidian); color: var(--ivory); }
+  .field select option { background: var(--surface); color: var(--text); }
   .sel-arrow {
     position: absolute;
     inset-inline-end: 15px;
@@ -293,7 +293,7 @@ const S = {
   .field select:focus,
   .field textarea:focus {
     outline: none;
-    border-color: var(--gold-light);
+    border-color: var(--accent-strong);
     box-shadow: inset 0 0 0 1px var(--gold-light);
   }
 
@@ -304,7 +304,7 @@ const S = {
     margin: 0;
     font-size: 12.5px;
     line-height: 1.5;
-    color: var(--ivory);
+    color: var(--text);
     border-inline-start: 3px solid var(--saffron-red);
     padding-inline-start: 10px;
   }
@@ -326,7 +326,7 @@ const S = {
     letter-spacing: 0.2em;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--ivory);
+    color: var(--text);
     background: transparent;
     border: 1px solid var(--gold);
     transition: color 0.4s var(--snap);
@@ -361,13 +361,13 @@ const S = {
     margin: 0;
     font-size: 14.5px;
     line-height: 1.7;
-    color: var(--ivory);
+    color: var(--text);
     padding-inline-start: 14px;
     border-inline-start: 3px solid transparent;
   }
   .eq[data-state='idle'] .eq-status { display: none; }
   .eq[data-state='sending'] .eq-status { color: var(--text-muted); border-inline-start-color: var(--hair-strong); }
-  .eq[data-state='sent'] .eq-status { border-inline-start-color: var(--gold); }
+  .eq[data-state='sent'] .eq-status { border-inline-start-color: var(--accent-strong); }
   .eq[data-state='failed'] .eq-status { border-inline-start-color: var(--saffron-red); }
 
   @media (pointer: coarse) {

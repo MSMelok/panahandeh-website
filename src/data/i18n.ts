@@ -91,7 +91,6 @@ export const T = {
                       'اسناد بر پایه الزامات بازار مقصد تنظیم می‌شود، نه از روی نمونه آماده، و همراه با کدهای محموله تحویل داده می‌شود.'],
 
   /* -- stat row -------------------------------------------------------- */
-  'stat.origins':    ['Sourcing regions', 'منطقه تأمین'],
   'stat.lines':      ['Commodity lines', 'قلم کالا'],
   'stat.live':       ['Shipping today', 'در حال ارسال'],
   'stat.markets':    ['Destination regions', 'منطقه مقصد'],
@@ -116,13 +115,6 @@ export const T = {
   'home.do.h2':      ['not a broker.', 'نه یک واسطه.'],
   'home.do.p':       ['The lot goes from the field to the vessel without changing hands twice.',
                       'محموله از زمین تا کشتی می‌رود، بی‌آنکه دوبار دست‌به‌دست شود.'],
-
-  /* -- origins --------------------------------------------------------- */
-  'origins.k':       ['Origins', 'مناطق تأمین'],
-  'origins.h1':      ['Where each line', 'هر قلم'],
-  'origins.h2':      ['comes from.', 'از کجا می‌آید.'],
-  'origins.p':       ['Every line is sourced in Iran, and from the same growers season after season.',
-                      'همه اقلام از ایران تأمین می‌شود، و از همان کشاورزان، فصل پس از فصل.'],
 
   /* -- closing band ----------------------------------------------------- */
   'close.k':         ['Enquiries', 'استعلام'],
@@ -426,7 +418,6 @@ export const AR: Partial<Record<Key, string>> = {
   'flow.4.b':        'تُحرَّر المستندات وفق متطلبات سوق الوجهة لا وفق نموذج جاهز، وتُسلَّم مع رموز الدفعات.',
 
   /* -- stat row -------------------------------------------------------- */
-  'stat.origins':    'مناطق التوريد',
   'stat.lines':      'أصناف السلع',
   'stat.live':       'تُشحن اليوم',
   'stat.markets':    'مناطق الوجهة',
@@ -448,12 +439,6 @@ export const AR: Partial<Record<Key, string>> = {
   'home.do.h1':      'بيت تجاري،',
   'home.do.h2':      'لا وسيط.',
   'home.do.p':       'تنتقل الدفعة من الحقل إلى السفينة دون أن تتداولها الأيدي مرتين.',
-
-  /* -- origins --------------------------------------------------------- */
-  'origins.k':       'مناطق التوريد',
-  'origins.h1':      'من أين يأتي',
-  'origins.h2':      'كل صنف.',
-  'origins.p':       'تُورَّد جميع الأصناف من إيران، ومن المزارعين أنفسهم موسماً بعد موسم.',
 
   /* -- closing band ----------------------------------------------------- */
   'close.k':         'الاستفسارات',

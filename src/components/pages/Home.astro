@@ -17,7 +17,7 @@
  * masked so its density falls away before it reaches the lede and the buttons.
  */
 import { TRANSIT, type Lang } from '../../data/site';
-import { LIVE_PRODUCTS, PRODUCTS, ORIGINS, PACK_FORMATS } from '../../data/products';
+import { LIVE_PRODUCTS, PRODUCTS, PACK_FORMATS } from '../../data/products';
 import { t, href, digits, type Key } from '../../data/i18n';
 import Arch from '../ornament/Arch.astro';
 import Shamsa from '../ornament/Shamsa.astro';
@@ -47,7 +47,6 @@ const counterDir = counterLang === 'fa' ? 'rtl' : 'ltr';
 const STATS: { n: number; k: Key }[] = [
   { n: PRODUCTS.length, k: 'stat.lines' },
   { n: LIVE_PRODUCTS.length, k: 'stat.live' },
-  { n: ORIGINS.length, k: 'stat.origins' },
   { n: TRANSIT.length, k: 'stat.markets' },
   { n: PACK_FORMATS.length, k: 'stat.formats' },
 ];
@@ -233,34 +232,6 @@ const FLOW: { t: Key; b: Key }[] = [
   </div>
 </section>
 
-<!-- ========================== ORIGINS =========================== -->
-<section class="sec origins">
-  <div class="origins-orn" aria-hidden="true"><Shamsa half rings={5} /></div>
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="label kick"><i aria-hidden="true"></i>{t('origins.k', lang)}</p>
-      <h2 class="display d2 sec-h">
-        {t('origins.h1', lang)}<br /><span class="acc">{t('origins.h2', lang)}</span>
-      </h2>
-      <p class="lede">{t('origins.p', lang)}</p>
-    </div>
-
-    <ul class="ogrid">
-      {
-        ORIGINS.map((o) => (
-          <li class="ocity">
-            <span class="oc display">{pick3(o.en, o.fa, o.ar)}</span>
-            <span class="of">
-              <bdi lang={counterLang} dir={counterDir}>{(lang === 'en' ? o.fa : o.en)}</bdi>
-            </span>
-            <span class="op">{pick3(o.pEn, o.pFa, o.pAr)}</span>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
-
 <!-- ========================== CLOSING =========================== -->
 <section class="close">
   <img
@@ -302,8 +273,7 @@ const FLOW: { t: Key; b: Key }[] = [
   /* Every band on the landing page carries ornament, and no two neighbours carry the
      same kind: medallion, tessellation, field, medallion again, rail. Each layer is
      -1 in its own stacking context, so content never has to out-specify it. */
-  .now,
-  .origins {
+  .now {
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -313,7 +283,7 @@ const FLOW: { t: Key; b: Key }[] = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    color: var(--gold);
+    color: var(--ornament);
     /* Quieter than the field on .do — this band already carries product photography,
        and a tessellation at full strength competes with it. */
     opacity: 0.075;
@@ -322,23 +292,6 @@ const FLOW: { t: Key; b: Key }[] = [
     mask-image: linear-gradient(180deg, transparent 0%, #000 26%, rgba(0, 0, 0, 0.4) 74%, transparent 100%);
   }
 
-  .origins-orn {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-end: 0;
-    z-index: -1;
-    block-size: min(880px, 112%);
-    aspect-ratio: 1 / 2;
-    /* The hero anchors its half-medallion to the inline start; this one answers from
-       the opposite edge, so the page reads as a spread rather than a repeat. The
-       mirror is what puts the flat side against that edge. */
-    transform: translateY(-50%) scaleX(-1);
-    color: var(--gold);
-    opacity: 0.15;
-    pointer-events: none;
-    -webkit-mask-image: radial-gradient(112% 86% at 0% 50%, #000 0%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 96%);
-    mask-image: radial-gradient(112% 86% at 0% 50%, #000 0%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 96%);
-  }
 
 
   .sec-head {
@@ -365,7 +318,7 @@ const FLOW: { t: Key; b: Key }[] = [
   /* the board's line element — tapering rule, arrow terminals, centre rosette */
   .grule {
     margin-block-start: 26px;
-    color: var(--gold);
+    color: var(--ornament);
   }
 
   /* the counter-script echo — Persian under English, Latin under Persian */
@@ -375,7 +328,7 @@ const FLOW: { t: Key; b: Key }[] = [
     font-size: clamp(1.25rem, 2.4vw, 1.8rem);
     font-weight: 400;
     line-height: 1.8;
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
   :global(html[lang='fa']) .counter {
     font-family: var(--font-display);
@@ -439,7 +392,7 @@ const FLOW: { t: Key; b: Key }[] = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--obsidian-deep);
+    background: var(--ground);
     transform: scaleY(0);
     transform-origin: bottom;
     transition: transform 0.45s var(--snap);
@@ -448,11 +401,11 @@ const FLOW: { t: Key; b: Key }[] = [
     transform: scaleY(1);
   }
   .btn:hover {
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   .btn.ghost {
     background: transparent;
-    color: var(--ivory);
+    color: var(--text);
   }
   .btn.ghost::after {
     background: var(--gold);
@@ -470,7 +423,7 @@ const FLOW: { t: Key; b: Key }[] = [
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent-strong);
     padding-block: 6px;
     border-block-end: 1px solid var(--hair-strong);
     transition: color 0.3s var(--snap), border-color 0.3s var(--snap);
@@ -488,8 +441,8 @@ const FLOW: { t: Key; b: Key }[] = [
     text-transform: none;
   }
   .inline-cta:hover {
-    color: var(--gold-pale);
-    border-block-end-color: var(--gold);
+    color: var(--accent-strong);
+    border-block-end-color: var(--accent-strong);
   }
   .inline-cta svg {
     inline-size: 15px;
@@ -530,7 +483,7 @@ const FLOW: { t: Key; b: Key }[] = [
     aspect-ratio: 1 / 2;
     transform: translateY(-50%);
     transform-origin: center;
-    color: var(--gold);
+    color: var(--ornament);
     /* 0.22 is the ceiling, measured off the render rather than the token: the
        brightest ornament pixel then sits at #302718, where the 11px gold kicker
        label still measures 4.60:1. At 0.24 it drops to 4.47:1 and fails AA. */
@@ -603,7 +556,7 @@ const FLOW: { t: Key; b: Key }[] = [
     inset-block-end: 0;
     inset-inline: 0;
     z-index: -1;
-    color: var(--gold);
+    color: var(--ornament);
     /* No text sits over this one — it runs under the figures, not behind them — so it
        can carry more than the 0.22 ceiling the medallion answers to. */
     opacity: 0.28;
@@ -651,7 +604,7 @@ const FLOW: { t: Key; b: Key }[] = [
     font-size: clamp(2.3rem, 4vw, 3.1rem);
     font-weight: 600;
     line-height: 1;
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
   :global(html[lang='fa']) .sv {
     font-family: var(--font-fa);
@@ -712,7 +665,7 @@ const FLOW: { t: Key; b: Key }[] = [
   }
   .line:hover {
     border-color: var(--hair-strong);
-    background: var(--obsidian-900);
+    background: var(--surface-raised);
   }
   .line:hover :global(.pg-arch-in img) {
     transform: scale(1.045);
@@ -721,7 +674,9 @@ const FLOW: { t: Key; b: Key }[] = [
   .line-fig {
     display: block;
     position: relative;
-    inline-size: min(190px, 60%);
+    /* Below 560px the card is a single column, so the picture takes the whole of it.
+       At and above 560px the grid hands it a 190px column and 100% fills that. */
+    inline-size: 100%;
   }
   @media (min-width: 560px) {
     .line-fig {
@@ -757,7 +712,7 @@ const FLOW: { t: Key; b: Key }[] = [
     transition: color 0.3s var(--snap);
   }
   .line-name a:hover {
-    color: var(--gold-light);
+    color: var(--accent-strong);
   }
 
   .kv {
@@ -819,6 +774,7 @@ const FLOW: { t: Key; b: Key }[] = [
   .tag {
     display: inline-flex;
     align-items: center;
+    justify-self: start;
     gap: 8px;
     margin: 0;
     padding: 6px 12px;
@@ -829,7 +785,7 @@ const FLOW: { t: Key; b: Key }[] = [
     line-height: 1.4;
     text-transform: uppercase;
     border: 1px solid var(--gold);
-    color: var(--gold);
+    color: var(--accent-strong);
   }
   :global(html[lang='fa']) .tag {
     font-family: var(--font-fa);
@@ -866,7 +822,7 @@ const FLOW: { t: Key; b: Key }[] = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    color: var(--gold);
+    color: var(--ornament);
     opacity: 0.07;
     pointer-events: none;
     -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.35) 62%, transparent 100%);
@@ -910,7 +866,7 @@ const FLOW: { t: Key; b: Key }[] = [
     font-size: 12.5px;
     letter-spacing: 0.02em;
     line-height: 1.9;
-    color: var(--gold);
+    color: var(--accent-strong);
     grid-row: 1;
   }
   :global(html[lang='fa']) .fn {
@@ -924,7 +880,7 @@ const FLOW: { t: Key; b: Key }[] = [
     font-size: clamp(1.15rem, 1.7vw, 1.4rem);
     font-weight: 600;
     line-height: 1.35;
-    color: var(--ivory);
+    color: var(--text);
     grid-row: 1;
   }
   :global(html[lang='fa']) .ft {
@@ -944,88 +900,6 @@ const FLOW: { t: Key; b: Key }[] = [
     font-size: 14.5px;
     line-height: 1.8;
     color: var(--text-muted);
-  }
-
-  /* -------------------------------------------------------------- origins */
-  /* Each tile draws its own end and block-end hairline rather than the container
-     painting a 1px gap: a 1px-gap grid over a coloured container lights up any cell
-     the last row does not fill. */
-  .ogrid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    border-block-start: 1px solid var(--hair-ivory);
-    border-inline-start: 1px solid var(--hair-ivory);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  @media (min-width: 720px) {
-    .ogrid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  @media (min-width: 1080px) {
-    .ogrid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-  .ocity {
-    display: grid;
-    align-content: start;
-    justify-items: start;
-    gap: 4px;
-    background: var(--ground);
-    padding: clamp(20px, 2.2vw, 28px);
-    border-block-end: 1px solid var(--hair-ivory);
-    border-inline-end: 1px solid var(--hair-ivory);
-    transition: background-color 0.4s var(--snap);
-  }
-  .ocity:hover {
-    background: var(--surface);
-  }
-  .oc {
-    font-size: clamp(1.15rem, 1.8vw, 1.35rem);
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--ivory);
-  }
-  .of {
-    font-family: var(--font-fa);
-    font-size: 0.95rem;
-    line-height: 1.9;
-    color: var(--gold-light);
-  }
-  :global(html[lang='fa']) .of {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    line-height: 1.4;
-  }
-:global(html[lang='ar']) .of {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    line-height: 1.4;
-  }
-  .op {
-    margin-block-start: 10px;
-    font-family: var(--font-body);
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    line-height: 1.7;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  :global(html[lang='fa']) .op {
-    font-family: var(--font-fa);
-    font-size: 13px;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-:global(html[lang='ar']) .op {
-    font-family: var(--font-ar);
-    font-size: 13px;
-    letter-spacing: 0;
-    text-transform: none;
   }
 
   /* -------------------------------------------------------------- closing */
@@ -1052,9 +926,9 @@ const FLOW: { t: Key; b: Key }[] = [
     z-index: -1;
     background: linear-gradient(
       180deg,
-      rgba(12, 11, 10, 0.92) 0%,
-      rgba(12, 11, 10, 0.82) 50%,
-      rgba(12, 11, 10, 0.94) 100%
+      rgba(255, 255, 240, 0.94) 0%,
+      rgba(255, 255, 240, 0.88) 50%,
+      rgba(255, 255, 240, 0.95) 100%
     );
   }
   /* The vine band closes the page. It sits above the scrim so it reads as an
@@ -1064,7 +938,7 @@ const FLOW: { t: Key; b: Key }[] = [
     inset-block-start: 0;
     inset-inline: 0;
     z-index: 0;
-    color: var(--gold);
+    color: var(--ornament);
     opacity: 0.55;
     pointer-events: none;
   }
@@ -1075,7 +949,7 @@ const FLOW: { t: Key; b: Key }[] = [
   }
   .close-lede {
     margin-block-start: 22px;
-    color: var(--ivory);
+    color: var(--text);
   }
 
   /* -------------------------------------------------------------- touch */

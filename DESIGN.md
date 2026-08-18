@@ -91,11 +91,11 @@ Five colours from the client's board, with a stated usage ratio of 60 / 20 / 15 
 
 | Role | Hex | Notes |
 |---|---|---|
-| Obsidian Black | `#171513` | Ground, 60%. Deepest variant `#0C0B0A` for page background. |
-| Antique Gold | `#B08A4A` | Accent, 20%. **Text-safe on obsidian only.** |
-| Deep Burgundy | `#5A171B` | 15%. Accent text on light grounds, 9.9:1 on ivory. |
+| Obsidian Black | `#171513` | **The text colour**, 18.05:1 on the ground. Also the field behind the gold RAVOMA wordmark, which cannot sit on a light surface. |
+| Antique Gold | `#B08A4A` | Ornament and borders only. **3.16:1 on the ground — never text.** Where a gold-coloured word is wanted, `#7A4A1E` is the substitute at 7.37:1. |
+| Deep Burgundy | `#5A171B` | **The accent.** 13.23:1 on the ground — this is what carries accent text now that gold cannot. |
 | Saffron Red | `#8F1D24` | Fills and secondary accent. 6.5:1 on ivory. |
-| Ivory | `#FFFFF0` | The text colour on the dark ground. 19.49:1 on `#0C0B0A`. Changed from warm ivory `#E8DCC8` on 19 Aug 2026 at the client's direction. |
+| Ivory | `#FFFFF0` | **The page ground.** Changed from warm ivory `#E8DCC8` on 19 Aug 2026 at the client's direction, and the site inverted from a dark ground to a light one on the same day. |
 
 **Two constraints, both measured, both learned the hard way:**
 
@@ -145,6 +145,25 @@ an italic accent is wanted, set the phrase in gold at a lighter weight instead.
 - **Removed by decision:** a product photograph that tracked the cursor across the catalogue. It
   covered the rows being read. Do not reintroduce cursor-following imagery.
 - All motion respects `prefers-reduced-motion`.
+
+## Ground and semantics
+
+The site runs on a light ground. The brand palette keeps its names; only the semantic
+roles invert, and they live in `src/styles/tokens.css`:
+
+| Token | Value | Note |
+|---|---|---|
+| `--ground` | `#FFFFF0` | the page |
+| `--surface` | `#F8F4E6` | cards and alternating bands, warm rather than grey |
+| `--text` | `#171513` | 18.05:1 |
+| `--text-muted` | `#5C5449` | 7.38:1 |
+| `--text-dim` | `#6E665A` | 5.61:1, still real text |
+| `--accent` | `#5A171B` | burgundy |
+| `--accent-strong` | `#7A4A1E` | the light-ground gold, for anything that wants to read as gold |
+| `--ornament` | `#B08A4A` | linework only |
+
+Two things carry a dark field deliberately, because gold cannot sit on the light one:
+the RAVOMA wordmark's frame on the products page, and the favicon tile.
 
 ## Brand Marks
 

@@ -3,9 +3,10 @@
    Source of truth is DESIGN.md. Do not add a colour that is not in the brand
    palette, and do not introduce a border-radius scale.
 
-   Ground is obsidian. The client's tazhib ornament is fine gold linework drawn
-   for gold-on-black; on a light ground antique gold measures 2.36:1 and the
-   linework disappears. The dark ground is what makes the ornament legible.
+   Ground is #FFFFF0 at the client's direction. The brand palette below keeps its
+   names; only the semantic roles invert. The one rule that survives the flip and
+   must not be broken: antique gold measures 3.16:1 on this ground, so it is
+   ornament and never text. The accent role belongs to deep burgundy.
    ============================================================================ */
 
 :root {
@@ -31,19 +32,24 @@
   --ivory-2:        #DCCDB4;
   --ivory-3:        #C9B694;
 
-  /* -- semantic, dark ground ------------------------------------------- */
-  --ground:         var(--obsidian-deep);
-  --surface:        var(--obsidian);
-  --surface-raised: var(--obsidian-700);
-  --text:           var(--ivory);
-  --text-muted:     #B9AC97;   /* 8.3:1 on obsidian-deep — solid, not ivory@opacity */
-  --text-dim:       #93876F;   /* 5.1:1 on obsidian-deep */
-  --accent:         var(--gold);
-  --accent-strong:  var(--gold-light);
+  /* -- semantic, light ground ------------------------------------------ */
+  --ground:         var(--ivory);          /* #FFFFF0 */
+  --surface:        #F8F4E6;               /* card ground, warm rather than grey */
+  --surface-raised: #F2ECD9;
+  --text:           var(--obsidian);       /* 18.05:1 on the ground */
+  --text-muted:     #5C5449;               /* 7.38:1 — solid, never text@opacity */
+  --text-dim:       #6E665A;               /* 5.61:1, still real text */
+  --accent:         var(--burgundy);       /* 13.23:1. Gold is 3.16:1 and cannot do this. */
+  --accent-strong:  var(--gold-on-light);  /* 7.37:1 */
 
-  --hair:           rgba(176, 138, 74, .22);
-  --hair-strong:    rgba(176, 138, 74, .40);
-  --hair-ivory:     rgba(255, 255, 240, .14);
+  /* Ornament colour, named so it can be tuned in one place. Gold linework on a light
+     ground needs far more presence than it did on obsidian. */
+  --ornament:       var(--gold);
+
+  --hair:           rgba(176, 138, 74, .38);
+  --hair-strong:    rgba(176, 138, 74, .62);
+  /* Was ivory-on-dark; on a light ground a divider has to be the dark one. */
+  --hair-ivory:     rgba(23, 21, 19, .12);
 
   /* -- type ------------------------------------------------------------ */
   --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -94,7 +100,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -118,10 +124,10 @@ html[lang='ar'] body { font-family: var(--font-ar); line-height: 1.85; font-weig
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; color: inherit; }
-::selection { background: var(--gold); color: var(--obsidian); }
+::selection { background: var(--gold-pale); color: var(--obsidian); }
 
 :focus-visible {
-  outline: 2px solid var(--gold-light);
+  outline: 2px solid var(--burgundy);
   outline-offset: 3px;
 }
 
