@@ -1,0 +1,507 @@
+---
+/**
+ * Sticky site header.
+ *
+ * Two things here are ported from the shipped v3 page rather than reinvented, because
+ * both were bugs that took a while to find:
+ *
+ * 1. The mobile sheet's links are block-level. They are <a>, i.e. inline by default, and
+ *    without `display:block` (plus `display:grid` on the nav) they flow onto shared lines
+ *    and the menu renders as a paragraph of run-together words.
+ * 2. The header lockup, the language switch and the burger do not share one line below
+ *    ~400px at full size. The sub-line, then the wordmark tracking, then the wordmark
+ *    itself step down so the row still fits a 320px viewport.
+ *
+ * The language switch is two real links to two real URLs, not a JS toggle — hreflang,
+ * the sitemap and answer engines can only see the former.
+ */
+import { SITE, type Lang } from '../data/site';
+import { t, href } from '../data/i18n';
+
+interface Props {
+  lang: Lang;
+  /** Path WITHOUT the language prefix, e.g. '/products'. */
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+
+/** Company sub-line. Not in the shared T map — it belongs to the lockup, not the UI. */
+const SUBLINE = lang === 'fa' ? 'بازرگانی مواد غذایی' : 'FOODSTUFF TRADING L.L.C';
+
+const NAV = [
+  { to: '/', key: 'nav.home' },
+  { to: '/about', key: 'nav.about' },
+  { to: '/products', key: 'nav.products' },
+  { to: '/quality', key: 'nav.quality' },
+  { to: '/logistics', key: 'nav.logistics' },
+  { to: '/contact', key: 'nav.contact' },
+] as const;
+
+const clean = path === '' ? '/' : path;
+const isActive = (to: string) =>
+  to === '/' ? clean === '/' : clean === to || clean.startsWith(`${to}/`);
+---
+
+<div class="shell-head">
+  <header class="hdr" id="hdr">
+    <div class="wrap hdr-in">
+      <a class="lock" href={href('/', lang)} aria-label={t('a11y.home', lang)}>
+        <svg class="seal" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"></circle>
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-width="4.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M48 38 L48 86"></path>
+            <path d="M48 41 h9 a14 14 0 0 1 0 28 H48"></path>
+          </g>
+        </svg>
+        <span class="lock-t">
+          <b>PANAHANDEH</b>
+          <small>{SUBLINE}</small>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        {
+          NAV.map((item) => (
+            <a
+              href={href(item.to, lang)}
+              aria-current={isActive(item.to) ? 'page' : undefined}
+            >
+              {t(item.key, lang)}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="hdr-end">
+        <div class="lang" role="group" aria-label={t('a11y.lang', lang)}>
+          <a
+            href={href(path, 'en')}
+            hreflang="en"
+            lang="en"
+            aria-current={lang === 'en' ? 'page' : undefined}>EN</a
+          >
+          <a
+            href={href(path, 'fa')}
+            hreflang="fa"
+            lang="fa"
+            aria-current={lang === 'fa' ? 'page' : undefined}>فارسی</a
+          >
+        </div>
+
+        <a class="btn hdr-cta" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
+
+        <button
+          class="burger"
+          id="burger"
+          type="button"
+          aria-label={t('a11y.menu', lang)}
+          aria-expanded="false"
+          aria-controls="sheet"
+        >
+          <i></i><i></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="sheet" id="sheet" data-open="false">
+    <div class="wrap sheet-in">
+      <nav class="sheet-nav" aria-label={t('a11y.menu', lang)}>
+        {
+          NAV.map((item) => (
+            <a
+              href={href(item.to, lang)}
+              aria-current={isActive(item.to) ? 'page' : undefined}
+            >
+              {t(item.key, lang)}
+            </a>
+          ))
+        }
+      </nav>
+
+      <a class="btn sheet-cta" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
+
+      {/* A bare number is a run of neutrals and digits: inside an RTL paragraph it is
+          drawn back to front as "4567 123 50 971+" without an explicit LTR isolate. */}
+      <ul class="sheet-meta">
+        <li><a href={`tel:${SITE.phoneHref}`}><bdi dir="ltr">{SITE.phone}</bdi></a></li>
+        <li><a href={`mailto:${SITE.email}`}><bdi dir="ltr">{SITE.email}</bdi></a></li>
+        <li>{lang === 'fa' ? 'دبی، امارات متحده عربی' : 'Dubai, United Arab Emirates'}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* The wrapper is the sticky element so the sheet can anchor to a stable header
+     height. The blur lives on .hdr, not here — backdrop-filter creates a containing
+     block for fixed descendants and would trap the sheet inside the bar. */
+  .shell-head {
+    --hdr-h: 72px;
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 60;
+  }
+  @media (min-width: 1080px) {
+    .shell-head { --hdr-h: 84px; }
+  }
+
+  .hdr {
+    background: rgba(12, 11, 10, 0.88);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-block-end: 1px solid transparent;
+    transition: border-color 0.35s var(--snap), background-color 0.35s var(--snap);
+  }
+  .hdr.stuck,
+  /* with the sheet open the bar needs its keyline whether or not the page is scrolled,
+     otherwise there is a 1px transparent seam between bar and sheet */
+  .shell-head:has(.sheet[data-open='true']) .hdr {
+    background: rgba(12, 11, 10, 0.97);
+    border-block-end-color: var(--hair);
+  }
+
+  .hdr-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    block-size: var(--hdr-h);
+    min-inline-size: 0;
+  }
+
+  /* -- lockup ---------------------------------------------------------- */
+  .lock {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+  }
+  .seal {
+    inline-size: 34px;
+    block-size: 34px;
+    flex: none;
+    color: var(--gold);
+  }
+  .lock-t { min-inline-size: 0; }
+  .lock b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    line-height: 1;
+    color: var(--ivory);
+    white-space: nowrap;
+  }
+  .lock small {
+    display: block;
+    margin-block-start: 5px;
+    font-family: var(--font-body);
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    line-height: 1;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  :global(html[lang='fa']) .lock small {
+    font-family: var(--font-fa);
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  /* -- primary nav ----------------------------------------------------- */
+  .nav {
+    display: none;
+    gap: 26px;
+    font-size: 14px;
+    font-weight: 400;
+    min-inline-size: 0;
+  }
+  .nav a {
+    position: relative;
+    padding-block: 6px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color 0.3s var(--snap);
+  }
+  .nav a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.4s var(--snap);
+  }
+  .nav a:hover { color: var(--ivory); }
+  .nav a:hover::after { transform: scaleX(1); }
+  .nav a[aria-current='page'] { color: var(--ivory); }
+  .nav a[aria-current='page']::after { transform: scaleX(1); }
+
+  .hdr-end {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+  }
+
+  /* -- language switch ------------------------------------------------- */
+  .lang {
+    display: inline-flex;
+    border: 1px solid var(--hair-strong);
+    flex: none;
+  }
+  .lang a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 11px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: background-color 0.25s var(--snap), color 0.25s var(--snap);
+  }
+  .lang a:hover { color: var(--ivory); }
+  /* Solid gold, never gold at partial opacity: obsidian on gold is 5.71:1. */
+  .lang a[aria-current='page'] {
+    background: var(--gold);
+    color: var(--obsidian-deep);
+  }
+  .lang a[lang='fa'] {
+    font-family: var(--font-fa);
+    letter-spacing: 0;
+  }
+
+  /* -- CTA ------------------------------------------------------------- */
+  .btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 22px;
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ivory);
+    background: transparent;
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+    /* the label is a bare text node, so the wipe goes behind it with z-index:-1 and
+       `isolation` keeps that negative index inside the button */
+    isolation: isolate;
+  }
+  :global(html[lang='fa']) .btn {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+    z-index: -1;
+  }
+  .btn:hover::after { transform: scaleY(1); }
+  /* the wipe fills gold, so the label has to invert with it — ivory on gold is 2.4:1 */
+  .btn:hover { color: var(--obsidian-deep); }
+
+  @media (min-width: 1080px) {
+    .nav { display: flex; }
+    .hdr-cta { display: inline-flex; }
+  }
+  @media (min-width: 1200px) {
+    .nav { gap: 32px; }
+  }
+
+  /* -- burger ---------------------------------------------------------- */
+  .burger {
+    display: grid;
+    align-content: center;
+    gap: 6px;
+    background: none;
+    border: 0;
+    padding: 10px;
+    margin-inline-end: -10px;
+    cursor: pointer;
+    flex: none;
+  }
+  .burger i {
+    display: block;
+    inline-size: 22px;
+    block-size: 1.5px;
+    background: var(--ivory);
+    transition: transform 0.35s var(--ease);
+  }
+  .burger[aria-expanded='true'] i:first-child { transform: translateY(3.75px) rotate(45deg); }
+  .burger[aria-expanded='true'] i:last-child { transform: translateY(-3.75px) rotate(-45deg); }
+  @media (min-width: 1080px) {
+    .burger { display: none; }
+  }
+
+  /* -- mobile sheet ---------------------------------------------------- */
+  /* Starts below the sticky bar, scrolls independently, opaque so the page behind it
+     does not read through. visibility:hidden keeps the links out of the tab order. */
+  .sheet {
+    position: fixed;
+    /* +1px clears the bar's own bottom hairline; without it the two rules stack. */
+    inset-block-start: calc(var(--hdr-h) + 1px);
+    inset-inline: 0;
+    block-size: calc(100dvh - var(--hdr-h) - 1px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    background: var(--obsidian-deep);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.36s var(--ease), transform 0.36s var(--ease),
+      visibility 0s linear 0.36s;
+  }
+  .sheet[data-open='true'] {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.36s var(--ease), transform 0.36s var(--ease), visibility 0s;
+  }
+  @media (min-width: 1080px) {
+    .sheet { display: none; }
+  }
+  .sheet-in { padding-block: 22px 48px; }
+
+  /* THE bug that has bitten three times: these are inline elements. Without both of
+     these the sheet renders as one run-together paragraph, not a menu. */
+  .sheet-nav { display: grid; }
+  .sheet-nav a {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.65rem, 6.6vw, 2.3rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ivory);
+    padding-block: 12px;
+    border-block-end: 1px solid var(--hair-ivory);
+  }
+  :global(html[lang='fa']) .sheet-nav a {
+    font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1.35rem, 5.6vw, 1.9rem);
+  }
+  .sheet-nav a[aria-current='page'] { color: var(--gold); }
+
+  .sheet-cta {
+    display: inline-flex;
+    margin-block-start: 30px;
+    inline-size: 100%;
+    padding-block: 16px;
+  }
+
+  .sheet-meta {
+    list-style: none;
+    margin: 30px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .sheet-meta a:hover { color: var(--gold-light); }
+
+  /* -- touch ----------------------------------------------------------- */
+  @media (pointer: coarse) {
+    .lang a { min-block-size: 44px; padding-inline: 13px; }
+    .burger { min-block-size: 44px; min-inline-size: 44px; padding: 14px 11px; margin-inline-end: -11px; }
+    .lock { min-block-size: 44px; }
+    .sheet-nav a { min-block-size: 44px; }
+    .sheet-meta a { display: inline-flex; align-items: center; min-block-size: 44px; }
+    .sheet-meta { gap: 0; }
+  }
+
+  /* -- narrow widths ---------------------------------------------------- */
+  /* Measured at 320: seal 34 + gap 12 + wordmark 172 + controls 152 + gutter 40 runs
+     over by ~90px, so the lockup steps down until the row fits exactly. */
+  @media (max-width: 460px) {
+    .lock small { display: none; }
+    .lock b { font-size: 18px; }
+    .hdr-in { gap: 10px; }
+  }
+  @media (max-width: 400px) {
+    .shell-head { --hdr-h: 66px; }
+    .lock b { font-size: 16px; letter-spacing: 0.05em; }
+    .seal { inline-size: 28px; block-size: 28px; }
+    .lock { gap: 9px; }
+    .hdr-end { gap: 8px; }
+    .lang a { padding-inline: 8px; font-size: 10.5px; letter-spacing: 0.08em; }
+  }
+  @media (max-width: 345px) {
+    .lock b { font-size: 14.5px; letter-spacing: 0.02em; }
+    .lang a { padding-inline: 6px; font-size: 10px; }
+  }
+  @media (pointer: coarse) and (max-width: 400px) {
+    .lang a { padding-inline: 8px; }
+  }
+  @media (pointer: coarse) and (max-width: 345px) {
+    .lang a { padding-inline: 5px; font-size: 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheet { transition: none; }
+  }
+</style>
+
+<script>
+  (() => {
+    const hdr = document.getElementById('hdr');
+    const burger = document.getElementById('burger');
+    const sheet = document.getElementById('sheet');
+    if (!hdr || !burger || !sheet) return;
+
+    const onScroll = () => hdr.classList.toggle('stuck', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    const set = (open: boolean) => {
+      sheet.dataset.open = String(open);
+      burger.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+    };
+
+    burger.addEventListener('click', () => set(sheet.dataset.open !== 'true'));
+    sheet.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => set(false)));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sheet.dataset.open === 'true') {
+        set(false);
+        burger.focus();
+      }
+    });
+    // The sheet is display:none above 1080; leaving the scroll lock on would freeze
+    // the page for anyone who opened the menu and then widened the window.
+    matchMedia('(min-width: 1080px)').addEventListener('change', (e) => {
+      if (e.matches) set(false);
+    });
+  })();
+</script>

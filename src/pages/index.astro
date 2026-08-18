@@ -1,0 +1,18 @@
+---
+/** English home. A wrapper — all the markup lives in components/pages/Home.astro. */
+import Base from '../layouts/Base.astro';
+import Home from '../components/pages/Home.astro';
+import { t } from '../data/i18n';
+
+const lang = 'en' as const;
+---
+
+<Base
+  title={t('meta.home.title', lang)}
+  description={t('meta.home.desc', lang)}
+  lang={lang}
+  path="/"
+  image="/assets/saffron.webp"
+>
+  <Home lang={lang} />
+</Base>

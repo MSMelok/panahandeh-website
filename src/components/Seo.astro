@@ -1,0 +1,119 @@
+---
+/**
+ * SEO + GEO head block.
+ *
+ * SEO is about being found. GEO — Generative Engine Optimisation — is about being
+ * *citable*: an AI answer engine reading this page should be able to state a fact
+ * about Panahandeh and attribute it. That wants unambiguous entity definitions,
+ * explicit structured data, and prose that states facts plainly rather than
+ * gesturing at them. Both are served by the same thing: say true things clearly,
+ * in HTML, on the server.
+ */
+import { SITE, type Lang } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** Path without language prefix, e.g. '/products/saffron'. */
+  path: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product';
+  /** Extra JSON-LD graph nodes for this page. */
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title, description, lang, path,
+  image = '/assets/pack-gift.webp',
+  type = 'website',
+  schema = [],
+  noindex = false,
+} = Astro.props;
+
+const base = SITE.url.replace(/\/$/, '');
+const clean = path === '/' ? '' : path.replace(/\/$/, '');
+const canonical = lang === 'fa' ? `${base}/fa${clean}` : `${base}${clean || '/'}`;
+const altEn = `${base}${clean || '/'}`;
+const altFa = `${base}/fa${clean}`;
+const ogImage = image.startsWith('http') ? image : `${base}${image}`;
+const fullTitle = `${title} | ${SITE.legalName}`;
+
+/* The Organization node is the anchor for every other entity on the site. Answer
+   engines resolve "who is Panahandeh" from this, so it carries the disambiguating
+   detail: legal name, the brand it owns, where it operates, what it deals in. */
+const organization = {
+  '@type': 'Organization',
+  '@id': `${base}/#organization`,
+  name: SITE.legalName,
+  alternateName: SITE.shortName,
+  url: base,
+  email: SITE.email,
+  telephone: SITE.phone,
+  description:
+    'Panahandeh Foodstuff Trading L.L.C is a Dubai-based trading house that sources saffron, rice, pulses, beans and spices at origin and exports them through Jebel Ali under its own RAVOMA brand.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.address.locality,
+    addressCountry: SITE.address.country,
+  },
+  areaServed: [
+    'GCC', 'South Asia', 'East Africa', 'Europe', 'United Kingdom', 'North America',
+  ],
+  brand: { '@type': 'Brand', name: SITE.brand, slogan: SITE.tagline },
+  knowsLanguage: ['en', 'fa'],
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${base}/#website`,
+  url: base,
+  name: SITE.legalName,
+  publisher: { '@id': `${base}/#organization` },
+  inLanguage: lang === 'fa' ? 'fa-IR' : 'en-AE',
+};
+
+const graph = { '@context': 'https://schema.org', '@graph': [organization, website, ...schema] };
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<link rel="alternate" hreflang="en" href={altEn} />
+<link rel="alternate" hreflang="fa" href={altFa} />
+<link rel="alternate" hreflang="x-default" href={altEn} />
+
+<meta property="og:type" content={type === 'product' ? 'website' : type} />
+<meta property="og:site_name" content={SITE.legalName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={lang === 'fa' ? 'fa_IR' : 'en_AE'} />
+<meta property="og:locale:alternate" content={lang === 'fa' ? 'en_AE' : 'fa_IR'} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<meta name="theme-color" content="#0C0B0A" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700&family=Gulzar&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />

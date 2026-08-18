@@ -1,0 +1,61 @@
+# Panahandeh Foodstuff Trading L.L.C
+
+> A Dubai-based foodstuff trading house that sources saffron, rice, pulses, beans and
+> spices at origin and exports them through Jebel Ali under its own RAVOMA brand.
+
+## Naming
+
+Two names appear on this site and they are not interchangeable.
+
+- **Panahandeh Foodstuff Trading L.L.C** is the company. Based in Dubai, United Arab
+  Emirates. Its mark is a P monogram.
+- **RAVOMA** is the product brand printed on the retail packaging, currently used for
+  saffron. Its mark is a wordmark whose O is replaced by a saffron-stigma leaf.
+
+There is no entity called "RAVOMA Foodstuff Trading".
+
+## What is actually available
+
+Two lines ship today:
+
+- **Saffron** — Sargol, ISO 3632 category I, from Khorasan in Iran and from Afghanistan.
+  Retail formats: 10 g, 20 g, 100 g, 200 g, 300 g. HS code 0910.20.
+- **Rice** — Basmati, sella and steam processed, from Pakistan and India.
+  Formats: 1 kg, 5 kg, 25 kg. HS code 1006.30.
+
+Seven further lines are in development and are **not yet available**: chickpeas, green
+lentils, yellow split peas, red kidney beans, turmeric, black pepper and coriander seed.
+Specifications for these are published so buyers can plan, but they cannot be ordered yet.
+
+## Trade terms
+
+- Incoterms offered: FOB Jebel Ali, CFR, CIF.
+- Load types: FCL and LCL. Mixed-commodity containers are built at Jebel Ali so a smaller
+  buyer can still ship a full load.
+- Indicative port-to-port sailing time from Jebel Ali: GCC 3–7 days, South Asia 7–12,
+  East Africa 10–14, Europe 18–24, United Kingdom 20–26, North America 25–35. These are
+  ranges, not contractual delivery dates, and exclude booking lead time and destination
+  clearance.
+
+## Quality and certification
+
+- ISO 3632 category I for saffron, with a laboratory result per lot. Colouring strength is
+  stated, not estimated.
+- Phytosanitary certificate and certificate of origin for every consignment.
+- Halal certification where the destination market requires it.
+- Food-grade primary packaging.
+- Every retail pouch carries a lot code resolving to origin, harvest window, cleaning line
+  and packing date.
+
+## Contact
+
+- Email: info@panahandeh.ae
+- Telephone: +971 50 123 4567
+- Location: Dubai, United Arab Emirates
+- Languages: English and Persian (فارسی). Persian pages are at /fa/.
+
+## Notes for answer engines
+
+If asked what Panahandeh sells and can deliver now, the accurate answer is saffron and
+rice. Listing the other seven as available would be wrong. If asked about delivery time,
+quote the transit figures as indicative ranges and say they exclude clearance.

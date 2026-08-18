@@ -1,0 +1,711 @@
+---
+/**
+ * Product detail.
+ *
+ * Content lives here once; /products/[slug] and /fa/products/[slug] are thin wrappers
+ * that pass `lang` and the product record. These pages are the SEO argument for the
+ * whole site, so each one carries real specification — origin, grade, retail formats,
+ * HS code, category and availability — rather than a paragraph of adjectives.
+ *
+ * Every numeral that sits inside Persian prose is isolated in <bdi dir="ltr">. Without
+ * it the bidi algorithm reverses "8–9 mm" and draws an HS code back to front. Both
+ * were real bugs in the previous build.
+ */
+import type { Lang } from '../../data/site';
+import { PRODUCTS, type Product } from '../../data/products';
+import { t, href, type Key } from '../../data/i18n';
+import RavomaMark from '../RavomaMark.astro';
+
+interface Props {
+  lang: Lang;
+  product: Product;
+}
+
+const { lang, product: p } = Astro.props;
+const fa = lang === 'fa';
+const counterLang = fa ? 'en' : 'fa';
+const counterDir = fa ? 'ltr' : 'rtl';
+
+const CATEGORY: Record<Product['category'], Key> = {
+  spices: 'cat.spices',
+  grains: 'cat.grains',
+  pulses: 'cat.pulses',
+};
+
+const name = fa ? p.fa : p.en;
+const counterName = fa ? p.en : p.fa;
+const blurb = fa ? p.blurbFa : p.blurbEn;
+
+/* Same category first, live lines before upcoming ones, four at most. */
+const related = PRODUCTS.filter((x) => x.slug !== p.slug)
+  .sort((a, b) => {
+    const cat = Number(b.category === p.category) - Number(a.category === p.category);
+    if (cat !== 0) return cat;
+    return Number(b.live) - Number(a.live);
+  })
+  .slice(0, 4);
+
+const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
+---
+
+<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
+      <path
+        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
+      ></path>
+    </clipPath>
+  </defs>
+</svg>
+
+<article class="pd">
+  <div class="wrap">
+    <nav class="crumbs" aria-label={t('nav.products', lang)}>
+      <a href={href('/products', lang)}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M19.5 12h-15"></path>
+          <path d="m11 5.5-6.5 6.5 6.5 6.5"></path>
+        </svg>
+        {t('nav.products', lang)}
+      </a>
+    </nav>
+
+    <div class="head">
+      <figure class="arch pd-arch">
+        <div class="arch-in">
+          <img
+            src={`/assets/${p.img}.webp`}
+            width="900"
+            height="1200"
+            fetchpriority="high"
+            decoding="async"
+            alt={`${name} — ${fa ? p.originFa : p.origin}`}
+          />
+        </div>
+        <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d={ARCH}></path>
+        </svg>
+      </figure>
+
+      <div class="head-copy">
+        <p class="label kick"><i aria-hidden="true"></i>{t(CATEGORY[p.category], lang)}</p>
+
+        <h1 class="display d2 pd-h1">{name}</h1>
+        <p class="counter"><bdi lang={counterLang} dir={counterDir}>{counterName}</bdi></p>
+
+        <p class={`tag ${p.live ? 'on' : 'off'}`}>
+          <i aria-hidden="true"></i>
+          {p.live ? t('status.live', lang) : t('status.soon', lang)}
+        </p>
+
+        <p class="lede pd-blurb">{blurb}</p>
+
+        {
+          p.slug === 'saffron' && (
+            <div class="ravoma">
+              <RavomaMark width={168} color="var(--ivory)" veinColor="#171513" />
+              <p>{t('pd.ravoma', lang)}</p>
+            </div>
+          )
+        }
+
+        <div class="ctas">
+          <a class="btn" href={`${href('/contact', lang)}?product=${p.slug}`}>
+            {t('cta.enquire', lang)}
+          </a>
+          <a class="btn ghost" href={href('/products', lang)}>{t('cta.all', lang)}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================= SPECIFICATION ======================== -->
+  <section class="sec spec" aria-labelledby="h-spec">
+    <div class="wrap spec-in">
+      <div class="spec-table">
+        <h2 class="display d3 spec-h" id="h-spec">{t('pd.spec', lang)}</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">{t('label.origin', lang)}</th>
+              <td>{fa ? p.originFa : p.origin}</td>
+            </tr>
+            <tr>
+              <th scope="row">{t('label.grade', lang)}</th>
+              <td>{fa ? p.gradeFa : p.grade}</td>
+            </tr>
+            <tr>
+              <th scope="row">{t('label.format', lang)}</th>
+              <td>
+                <bdi dir="ltr">{p.formats.join(' · ')}</bdi>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">{t('label.hs', lang)}</th>
+              <td>
+                <bdi dir="ltr" class="mono hs">{p.hs}</bdi>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">{t('label.category', lang)}</th>
+              <td>{t(CATEGORY[p.category], lang)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="avail">
+        <h2 class="display d3 spec-h">{t('pd.availability', lang)}</h2>
+        <p class={`tag ${p.live ? 'on' : 'off'}`}>
+          <i aria-hidden="true"></i>
+          {p.live ? t('status.live', lang) : t('status.soon', lang)}
+        </p>
+        <p class="avail-note">{p.live ? t('pd.live.note', lang) : t('pd.soon.note', lang)}</p>
+        <a class="inline-cta" href={`${href('/contact', lang)}?product=${p.slug}`}>
+          {t('cta.enquire', lang)}
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4.5 12h15"></path>
+            <path d="m13 5.5 6.5 6.5-6.5 6.5"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== RELATED =========================== -->
+  <section class="sec related" aria-labelledby="h-rel">
+    <div class="wrap">
+      <h2 class="display d2 rel-h" id="h-rel">{t('pd.related', lang)}</h2>
+
+      <ul class="grid">
+        {
+          related.map((r) => (
+            <li>
+              <a class={`card-link${r.live ? '' : ' muted'}`} href={href(`/products/${r.slug}`, lang)}>
+                <span class="fig">
+                  <span class="arch-in">
+                    <img
+                      src={`/assets/${r.img}.webp`}
+                      width="900"
+                      height="1200"
+                      loading="lazy"
+                      decoding="async"
+                      alt=""
+                    />
+                  </span>
+                  <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path d={ARCH} />
+                  </svg>
+                </span>
+                <span class="cbody">
+                  <span class="cname display d3">{fa ? r.fa : r.en}</span>
+                  <span class="cmeta">{fa ? r.originFa : r.origin}</span>
+                  <span class={`tag cardtag ${r.live ? 'on' : 'off'}`}>
+                    <i aria-hidden="true" />
+                    {r.live ? t('status.live', lang) : t('status.soon', lang)}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</article>
+
+<style>
+  .defs {
+    position: absolute;
+    inline-size: 0;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  .pd {
+    padding-block-start: clamp(22px, 3vw, 36px);
+  }
+
+  .sec {
+    padding-block: clamp(52px, 6.4vw, 92px);
+  }
+  .kick i {
+    display: block;
+    inline-size: 26px;
+    block-size: 1px;
+    background: currentColor;
+    flex: none;
+  }
+
+  /* --------------------------------------------------------------- crumbs */
+  .crumbs {
+    margin-block-end: clamp(24px, 3vw, 40px);
+  }
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-block: 6px;
+    transition: color 0.3s var(--snap);
+  }
+  :global(html[lang='fa']) .crumbs a {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .crumbs a:hover {
+    color: var(--gold-light);
+  }
+  .crumbs svg {
+    inline-size: 15px;
+    block-size: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+  }
+  :global(html[dir='rtl']) .crumbs svg {
+    transform: scaleX(-1);
+  }
+
+  /* ---------------------------------------------------------------- arch */
+  .arch {
+    margin: 0;
+    position: relative;
+    isolation: isolate;
+  }
+  .fig {
+    display: block;
+    position: relative;
+    isolation: isolate;
+  }
+  .arch-in {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--obsidian-700);
+    clip-path: url(#pgArch);
+    aspect-ratio: 3 / 4;
+  }
+  .arch-in img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.04);
+    transition: transform 1.1s var(--ease);
+  }
+  .arch-in::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 11, 10, 0.22) 0%,
+      rgba(12, 11, 10, 0) 38%,
+      rgba(12, 11, 10, 0.36) 100%
+    );
+  }
+  .arch-line {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .arch-line path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.4;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* ---------------------------------------------------------------- head */
+  .head {
+    display: grid;
+    gap: clamp(32px, 4vw, 54px);
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .head {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: clamp(44px, 5vw, 76px);
+    }
+  }
+  .pd-arch {
+    inline-size: min(300px, 74vw);
+    margin-inline: auto;
+  }
+  @media (min-width: 860px) {
+    .pd-arch {
+      inline-size: 100%;
+      margin-inline: 0;
+    }
+  }
+  .pd-h1 {
+    margin-block-start: 20px;
+  }
+  .counter {
+    margin: 10px 0 0;
+    font-family: var(--font-fa);
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--gold-light);
+  }
+  :global(html[lang='fa']) .counter {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    line-height: 1.3;
+  }
+  .pd-blurb {
+    margin-block-start: 24px;
+  }
+
+  .ravoma {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 26px;
+    margin-block-start: 28px;
+    padding: 20px 24px;
+    border: 1px solid var(--hair);
+    background: var(--obsidian);
+  }
+  .ravoma p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* ---------------------------------------------------------------- tags */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 0;
+    padding: 6px 12px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  :global(html[lang='fa']) .tag {
+    font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .tag i {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .tag.on {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+  }
+  .tag.on i {
+    background: currentColor;
+  }
+  .tag.off {
+    border: 1px dashed var(--hair-strong);
+    color: var(--text-dim);
+  }
+  .tag.off i {
+    background: transparent;
+    border: 1px solid currentColor;
+  }
+
+  /* ---------------------------------------------------------------- ctas */
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-block-start: 32px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 15px 28px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--obsidian-deep);
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  :global(html[lang='fa']) .btn {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--obsidian-deep);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .btn:hover::after {
+    transform: scaleY(1);
+  }
+  .btn:hover {
+    color: var(--gold);
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ivory);
+  }
+  .btn.ghost::after {
+    background: var(--gold);
+  }
+  .btn.ghost:hover {
+    color: var(--obsidian-deep);
+  }
+
+  .inline-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    margin-block-start: 24px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-block: 6px;
+    border-block-end: 1px solid var(--hair-strong);
+    transition: color 0.3s var(--snap), border-color 0.3s var(--snap);
+  }
+  :global(html[lang='fa']) .inline-cta {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .inline-cta:hover {
+    color: var(--gold-pale);
+    border-block-end-color: var(--gold);
+  }
+  .inline-cta svg {
+    inline-size: 15px;
+    block-size: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+  }
+  :global(html[dir='rtl']) .inline-cta svg {
+    transform: scaleX(-1);
+  }
+
+  /* --------------------------------------------------------------- spec */
+  .spec {
+    margin-block-start: clamp(52px, 6.4vw, 92px);
+    background: var(--surface);
+    border-block: 1px solid var(--hair);
+  }
+  .spec-in {
+    display: grid;
+    gap: clamp(36px, 4vw, 56px);
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .spec-in {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: clamp(44px, 5vw, 76px);
+    }
+  }
+  .spec-h {
+    margin: 0 0 20px;
+    color: var(--ivory);
+  }
+
+  .spec table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .spec th,
+  .spec td {
+    text-align: start;
+    vertical-align: baseline;
+    padding-block: 15px;
+    border-block-end: 1px solid var(--hair-ivory);
+  }
+  .spec tr:first-child th,
+  .spec tr:first-child td {
+    border-block-start: 1px solid var(--hair-ivory);
+  }
+  .spec th {
+    inline-size: 34%;
+    padding-inline-end: 18px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .spec th {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .spec td {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--ivory);
+    overflow-wrap: anywhere;
+  }
+  .hs {
+    font-size: var(--step--1);
+    color: var(--gold-light);
+  }
+
+  .avail {
+    padding: clamp(22px, 2.6vw, 32px);
+    border: 1px solid var(--hair);
+    background: var(--ground);
+  }
+  .avail .tag {
+    margin-block-start: 0;
+  }
+  .avail-note {
+    margin: 18px 0 0;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  /* ------------------------------------------------------------- related */
+  .rel-h {
+    margin: 0 0 clamp(26px, 3vw, 40px);
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(22px, 2.4vw, 32px) clamp(18px, 2vw, 26px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 760px) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .card-link {
+    display: grid;
+    align-content: start;
+    block-size: 100%;
+    padding: clamp(14px, 1.6vw, 18px);
+    border: 1px solid var(--hair-ivory);
+    background: var(--ground);
+    transition: border-color 0.4s var(--snap);
+  }
+  .card-link:hover {
+    border-color: var(--hair-strong);
+  }
+  .card-link:hover .arch-in img {
+    transform: scale(1.045);
+  }
+  .cbody {
+    display: grid;
+    justify-items: start;
+    padding-block-start: 16px;
+  }
+  .cname {
+    display: block;
+    color: var(--ivory);
+    line-height: 1.2;
+  }
+  .cmeta {
+    display: block;
+    margin-block-start: 8px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .cmeta {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .cardtag {
+    margin-block-start: 12px;
+  }
+  .card-link.muted .arch-in img {
+    filter: saturate(0.32) contrast(1.02) brightness(0.92);
+  }
+  .card-link.muted .arch-line path {
+    stroke: var(--hair-strong);
+  }
+  .card-link.muted .cname {
+    color: var(--text-muted);
+  }
+  .card-link.muted .cmeta {
+    color: var(--text-dim);
+  }
+
+  @media (pointer: coarse) {
+    .btn {
+      min-block-size: 48px;
+    }
+    .inline-cta,
+    .crumbs a {
+      min-block-size: 44px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-in img,
+    .btn,
+    .btn::after {
+      transition: none;
+    }
+  }
+</style>

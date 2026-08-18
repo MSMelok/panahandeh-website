@@ -2,17 +2,27 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
-      "source": "/(assets|brand)/(.*)",
+      "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
       ]
     }
+  ],
+  "redirects": [
+    { "source": "/v1", "destination": "/", "permanent": false },
+    { "source": "/v1/(.*)", "destination": "/", "permanent": false },
+    { "source": "/v2", "destination": "/", "permanent": false },
+    { "source": "/v2/(.*)", "destination": "/", "permanent": false },
+    { "source": "/v3", "destination": "/", "permanent": false },
+    { "source": "/v3/(.*)", "destination": "/", "permanent": false }
   ]
 }

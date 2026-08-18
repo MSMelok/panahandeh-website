@@ -1,0 +1,182 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>probe</title>
+<style>body{margin:0;font:12px monospace} iframe{border:0;display:block}</style>
+</head><body>
+<pre id="out">pending</pre>
+<iframe id="fr" width="320" height="900"></iframe>
+<script>
+const WIDTHS = [320, 360, 390, 414, 768, 1024, 1280, 1440];
+const PAGES = ['/zz-shell', '/fa/zz-shell'];
+const fr = document.getElementById('fr');
+const out = document.getElementById('out');
+
+function load(url, w) {
+  return new Promise((res) => {
+    fr.style.width = w + 'px';
+    fr.width = w;
+    fr.onload = () => setTimeout(res, 500);
+    fr.src = url + '?w=' + w + '&r=' + Math.random();
+  });
+}
+
+function rectInfo(el) {
+  const r = el.getBoundingClientRect();
+  return { t: Math.round(r.top), l: Math.round(r.left), w: Math.round(r.width), h: Math.round(r.height) };
+}
+
+async function measure(w) {
+  const d = fr.contentDocument, win = fr.contentWindow;
+  try { await d.fonts.ready; } catch (e) {}
+  await new Promise((r) => setTimeout(r, 250));
+  const de = d.documentElement;
+  const offenders = [];
+  d.querySelectorAll('body *').forEach((el) => {
+    const cs = win.getComputedStyle(el);
+    if (cs.position === 'fixed' && cs.visibility === 'hidden') return;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) return;
+    if (r.right > w + 1 || r.left < -1) {
+      offenders.push(
+        el.tagName.toLowerCase() +
+          (el.className ? '.' + String(el.className).trim().split(/\s+/).join('.').slice(0, 50) : '') +
+          ' [' + Math.round(r.left) + '→' + Math.round(r.right) + ']'
+      );
+    }
+  });
+  const hdr = d.querySelector('.hdr');
+  const hdrIn = d.querySelector('.hdr-in');
+  const ftr = d.querySelector('footer');
+  return {
+    w,
+    innerW: win.innerWidth,
+    docScrollW: de.scrollWidth,
+    bodyScrollW: d.body.scrollWidth,
+    hOverflow: de.scrollWidth - win.innerWidth,
+    hdrOverflow: hdr ? hdr.scrollWidth - hdr.clientWidth : null,
+    hdrInOverflow: hdrIn ? hdrIn.scrollWidth - hdrIn.clientWidth : null,
+    ftrOverflow: ftr ? ftr.scrollWidth - ftr.clientWidth : null,
+    offenders: offenders.slice(0, 6),
+  };
+}
+
+async function sheetCheck(url, w) {
+  await load(url, w);
+  const d = fr.contentDocument, win = fr.contentWindow;
+  try { await d.fonts.ready; } catch (e) {}
+  const burger = d.getElementById('burger');
+  if (!burger) return { err: 'no burger' };
+  // Kill the transition first: under --virtual-time-budget the open transition never
+  // renders, and the measured rect would be the mid-flight -10px offset, not the rest
+  // position we actually care about.
+  const pre = d.getElementById('sheet');
+  pre.style.transition = 'none';
+  burger.click();
+  await new Promise((r) => setTimeout(r, 300));
+  const sheet = d.getElementById('sheet');
+  const links = [...sheet.querySelectorAll('.sheet-nav a')];
+  const cs = win.getComputedStyle(sheet);
+  const rects = links.map(rectInfo);
+  const tops = rects.map((r) => r.t);
+  const uniqueLines = new Set(tops).size;
+  const de = d.documentElement;
+  return {
+    w,
+    open: sheet.dataset.open,
+    visibility: cs.visibility,
+    overflowY: cs.overflowY,
+    sheetTop: Math.round(sheet.getBoundingClientRect().top),
+    hdrBottom: Math.round(d.querySelector('.hdr').getBoundingClientRect().bottom),
+    linkCount: links.length,
+    linesUsed: uniqueLines,
+    everyLinkOwnLine: uniqueLines === links.length,
+    linkDisplay: win.getComputedStyle(links[0]).display,
+    navDisplay: win.getComputedStyle(sheet.querySelector('.sheet-nav')).display,
+    minLinkH: Math.min(...rects.map((r) => r.h)),
+    scrollable: sheet.scrollHeight > sheet.clientHeight ? 'yes' : 'fits',
+    docOverflow: de.scrollWidth - win.innerWidth,
+    sheetLeft: Math.round(sheet.getBoundingClientRect().left),
+    sheetRight: Math.round(sheet.getBoundingClientRect().right),
+  };
+}
+
+/* chrome-headless-shell has no flag that flips `pointer: coarse`, so the coarse blocks
+   are verified by rewriting their media condition to `all` in the live stylesheets and
+   then measuring. This tests the authored declarations, not a guess about them. */
+function forceCoarse(d) {
+  const walk = (rules) => {
+    for (const rule of rules) {
+      if (rule.type === CSSRule.MEDIA_RULE) {
+        if (/coarse/.test(rule.conditionText || rule.media.mediaText)) {
+          try { rule.media.mediaText = 'all'; } catch (e) {}
+        }
+        walk(rule.cssRules);
+      } else if (rule.cssRules) {
+        walk(rule.cssRules);
+      }
+    }
+  };
+  for (const sheet of d.styleSheets) {
+    try { walk(sheet.cssRules); } catch (e) {}
+  }
+}
+
+async function touchCheck(url, w, coarse) {
+  await load(url, w);
+  const d = fr.contentDocument, win = fr.contentWindow;
+  try { await d.fonts.ready; } catch (e) {}
+  if (coarse) { forceCoarse(d); await new Promise((r) => setTimeout(r, 120)); }
+  const sheet = d.getElementById('sheet');
+  sheet.style.transition = 'none';
+  d.getElementById('burger').click();
+  await new Promise((r) => setTimeout(r, 200));
+  const h = (sel) => {
+    const el = d.querySelector(sel);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return Math.round(r.height);
+  };
+  const hdr = d.querySelector('.hdr');
+  const hdrIn = d.querySelector('.hdr-in');
+  return {
+    w,
+    forcedCoarse: Boolean(coarse),
+    docOverflow: d.documentElement.scrollWidth - win.innerWidth,
+    hdrOverflow: hdr.scrollWidth - hdr.clientWidth,
+    hdrInOverflow: hdrIn.scrollWidth - hdrIn.clientWidth,
+    hdrH: Math.round(hdr.getBoundingClientRect().height),
+    langLink: h('.lang a'),
+    burger: h('.burger'),
+    sheetLink: h('.sheet-nav a'),
+    sheetCta: h('.sheet-cta'),
+    footerLink: h('.fcol a'),
+    input: h('.field input'),
+    select: h('.field select'),
+    textarea: h('.field textarea'),
+    submit: h('.eq-send'),
+    skip: h('.skip'),
+  };
+}
+
+(async () => {
+  const report = { sweep: [], sheet: [], touch: [] };
+  for (const page of PAGES) {
+    for (const w of WIDTHS) {
+      await load(page, w);
+      const m = await measure(w);
+      m.page = page;
+      report.sweep.push(m);
+    }
+  }
+  for (const page of PAGES) {
+    report.sheet.push({ page, ...(await sheetCheck(page, 360)) });
+    report.sheet.push({ page, ...(await sheetCheck(page, 320)) });
+  }
+  for (const page of PAGES) {
+    for (const w of [320, 360, 390, 768]) {
+      report.touch.push({ page, ...(await touchCheck(page, w, true)) });
+    }
+  }
+  out.textContent = 'RESULT::' + JSON.stringify(report, null, 1);
+})();
+</script>
+</body></html>

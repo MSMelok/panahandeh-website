@@ -1,0 +1,740 @@
+---
+/**
+ * About — the trading house.
+ *
+ * Content lives here once; /about and /fa/about are thin wrappers that pass `lang`.
+ *
+ * The page answers one question a B2B buyer actually asks: who handles the goods
+ * between the field and my port, and at which points do they stop and check. That is
+ * the four-stage arc, then the five CONTROL_POINTS from site.ts.
+ *
+ * The company/brand distinction gets its own section rather than a footnote. Panahandeh
+ * is the legal entity that buys, ships and signs; RAVOMA is the brand printed on the
+ * retail packs. The two have been merged before and it caused a correction.
+ */
+import { CONTROL_POINTS, SITE, type Lang } from '../../data/site';
+import { PRODUCTS, LIVE_PRODUCTS, PACK_FORMATS } from '../../data/products';
+import { t, href, digits, type Key } from '../../data/i18n';
+import RavomaMark from '../RavomaMark.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const fa = lang === 'fa';
+const counterLang = fa ? 'en' : 'fa';
+const counterDir = fa ? 'ltr' : 'rtl';
+
+const FLOW: { t: Key; b: Key }[] = [
+  { t: 'flow.1', b: 'flow.1.b' },
+  { t: 'flow.2', b: 'flow.2.b' },
+  { t: 'flow.3', b: 'flow.3.b' },
+  { t: 'flow.4', b: 'flow.4.b' },
+];
+
+const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
+---
+
+<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
+      <path
+        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
+      ></path>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- ============================ INTRO ============================ -->
+<section class="intro">
+  <div class="wrap intro-in">
+    <div class="intro-copy">
+      <p class="label kick"><i aria-hidden="true"></i>{t('about.k', lang)}</p>
+      <h1 class="display d1 intro-h1">
+        {t('about.h1a', lang)}<br /><span class="acc">{t('about.h1b', lang)}</span>
+      </h1>
+      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="lede intro-lede">{t('about.lede', lang)}</p>
+    </div>
+
+    <figure class="arch intro-arch">
+      <div class="arch-in">
+        <img
+          src="/assets/about.webp"
+          width="1000"
+          height="1250"
+          fetchpriority="high"
+          decoding="async"
+          alt={fa ? 'کیسه‌های حبوبات درجه‌بندی‌شده در انبار خشک' : 'Jute sacks of graded pulses stacked in dry storage'}
+        />
+      </div>
+      <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d={ARCH}></path>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ STORY ============================ -->
+<section class="sec story">
+  <div class="wrap story-in">
+    <div class="story-copy">
+      <p class="body-p">{t('about.p1', lang)}</p>
+      <p class="body-p">{t('about.p2', lang)}</p>
+      <p class="body-p">{t('about.p3', lang)}</p>
+
+      <dl class="tally">
+        <div>
+          <dt>{t('stat.lines', lang)}</dt>
+          <dd>{digits(PRODUCTS.length, lang)}</dd>
+        </div>
+        <div>
+          <dt>{t('stat.live', lang)}</dt>
+          <dd>{digits(LIVE_PRODUCTS.length, lang)}</dd>
+        </div>
+        <div>
+          <dt>{t('stat.formats', lang)}</dt>
+          <dd>{digits(PACK_FORMATS.length, lang)}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <ol class="flow">
+      {
+        FLOW.map((f, i) => (
+          <li>
+            <span class="fn">{digits(String(i + 1).padStart(2, '0'), lang)}</span>
+            <span class="ft">{t(f.t, lang)}</span>
+            <span class="fb">{t(f.b, lang)}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= CONTROL POINTS ======================= -->
+<section class="sec points">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label kick"><i aria-hidden="true"></i>{t('about.control.k', lang)}</p>
+      <h2 class="display d2 sec-h">
+        {t('about.control.h1', lang)}<br /><span class="acc">{t('about.control.h2', lang)}</span>
+      </h2>
+    </div>
+
+    <ol class="cp">
+      {
+        CONTROL_POINTS.map((c, i) => (
+          <li>
+            <span class="cn">{digits(String(i + 1).padStart(2, '0'), lang)}</span>
+            <h3 class="display d3 ch">{fa ? c.fa : c.en}</h3>
+            <p class="cb">{fa ? c.faFixed : c.enFixed}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ==================== COMPANY AND BRAND ======================= -->
+<section class="sec brand">
+  <div class="wrap brand-in">
+    <div class="brand-copy">
+      <p class="label kick"><i aria-hidden="true"></i>{t('about.brand.k', lang)}</p>
+      <h2 class="display d2 sec-h">
+        {t('about.brand.h1', lang)}<br /><span class="acc">{t('about.brand.h2', lang)}</span>
+      </h2>
+      <p class="lede brand-lede">{t('about.brand.p', lang)}</p>
+
+      <dl class="names">
+        <div>
+          <dt>{fa ? 'شرکت' : 'The company'}</dt>
+          <dd>{SITE.legalName}</dd>
+        </div>
+        <div>
+          <dt>{fa ? 'نشان بسته‌بندی' : 'The pack brand'}</dt>
+          <dd>{SITE.brand}</dd>
+        </div>
+        <div>
+          <dt>{fa ? 'بندر بارگیری' : 'Port of loading'}</dt>
+          <dd>{SITE.port}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="brand-mark">
+      <div class="markbox">
+        <RavomaMark width={230} color="var(--ivory)" veinColor="#171513" />
+        <p class="markline">{t('pd.ravoma', lang)}</p>
+      </div>
+      <figure class="arch brand-arch">
+        <div class="arch-in">
+          <img
+            src="/assets/pack-gift.webp"
+            width="1200"
+            height="960"
+            loading="lazy"
+            decoding="async"
+            alt={fa ? 'جعبه هدیه ۲۰۰ گرمی زعفران راوما' : 'RAVOMA 200 g saffron gift box'}
+          />
+        </div>
+        <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d={ARCH}></path>
+        </svg>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PORT ============================ -->
+<section class="port">
+  <img
+    class="port-bg"
+    src="/assets/skyline.webp"
+    width="2400"
+    height="1030"
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="wrap">
+    {/* The measure sits on the inner block. .wrap carries margin-inline:auto, so
+        narrowing .wrap itself would centre the column rather than hold it on the
+        reading edge. */}
+    <div class="port-in">
+      <p class="label kick"><i aria-hidden="true"></i>{t('about.port.k', lang)}</p>
+      <h2 class="display d2 sec-h">{t('about.port.h', lang)}</h2>
+      <p class="lede port-lede">{t('about.port.p', lang)}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== CLOSING =========================== -->
+<section class="sec close">
+  <div class="wrap">
+    <div class="close-in">
+      <p class="label kick"><i aria-hidden="true"></i>{t('close.k', lang)}</p>
+      <h2 class="display d2 sec-h">
+        {t('close.h1', lang)} <span class="acc">{t('close.h2', lang)}</span>
+      </h2>
+      <p class="lede">{t('close.p', lang)}</p>
+      <div class="ctas">
+        <a class="btn" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
+        <a class="btn ghost" href={href('/products', lang)}>{t('cta.all', lang)}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .defs {
+    position: absolute;
+    inline-size: 0;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  /* ---------------------------------------------------------------- shared */
+  .sec {
+    padding-block: var(--rhythm);
+  }
+  .sec-head {
+    max-inline-size: 62ch;
+    margin-block-end: clamp(38px, 4.4vw, 60px);
+  }
+  .sec-h {
+    margin-block-start: 20px;
+  }
+
+  .kick i {
+    display: block;
+    inline-size: 26px;
+    block-size: 1px;
+    background: currentColor;
+    flex: none;
+  }
+
+  .grule {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    max-inline-size: 320px;
+    margin-block-start: 26px;
+  }
+  .grule::before,
+  .grule::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--hair-strong);
+  }
+  .grule i {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .grule i:nth-child(2) {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  /* ---------------------------------------------------------------- arch */
+  .arch {
+    margin: 0;
+    position: relative;
+    isolation: isolate;
+  }
+  .arch-in {
+    position: relative;
+    overflow: hidden;
+    background: var(--obsidian-700);
+    clip-path: url(#pgArch);
+  }
+  .arch-in img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.04);
+  }
+  .arch-in::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 11, 10, 0.24) 0%,
+      rgba(12, 11, 10, 0) 38%,
+      rgba(12, 11, 10, 0.34) 100%
+    );
+  }
+  .arch-line {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .arch-line path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.4;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* ---------------------------------------------------------------- buttons */
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-block-start: 36px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 15px 28px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--obsidian-deep);
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  :global(html[lang='fa']) .btn {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--obsidian-deep);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .btn:hover::after {
+    transform: scaleY(1);
+  }
+  .btn:hover {
+    color: var(--gold);
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ivory);
+  }
+  .btn.ghost::after {
+    background: var(--gold);
+  }
+  .btn.ghost:hover {
+    color: var(--obsidian-deep);
+  }
+
+  /* ---------------------------------------------------------------- intro */
+  .intro {
+    padding-block: clamp(44px, 6vw, 84px) clamp(48px, 6vw, 88px);
+    overflow: hidden;
+  }
+  .intro-in {
+    display: grid;
+    gap: clamp(38px, 5vw, 62px);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .intro-in {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: clamp(48px, 5vw, 80px);
+    }
+  }
+  .intro-h1 {
+    margin-block-start: 22px;
+  }
+  .intro-lede {
+    margin-block-start: 24px;
+  }
+  .intro-arch {
+    inline-size: min(320px, 76vw);
+    margin-inline: auto;
+  }
+  .intro-arch .arch-in {
+    aspect-ratio: 3 / 4;
+  }
+  @media (min-width: 900px) {
+    .intro-arch {
+      inline-size: min(400px, 100%);
+      margin-inline: 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------- story */
+  .story {
+    background: var(--surface);
+    border-block: 1px solid var(--hair);
+  }
+  .story-in {
+    display: grid;
+    gap: clamp(38px, 4.4vw, 60px);
+  }
+  @media (min-width: 960px) {
+    .story-in {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(48px, 5vw, 78px);
+      align-items: start;
+    }
+  }
+  .body-p {
+    margin: 0 0 20px;
+    max-inline-size: 58ch;
+    font-size: var(--step-1);
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+  .body-p:last-of-type {
+    margin-block-end: 0;
+  }
+
+  .tally {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 34px 0 0;
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--hair-ivory);
+  }
+  .tally dt {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.6;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .tally dt {
+    font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .tally dd {
+    margin: 8px 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--gold-light);
+  }
+  :global(html[lang='fa']) .tally dd {
+    font-family: var(--font-fa);
+  }
+
+  .flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    border-block-start: 1px solid var(--hair-ivory);
+  }
+  .flow li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 18px;
+    padding-block: 22px;
+    border-block-end: 1px solid var(--hair-ivory);
+  }
+  .fn {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--gold);
+    grid-row: 1;
+  }
+  :global(html[lang='fa']) .fn {
+    font-family: var(--font-fa);
+  }
+  .ft {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ivory);
+    grid-row: 1;
+  }
+  :global(html[lang='fa']) .ft {
+    font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.7;
+  }
+  .fb {
+    grid-column: 2;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  /* ------------------------------------------------------- control points */
+  /* Each tile draws its own end and block-end hairline against a container that draws
+     the two opening edges. A 1px-gap-over-a-coloured-container grid would paint the
+     leftover cell — five points never fill two or three columns — as a lit rectangle. */
+  .cp {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    border-block-start: 1px solid var(--hair-ivory);
+    border-inline-start: 1px solid var(--hair-ivory);
+  }
+  @media (min-width: 720px) {
+    .cp {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .cp {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .cp li {
+    background: var(--ground);
+    padding: clamp(24px, 2.6vw, 34px);
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    border-block-end: 1px solid var(--hair-ivory);
+    border-inline-end: 1px solid var(--hair-ivory);
+    transition: background-color 0.4s var(--snap);
+  }
+  .cp li:hover {
+    background: var(--surface);
+  }
+  .cn {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--gold);
+  }
+  :global(html[lang='fa']) .cn {
+    font-family: var(--font-fa);
+  }
+  .ch {
+    margin: 0;
+    color: var(--ivory);
+  }
+  .cb {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  /* ---------------------------------------------------------------- brand */
+  .brand {
+    background: var(--surface);
+    border-block: 1px solid var(--hair);
+  }
+  .brand-in {
+    display: grid;
+    gap: clamp(38px, 4.4vw, 62px);
+  }
+  @media (min-width: 960px) {
+    .brand-in {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(48px, 5vw, 78px);
+      align-items: start;
+    }
+  }
+  .brand-lede {
+    margin-block-start: 22px;
+  }
+
+  .names {
+    margin: 30px 0 0;
+    display: grid;
+    border-block-start: 1px solid var(--hair-ivory);
+  }
+  .names > div {
+    display: grid;
+    gap: 6px;
+    padding-block: 15px;
+    border-block-end: 1px solid var(--hair-ivory);
+  }
+  @media (min-width: 560px) {
+    .names > div {
+      grid-template-columns: minmax(0, 16ch) minmax(0, 1fr);
+      gap: 6px 22px;
+      align-items: baseline;
+    }
+  }
+  .names dt {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.8;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .names dt {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .names dd {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--ivory);
+  }
+
+  .brand-mark {
+    display: grid;
+    gap: 26px;
+  }
+  .markbox {
+    position: relative;
+    padding: clamp(26px, 3vw, 38px);
+    border: 1px solid var(--hair);
+    background: var(--obsidian);
+    display: grid;
+    justify-items: start;
+    gap: 18px;
+  }
+  .markbox::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid var(--hair);
+    pointer-events: none;
+  }
+  .markline {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+  .brand-arch .arch-in {
+    aspect-ratio: 5 / 4;
+  }
+
+  /* ---------------------------------------------------------------- port */
+  .port {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .port-bg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: saturate(0.75) contrast(1.05);
+  }
+  /* Worst case is a blown highlight in the photograph; over pure white the lightest
+     stop resolves to #38312B, where ivory measures 9.9:1 and text-muted 6.1:1. */
+  .port::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 11, 10, 0.92) 0%,
+      rgba(12, 11, 10, 0.82) 50%,
+      rgba(12, 11, 10, 0.94) 100%
+    );
+  }
+  .port-in {
+    padding-block: clamp(60px, 7.5vw, 108px);
+    max-inline-size: 44rem;
+  }
+  .port-lede {
+    margin-block-start: 22px;
+    color: var(--ivory);
+  }
+
+  /* ---------------------------------------------------------------- close */
+  .close-in {
+    max-inline-size: 46rem;
+  }
+  .close .lede {
+    margin-block-start: 22px;
+  }
+
+  @media (pointer: coarse) {
+    .btn {
+      min-block-size: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn::after {
+      transition: none;
+    }
+  }
+</style>

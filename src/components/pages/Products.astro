@@ -1,0 +1,726 @@
+---
+/**
+ * Products index.
+ *
+ * Content lives here once; /products and /fa/products are thin wrappers that pass
+ * `lang`.
+ *
+ * The two lines that ship are visually primary — larger frame, full-strength image,
+ * solid gold status tag. The seven that do not are muted: desaturated image, dashed
+ * tag, dimmed type. The distinction is never carried by colour alone; the tag says
+ * what it is in words, and the two groups sit under separate headings.
+ */
+import type { Lang } from '../../data/site';
+import { LIVE_PRODUCTS, UPCOMING_PRODUCTS, PACK_FORMATS, type Product } from '../../data/products';
+import { t, href } from '../../data/i18n';
+import RavomaMark from '../RavomaMark.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const fa = lang === 'fa';
+const counterLang = fa ? 'en' : 'fa';
+const counterDir = fa ? 'ltr' : 'rtl';
+
+const name = (p: Product) => (fa ? p.fa : p.en);
+const counterName = (p: Product) => (fa ? p.en : p.fa);
+const origin = (p: Product) => (fa ? p.originFa : p.origin);
+const grade = (p: Product) => (fa ? p.gradeFa : p.grade);
+
+const ARCH = 'M0,100 V46 C0,29 13,13.5 35,5.5 C43,2.5 47.5,0.8 50,0 C52.5,0.8 57,2.5 65,5.5 C87,13.5 100,29 100,46 V100';
+
+/* Intrinsic sizes of the packaging renders. They differ per sheet, and a wrong pair
+   here would give the browser a false aspect ratio before the stylesheet lands. */
+const PACK_SIZE: Record<string, [number, number]> = {
+  'pack-pocket-dark': [900, 1180],
+  'pack-drawer': [1200, 1120],
+  'pack-tin': [900, 720],
+  'pack-gift': [1200, 960],
+  'pack-flagship': [1200, 720],
+};
+---
+
+<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="pgArch" clipPathUnits="objectBoundingBox">
+      <path
+        d="M0,1 V0.46 C0,0.29 0.13,0.135 0.35,0.055 C0.43,0.025 0.475,0.008 0.5,0 C0.525,0.008 0.57,0.025 0.65,0.055 C0.87,0.135 1,0.29 1,0.46 V1 Z"
+      ></path>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- ============================ INTRO ============================ -->
+<section class="intro">
+  <div class="wrap">
+    {/* The measure sits on the inner block. .wrap carries margin-inline:auto, so
+        narrowing .wrap itself would centre the column rather than hold it on the
+        reading edge. */}
+    <div class="intro-in">
+      <p class="label kick"><i aria-hidden="true"></i>{t('products.k', lang)}</p>
+      <h1 class="display d1 intro-h1">
+        {t('products.h1a', lang)}<br /><span class="acc">{t('products.h1b', lang)}</span>
+      </h1>
+      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="lede intro-lede">{t('products.lede', lang)}</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= SHIPPING NOW ======================== -->
+<section class="sec live" aria-labelledby="h-now">
+  <div class="wrap">
+    <div class="group-head">
+      <h2 class="display d2" id="h-now">{t('products.now.h', lang)}</h2>
+      <p class="tag on">
+        <i aria-hidden="true"></i>
+        {t('status.live', lang)}
+      </p>
+    </div>
+
+    <ul class="grid big">
+      {
+        LIVE_PRODUCTS.map((p) => (
+          <li>
+            <article class="card">
+              <a class="card-link" href={href(`/products/${p.slug}`, lang)}>
+                <span class="fig">
+                  <span class="arch-in">
+                    <img
+                      src={`/assets/${p.img}.webp`}
+                      width="900"
+                      height="1200"
+                      loading="eager"
+                      decoding="async"
+                      alt=""
+                    />
+                  </span>
+                  <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path d={ARCH} />
+                  </svg>
+                </span>
+
+                <span class="cbody">
+                  <span class="cname display d3">{name(p)}</span>
+                  <span class="counter">
+                    <bdi lang={counterLang} dir={counterDir}>{counterName(p)}</bdi>
+                  </span>
+                  <span class="cmeta">{origin(p)}</span>
+                  <span class="cgrade">{grade(p)}</span>
+                  <span class="cformats">
+                    <bdi dir="ltr">{p.formats.join(' · ')}</bdi>
+                  </span>
+                  <span class="tag on cardtag">
+                    <i aria-hidden="true" />
+                    {t('status.live', lang)}
+                  </span>
+                </span>
+              </a>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= NEXT IN THE RANGE ===================== -->
+<section class="sec soon" aria-labelledby="h-soon">
+  <div class="wrap">
+    <div class="group-head">
+      <h2 class="display d2" id="h-soon">{t('products.soon.h', lang)}</h2>
+      <p class="tag off">
+        <i aria-hidden="true"></i>
+        {t('status.soon', lang)}
+      </p>
+    </div>
+    <p class="lede group-lede">{t('products.soon.p', lang)}</p>
+
+    <ul class="grid small">
+      {
+        UPCOMING_PRODUCTS.map((p) => (
+          <li>
+            <article class="card muted">
+              <a class="card-link" href={href(`/products/${p.slug}`, lang)}>
+                <span class="fig">
+                  <span class="arch-in">
+                    <img
+                      src={`/assets/${p.img}.webp`}
+                      width="900"
+                      height="1200"
+                      loading="lazy"
+                      decoding="async"
+                      alt=""
+                    />
+                  </span>
+                  <svg class="arch-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path d={ARCH} />
+                  </svg>
+                </span>
+
+                <span class="cbody">
+                  <span class="cname display d3">{name(p)}</span>
+                  <span class="counter">
+                    <bdi lang={counterLang} dir={counterDir}>{counterName(p)}</bdi>
+                  </span>
+                  <span class="cmeta">{origin(p)}</span>
+                  <span class="tag off cardtag">
+                    <i aria-hidden="true" />
+                    {t('status.soon', lang)}
+                  </span>
+                </span>
+              </a>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ========================= RAVOMA PACKS ======================== -->
+<section class="sec packs">
+  <div class="wrap">
+    <div class="packs-head">
+      <div>
+        <p class="label kick"><i aria-hidden="true"></i>{t('products.packs.k', lang)}</p>
+        <h2 class="display d2 sec-h">{t('products.packs.h', lang)}</h2>
+        <p class="lede packs-lede">{t('products.packs.p', lang)}</p>
+      </div>
+      <div class="packs-mark">
+        <RavomaMark width={210} color="var(--ivory)" veinColor="#171513" />
+      </div>
+    </div>
+
+    <ul class="packstrip">
+      {
+        PACK_FORMATS.map((f) => (
+          <li>
+            <span class="pk-fig">
+              <img
+                src={`/assets/${f.img}.webp`}
+                width={PACK_SIZE[f.img]?.[0]}
+                height={PACK_SIZE[f.img]?.[1]}
+                loading="lazy"
+                decoding="async"
+                alt=""
+              />
+            </span>
+            <span class="pk-name">
+              <bdi dir={fa ? 'rtl' : 'ltr'}>{fa ? f.fa : f.en}</bdi>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ========================== CLOSING =========================== -->
+<section class="sec close">
+  <div class="wrap">
+    <div class="close-in">
+      <p class="label kick"><i aria-hidden="true"></i>{t('close.k', lang)}</p>
+      <h2 class="display d2 sec-h">
+        {t('close.h1', lang)} <span class="acc">{t('close.h2', lang)}</span>
+      </h2>
+      <p class="lede">{t('close.p', lang)}</p>
+      <div class="ctas">
+        <a class="btn" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
+        <a class="btn ghost" href={href('/about', lang)}>{t('cta.about', lang)}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .defs {
+    position: absolute;
+    inline-size: 0;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  /* ---------------------------------------------------------------- shared */
+  .sec {
+    padding-block: clamp(52px, 6.4vw, 92px);
+  }
+  .sec-h {
+    margin-block-start: 20px;
+  }
+  .kick i {
+    display: block;
+    inline-size: 26px;
+    block-size: 1px;
+    background: currentColor;
+    flex: none;
+  }
+  .grule {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    max-inline-size: 320px;
+    margin-block-start: 26px;
+  }
+  .grule::before,
+  .grule::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--hair-strong);
+  }
+  .grule i {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .grule i:nth-child(2) {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  .counter {
+    display: block;
+    font-family: var(--font-fa);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.8;
+    color: var(--gold-light);
+  }
+  :global(html[lang='fa']) .counter {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+
+  /* ---------------------------------------------------------------- arch */
+  .fig {
+    display: block;
+    position: relative;
+    isolation: isolate;
+  }
+  .arch-in {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--obsidian-700);
+    clip-path: url(#pgArch);
+    aspect-ratio: 3 / 4;
+  }
+  /* Fixed-ratio frame, image absolutely positioned. In normal flow block-size:100%
+     cannot resolve against a flex-sized parent and the image drives the row height. */
+  .arch-in img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.04);
+    transition: transform 1.1s var(--ease);
+  }
+  .arch-in::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(12, 11, 10, 0.22) 0%,
+      rgba(12, 11, 10, 0) 38%,
+      rgba(12, 11, 10, 0.36) 100%
+    );
+  }
+  .arch-line {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .arch-line path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.4;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* ---------------------------------------------------------------- intro */
+  .intro {
+    padding-block: clamp(40px, 5.4vw, 76px) clamp(30px, 3.4vw, 46px);
+  }
+  .intro-in {
+    max-inline-size: 48rem;
+  }
+  .intro-h1 {
+    margin-block-start: 22px;
+  }
+  .intro-lede {
+    margin-block-start: 24px;
+  }
+
+  /* ---------------------------------------------------------------- groups */
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    padding-block-end: 18px;
+    border-block-end: 1px solid var(--hair);
+    margin-block-end: clamp(28px, 3.2vw, 44px);
+  }
+  .group-head h2 {
+    margin: 0;
+  }
+  .group-lede {
+    margin: -14px 0 clamp(28px, 3.2vw, 42px);
+  }
+
+  .soon {
+    background: var(--surface);
+    border-block: 1px solid var(--hair);
+  }
+
+  /* ---------------------------------------------------------------- tags */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 12px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  :global(html[lang='fa']) .tag {
+    font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  /* the only circles on the page — status dots, per the radius rule */
+  .tag i {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    flex: none;
+  }
+  .tag.on {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+  }
+  .tag.on i {
+    background: currentColor;
+  }
+  /* coming soon: dashed border, solid dim colour — never gold at partial opacity */
+  .tag.off {
+    border: 1px dashed var(--hair-strong);
+    color: var(--text-dim);
+  }
+  .tag.off i {
+    background: transparent;
+    border: 1px solid currentColor;
+  }
+  .cardtag {
+    justify-self: start;
+    margin-block-start: 14px;
+  }
+
+  /* ---------------------------------------------------------------- grids */
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(26px, 3vw, 40px) clamp(20px, 2.2vw, 30px);
+  }
+  .grid.big {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 700px) {
+    .grid.big {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .grid.small {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 760px) {
+    .grid.small {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1120px) {
+    .grid.small {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .card {
+    block-size: 100%;
+  }
+  .card-link {
+    display: grid;
+    align-content: start;
+    block-size: 100%;
+    padding: clamp(14px, 1.6vw, 20px);
+    border: 1px solid var(--hair-ivory);
+    background: var(--ground);
+    transition: border-color 0.4s var(--snap), background-color 0.4s var(--snap);
+  }
+  .soon .card-link {
+    background: var(--surface);
+  }
+  .card-link:hover {
+    border-color: var(--hair-strong);
+  }
+  .card-link:hover .arch-in img {
+    transform: scale(1.045);
+  }
+
+  .cbody {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    padding-block-start: 18px;
+  }
+  .cname {
+    display: block;
+    color: var(--ivory);
+    line-height: 1.2;
+  }
+  .cmeta {
+    display: block;
+    margin-block-start: 10px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .cmeta {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .cgrade {
+    display: block;
+    margin-block-start: 8px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .cformats {
+    display: block;
+    margin-block-start: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .cformats {
+    font-family: var(--font-mono);
+  }
+
+  /* The muted treatment: desaturated photograph, dimmed keyline, dimmed type. It is
+     never the only signal — the dashed tag and the section heading both say so. */
+  .card.muted .arch-in img {
+    filter: saturate(0.32) contrast(1.02) brightness(0.92);
+  }
+  .card.muted .arch-line path {
+    stroke: var(--hair-strong);
+  }
+  .card.muted .cname {
+    color: var(--text-muted);
+  }
+  .card.muted .counter {
+    color: var(--text-dim);
+  }
+  .card.muted .cmeta {
+    color: var(--text-dim);
+  }
+  .card.muted .card-link:hover .arch-in img {
+    filter: saturate(0.5) contrast(1.02) brightness(0.96);
+  }
+
+  /* ---------------------------------------------------------------- packs */
+  .packs-head {
+    display: grid;
+    gap: 30px;
+    align-items: end;
+    margin-block-end: clamp(30px, 3.4vw, 46px);
+  }
+  @media (min-width: 900px) {
+    .packs-head {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 48px;
+    }
+  }
+  .packs-lede {
+    margin-block-start: 22px;
+  }
+  .packs-mark {
+    padding: 22px 26px;
+    border: 1px solid var(--hair);
+    background: var(--obsidian);
+    justify-self: start;
+  }
+
+  /* Each tile draws its own end and block-end hairline. Five formats never fill two or
+     three columns, and a 1px-gap-over-a-coloured-container grid would paint the
+     leftover cell as a lit rectangle. */
+  .packstrip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    border-block-start: 1px solid var(--hair-ivory);
+    border-inline-start: 1px solid var(--hair-ivory);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 680px) {
+    .packstrip {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1000px) {
+    .packstrip {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+  .packstrip li {
+    display: grid;
+    align-content: start;
+    background: var(--ground);
+    padding: 0 0 20px;
+    border-block-end: 1px solid var(--hair-ivory);
+    border-inline-end: 1px solid var(--hair-ivory);
+  }
+  .pk-fig {
+    display: block;
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--obsidian-700);
+    margin-block-end: 16px;
+  }
+  .pk-fig img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .pk-name {
+    display: block;
+    padding-inline: 18px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .pk-name {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ---------------------------------------------------------------- close */
+  .close {
+    border-block-start: 1px solid var(--hair);
+  }
+  .close-in {
+    max-inline-size: 46rem;
+  }
+  .close .lede {
+    margin-block-start: 22px;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-block-start: 36px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 15px 28px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--obsidian-deep);
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  :global(html[lang='fa']) .btn {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--obsidian-deep);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .btn:hover::after {
+    transform: scaleY(1);
+  }
+  .btn:hover {
+    color: var(--gold);
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ivory);
+  }
+  .btn.ghost::after {
+    background: var(--gold);
+  }
+  .btn.ghost:hover {
+    color: var(--obsidian-deep);
+  }
+
+  @media (pointer: coarse) {
+    .btn {
+      min-block-size: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-in img,
+    .btn,
+    .btn::after {
+      transition: none;
+    }
+  }
+</style>

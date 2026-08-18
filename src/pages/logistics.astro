@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import Logistics from '../components/pages/Logistics.astro';
+import { t } from '../data/i18n';
+---
+
+<Base
+  title={t('meta.logistics.title', 'en')}
+  description={t('meta.logistics.desc', 'en')}
+  lang="en"
+  path="/logistics"
+>
+  <Logistics lang="en" />
+</Base>

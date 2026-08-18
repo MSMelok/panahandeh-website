@@ -1,0 +1,332 @@
+---
+/**
+ * Contact — the enquiry form, the ways to reach a person, and what to put in a
+ * message so the reply is a real answer rather than a request for more detail.
+ *
+ * The product pages link here as /contact?product=<slug>. That parameter is read on
+ * the client and used to preselect the form's commodity field. It is checked against
+ * the real slug list before it is used: the value goes straight into a form field
+ * that is emailed to a trader, and an unvalidated query string is not something to
+ * hand to that.
+ *
+ * The phone number and address are bare runs of digits and Latin — inside the
+ * Persian page they need an explicit LTR isolate or the algorithm draws
+ * "+971 50 123 4567" back to front as "4567 123 50 971+".
+ */
+import { SITE, type Lang } from '../../data/site';
+import { PRODUCTS } from '../../data/products';
+import { t, type Key } from '../../data/i18n';
+import EnquiryForm from '../EnquiryForm.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+/** Label key, body key. The first four labels are the form's own field names, so the
+ *  checklist and the thing being filled in cannot describe different fields. */
+const INCLUDE: ReadonlyArray<readonly [Key, Key]> = [
+  ['form.product', 'c.inc.commodity'],
+  ['label.grade', 'c.inc.grade'],
+  ['label.format', 'c.inc.format'],
+  ['form.port', 'c.inc.port'],
+  ['c.inc.volume', 'c.inc.volume.b'],
+];
+
+const slugs = PRODUCTS.map((p) => p.slug);
+---
+
+<section class="pgh">
+  <div class="wrap">
+    <p class="label">{t('c.kicker', lang)}</p>
+    <h1 class="display d1 pgh-h">
+      {t('c.h1a', lang)} <span class="acc">{t('c.h1b', lang)}</span>
+    </h1>
+    <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+    <p class="lede">{t('c.lede', lang)}</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap cgrid">
+    <!-- ---------------- reach a person ---------------- -->
+    <div class="col">
+      <ul class="reach">
+        <li>
+          <span class="reach-k">{t('c.tel', lang)}</span>
+          <a class="reach-v" href={`tel:${SITE.phoneHref}`}>
+            <bdi dir="ltr">{SITE.phone}</bdi>
+          </a>
+        </li>
+        <li>
+          <span class="reach-k">{t('form.email', lang)}</span>
+          <a class="reach-v" href={`mailto:${SITE.email}`}>
+            <bdi dir="ltr">{SITE.email}</bdi>
+          </a>
+        </li>
+        <li>
+          <span class="reach-k">{t('c.office', lang)}</span>
+          <span class="reach-v reach-v-static">{t('c.officev', lang)}</span>
+        </li>
+      </ul>
+
+      <p class="reply">{t('c.reply', lang)}</p>
+
+      <div class="include">
+        <p class="label">{t('c.inc.k', lang)}</p>
+        <h2 class="display d3 include-h">{t('c.inc.h', lang)}</h2>
+        <ol class="inc-list">
+          {
+            INCLUDE.map(([k, b]) => (
+              <li>
+                <span class="inc-k">{t(k, lang)}</span>
+                <span class="inc-b">{t(b, lang)}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+
+    <!-- ---------------- the form ---------------- -->
+    <div class="col form-col">
+      <header class="form-head">
+        <p class="label">{t('c.form.k', lang)}</p>
+        <h2 class="display d3">{t('c.form.h', lang)}</h2>
+      </header>
+      <EnquiryForm lang={lang} />
+    </div>
+  </div>
+</section>
+
+{/* Preselect from ?product=<slug>. Runs after the form is in the DOM; if the value
+    is not a real slug, nothing happens and the field keeps its empty default. */}
+<script define:vars={{ slugs }}>
+  (() => {
+    const select = document.getElementById('eq-commodity');
+    if (!select) return;
+
+    const wanted = new URLSearchParams(window.location.search).get('product');
+    if (!wanted || !slugs.includes(wanted)) return;
+
+    select.value = wanted;
+    // The form reads the field on submit, but anything else listening for a change
+    // (validation state, analytics later) should see this as a real selection.
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  })();
+</script>
+
+<style>
+  .pgh {
+    padding-block: clamp(48px, 7vw, 92px) clamp(40px, 5vw, 68px);
+    border-block-end: 1px solid var(--hair);
+  }
+  .pgh-h {
+    margin-block-start: 18px;
+    max-inline-size: 18ch;
+  }
+  .lede {
+    margin-block: 0;
+  }
+  .pgh .lede {
+    margin-block-start: 26px;
+  }
+
+  .grule {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-block-start: 30px;
+    max-inline-size: 320px;
+  }
+  .grule::before,
+  .grule::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--hair-strong);
+  }
+  .grule i {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .grule i:nth-child(2) {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  .sec {
+    padding-block: var(--rhythm);
+  }
+
+  .cgrid {
+    display: grid;
+    gap: clamp(44px, 5vw, 64px);
+  }
+  @media (min-width: 980px) {
+    .cgrid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: clamp(48px, 5.5vw, 80px);
+      align-items: start;
+    }
+  }
+  .col {
+    min-inline-size: 0;
+  }
+
+  /* ---------------------------------------------------------------- reach */
+  .reach {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--hair);
+  }
+  .reach li {
+    padding-block: 18px;
+    border-block-end: 1px solid var(--hair);
+    display: grid;
+    gap: 6px;
+    min-inline-size: 0;
+  }
+  .reach-k {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .reach-k {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  /* inline-flex, not inline: min-block-size does nothing to an inline box, and the
+     coarse-pointer rule in tokens.css would silently fail on these two links */
+  .reach-v {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    max-inline-size: 100%;
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+    overflow-wrap: anywhere;
+    /* Cormorant sets old-style figures by default, which drops 0, 1, 3, 4, 5 and 7
+       below the x-height — fine for prose, wrong for a phone number someone dials */
+    font-variant-numeric: lining-nums;
+    font-feature-settings: 'lnum' 1;
+    transition: color 0.3s var(--snap);
+  }
+  a.reach-v:hover {
+    color: var(--accent-strong);
+  }
+  :global(html[lang='fa']) .reach-v {
+    font-family: var(--font-fa);
+    font-weight: 600;
+    font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  }
+
+  .reply {
+    margin: 22px 0 0;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text-muted);
+    border-inline-start: 3px solid var(--hair-strong);
+    padding-inline-start: 14px;
+  }
+
+  /* ---------------------------------------------------------------- include */
+  .include {
+    margin-block-start: clamp(40px, 4.6vw, 60px);
+  }
+  .include-h {
+    margin: 14px 0 0;
+    color: var(--text);
+  }
+  .inc-list {
+    list-style: none;
+    margin: 26px 0 0;
+    padding: 0;
+    counter-reset: inc;
+    border-block-start: 1px solid var(--hair);
+  }
+  .inc-list li {
+    counter-increment: inc;
+    display: grid;
+    gap: 4px;
+    padding-block: 14px;
+    padding-inline-start: 34px;
+    position: relative;
+    border-block-end: 1px solid var(--hair);
+    min-inline-size: 0;
+  }
+  .inc-list li::before {
+    content: counter(inc, decimal);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 14px;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--gold-light);
+    font-variant-numeric: lining-nums;
+    font-feature-settings: 'lnum' 1;
+  }
+  /* the counter has to follow the language, like every other numeral on the site */
+  :global(html[lang='fa']) .inc-list li::before {
+    content: counter(inc, persian);
+    font-family: var(--font-fa);
+  }
+  .inc-k {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  :global(html[lang='fa']) .inc-k {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .inc-b {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  /* ---------------------------------------------------------------- form */
+  .form-col {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    padding: clamp(24px, 3.4vw, 42px);
+  }
+  .form-head {
+    display: grid;
+    gap: 12px;
+    margin-block-end: clamp(26px, 3vw, 34px);
+  }
+  .form-head .display {
+    margin: 0;
+    color: var(--text);
+  }
+
+  @media (pointer: coarse) {
+    a.reach-v {
+      min-block-size: 44px;
+    }
+  }
+</style>

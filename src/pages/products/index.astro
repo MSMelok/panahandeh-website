@@ -1,0 +1,21 @@
+---
+/** English products index. A wrapper — the markup lives in components/pages/Products.astro. */
+import Base from '../../layouts/Base.astro';
+import Products from '../../components/pages/Products.astro';
+import { PRODUCTS } from '../../data/products';
+import { productListSchema } from '../../lib/schema';
+import { t } from '../../data/i18n';
+
+const lang = 'en' as const;
+---
+
+<Base
+  title={t('meta.products.title', lang)}
+  description={t('meta.products.desc', lang)}
+  lang={lang}
+  path="/products"
+  image="/assets/saffron-pack.webp"
+  schema={[productListSchema(PRODUCTS, lang)]}
+>
+  <Products lang={lang} />
+</Base>

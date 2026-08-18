@@ -1,0 +1,98 @@
+---
+/**
+ * The shell every page renders into.
+ *
+ * `dir` is set here and nowhere else. The whole layout mirrors off that one attribute,
+ * which only works because every component below uses logical properties —
+ * padding-inline, margin-inline, inset-inline, border-inline-*. A single `left` or
+ * `right` anywhere in the tree breaks the Persian build silently, because it still
+ * looks correct in English.
+ */
+import '../styles/tokens.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { t } from '../data/i18n';
+import type { Lang } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** Path WITHOUT the language prefix, e.g. '/products/saffron'. */
+  path: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product';
+  /** Extra JSON-LD graph nodes for this page. */
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, lang, path, image, type, schema, noindex } = Astro.props;
+const dir = lang === 'fa' ? 'rtl' : 'ltr';
+---
+
+<!doctype html>
+<html lang={lang} dir={dir}>
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      lang={lang}
+      path={path}
+      image={image}
+      type={type}
+      schema={schema}
+      noindex={noindex}
+    />
+    <slot name="head" />
+  </head>
+
+  <body>
+    <a class="skip" href="#main">{t('a11y.skip', lang)}</a>
+
+    <Header lang={lang} path={path} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+  </body>
+</html>
+
+<style>
+  /* Off-canvas until focused. inset-inline-start rather than left, so it comes in from
+     the reading edge in both directions. */
+  .skip {
+    position: fixed;
+    inset-block-start: 8px;
+    inset-inline-start: 8px;
+    z-index: 100;
+    transform: translateY(-160%);
+    padding: 14px 22px;
+    background: var(--gold);
+    color: var(--obsidian-deep);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: transform 0.25s var(--snap);
+  }
+  :global(html[lang='fa']) .skip {
+    font-family: var(--font-fa);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .skip:focus-visible,
+  .skip:focus {
+    transform: none;
+  }
+
+  main {
+    display: block;
+    min-block-size: 40vh;
+  }
+</style>

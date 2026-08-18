@@ -1,0 +1,200 @@
+---
+/**
+ * Site footer.
+ *
+ * Every phone number and email address is wrapped in <bdi dir="ltr">. A bare number is
+ * a run of bidi-neutral characters and digits, so inside a Persian paragraph the browser
+ * draws +971 50 123 4567 as "4567 123 50 971+". This shipped once already.
+ *
+ * Links go through href() so the Persian footer stays inside /fa/.
+ */
+import { SITE, type Lang } from '../data/site';
+import { PRODUCTS } from '../data/products';
+import { t, href } from '../data/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const year = new Date().getFullYear();
+
+const SUBLINE = lang === 'fa' ? 'بازرگانی مواد غذایی' : 'FOODSTUFF TRADING L.L.C';
+const OFFICE = lang === 'fa' ? 'دبی، امارات متحده عربی' : 'Dubai, United Arab Emirates';
+
+const COMPANY = [
+  { to: '/about', key: 'nav.about' },
+  { to: '/quality', key: 'nav.quality' },
+  { to: '/logistics', key: 'nav.logistics' },
+  { to: '/contact', key: 'nav.contact' },
+] as const;
+
+/** Saffron and rice ship; the next two are shown because they are next in the range. */
+const RANGE = PRODUCTS.slice(0, 4);
+---
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <p class="fmark">PANAHANDEH</p>
+        <p class="fsub">{SUBLINE}</p>
+        <p class="fblurb">{t('foot.brandline', lang)}</p>
+      </div>
+
+      <nav class="fcol" aria-labelledby="f-company">
+        <h2 class="fh" id="f-company">{t('foot.company', lang)}</h2>
+        <ul>
+          {
+            COMPANY.map((item) => (
+              <li>
+                <a href={href(item.to, lang)}>{t(item.key, lang)}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav class="fcol" aria-labelledby="f-range">
+        <h2 class="fh" id="f-range">{t('foot.range', lang)}</h2>
+        <ul>
+          {
+            RANGE.map((p) => (
+              <li>
+                <a href={href(`/products/${p.slug}`, lang)}>{lang === 'fa' ? p.fa : p.en}</a>
+              </li>
+            ))
+          }
+          <li><a href={href('/products', lang)}>{t('cta.all', lang)}</a></li>
+        </ul>
+      </nav>
+
+      <div class="fcol">
+        <h2 class="fh">{t('foot.reach', lang)}</h2>
+        <ul>
+          <li><a href={`tel:${SITE.phoneHref}`}><bdi dir="ltr">{SITE.phone}</bdi></a></li>
+          <li><a href={`mailto:${SITE.email}`}><bdi dir="ltr">{SITE.email}</bdi></a></li>
+          <li>{OFFICE}</li>
+          <li>{lang === 'fa' ? `بندر ${SITE.port}` : `Port of loading — ${SITE.port}`}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fbase">
+      <span>
+        © <bdi dir="ltr">{year}</bdi> {SITE.legalName} — {t('foot.rights', lang)}
+      </span>
+      <span>{OFFICE}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: var(--obsidian-900);
+    border-block-start: 1px solid var(--hair);
+    color: var(--text-muted);
+    padding-block: clamp(48px, 6vw, 76px) 26px;
+  }
+
+  .fgrid {
+    display: grid;
+    gap: 38px;
+  }
+  @media (min-width: 700px) {
+    .fgrid { grid-template-columns: repeat(2, 1fr); gap: 42px 32px; }
+  }
+  @media (min-width: 980px) {
+    .fgrid { grid-template-columns: 1.6fr 1fr 1fr 1.15fr; gap: 44px; }
+  }
+
+  .fmark {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.6vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    color: var(--ivory);
+  }
+  .fsub {
+    margin: 10px 0 0;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    line-height: 1.4;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .fsub {
+    font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+  }
+  .fblurb {
+    margin: 20px 0 0;
+    max-inline-size: 40ch;
+    font-size: 14.5px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  :global(html[lang='fa']) .fblurb { font-weight: 400; }
+
+  /* gold-pale is 11.6:1 on obsidian and is set solid — gold at partial opacity fails */
+  .fh {
+    margin: 0 0 15px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--gold-pale);
+  }
+  :global(html[lang='fa']) .fh {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .fcol ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    font-size: 14.5px;
+  }
+  .fcol a { transition: color 0.3s var(--snap); }
+  .fcol a:hover { color: var(--gold-light); }
+
+  .fbase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    justify-content: space-between;
+    margin-block-start: 46px;
+    padding-block-start: 20px;
+    border-block-start: 1px solid var(--hair-ivory);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    line-height: 1.9;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  :global(html[lang='fa']) .fbase {
+    font-family: var(--font-fa);
+    font-size: 12.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  @media (pointer: coarse) {
+    .fcol ul { gap: 2px; }
+    .fcol a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: 44px;
+    }
+  }
+</style>

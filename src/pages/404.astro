@@ -1,0 +1,133 @@
+---
+/**
+ * 404. English only, and noindex — a not-found page has nothing to rank for, and
+ * a Persian mirror of it would only add a URL that has to resolve.
+ *
+ * The two links out are Home and Products, because those are the two things
+ * someone who mistyped a URL was probably looking for.
+ */
+import Base from '../layouts/Base.astro';
+import { t, href } from '../data/i18n';
+---
+
+<Base
+  title={t('nf.title', 'en')}
+  description={t('nf.p', 'en')}
+  lang="en"
+  path="/404"
+  noindex={true}
+>
+  <section class="nf">
+    <div class="wrap nf-in">
+      <p class="label">404</p>
+      <h1 class="display d1 nf-h">
+        {t('nf.h1a', 'en')} <span class="acc">{t('nf.h1b', 'en')}</span>
+      </h1>
+      <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="lede">{t('nf.p', 'en')}</p>
+
+      <div class="nf-cta">
+        <a class="cta" href={href('/', 'en')}>{t('nav.home', 'en')}</a>
+        <a class="cta cta-out" href={href('/products', 'en')}>{t('nav.products', 'en')}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-block: clamp(64px, 11vw, 148px) clamp(72px, 12vw, 160px);
+  }
+  /* the measure goes on the children — .nf-in is the .wrap, and capping the wrap's
+     width would centre the whole block against its own margin-inline:auto */
+  .nf-h {
+    margin-block-start: 18px;
+    max-inline-size: 16ch;
+  }
+  .nf .lede {
+    max-inline-size: 52ch;
+  }
+  .nf .lede {
+    margin-block: 0;
+  }
+
+  .grule {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-block: 30px;
+    max-inline-size: 320px;
+  }
+  .grule::before,
+  .grule::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--hair-strong);
+  }
+  .grule i {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .grule i:nth-child(2) {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  .nf-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-block-start: 36px;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 28px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ivory);
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .cta:hover::after {
+    transform: scaleY(1);
+  }
+  /* the wipe fills gold, so the label inverts with it — ivory on gold is 2.4:1 */
+  .cta:hover {
+    color: var(--obsidian-deep);
+  }
+  .cta-out {
+    border-color: var(--hair-strong);
+  }
+  .cta-out::after {
+    background: var(--gold-light);
+  }
+
+  @media (pointer: coarse) {
+    .cta {
+      min-block-size: 48px;
+    }
+  }
+</style>

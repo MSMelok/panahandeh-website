@@ -1,0 +1,18 @@
+---
+/** English about. A wrapper — all the markup lives in components/pages/About.astro. */
+import Base from '../layouts/Base.astro';
+import About from '../components/pages/About.astro';
+import { t } from '../data/i18n';
+
+const lang = 'en' as const;
+---
+
+<Base
+  title={t('meta.about.title', lang)}
+  description={t('meta.about.desc', lang)}
+  lang={lang}
+  path="/about"
+  image="/assets/about.webp"
+>
+  <About lang={lang} />
+</Base>

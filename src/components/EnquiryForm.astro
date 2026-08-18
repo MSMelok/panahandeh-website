@@ -1,0 +1,360 @@
+---
+/**
+ * Buyer enquiry form.
+ *
+ * Labels sit above every field and stay visible. A placeholder-only label disappears the
+ * moment someone types, which is exactly when a buyer filling in six fields needs it.
+ *
+ * The form posts JSON to /api/enquiry and reports what actually happened. If the POST
+ * fails it says so and gives the address to write to instead — a form that swallows an
+ * enquiry and shows a tick is worse than no form at all, because the buyer walks away
+ * believing they made contact.
+ */
+import type { Lang } from '../data/site';
+import { PRODUCTS } from '../data/products';
+import { t } from '../data/i18n';
+
+interface Props {
+  lang: Lang;
+  /** Preselects a commodity, e.g. from a product page's "enquire about this line". */
+  preselect?: string;
+}
+
+const { lang, preselect } = Astro.props;
+
+const soon = t('status.soon', lang).toLowerCase();
+const options = PRODUCTS.map((p) => ({
+  value: p.slug,
+  label: `${lang === 'fa' ? p.fa : p.en}${p.live ? '' : ` (${soon})`}`,
+}));
+
+/* Handed to the inline script so every runtime string still comes from t(). */
+const S = {
+  sending: t('form.sending', lang),
+  sent: t('form.sent', lang),
+  failed: t('form.failed', lang),
+  send: t('form.send', lang),
+  errName: t('form.err.name', lang),
+  errEmail: t('form.err.email', lang),
+  errMsg: t('form.err.msg', lang),
+};
+---
+
+<form class="eq" id="eq-form" novalidate data-state="idle">
+  <div class="eq-row">
+    <div class="field" data-field="name">
+      <label for="eq-name">{t('form.name', lang)}</label>
+      <input id="eq-name" name="name" type="text" autocomplete="name" required />
+      <p class="err" id="eq-name-err"></p>
+    </div>
+
+    <div class="field" data-field="company">
+      <label for="eq-company">{t('form.company', lang)}</label>
+      <input id="eq-company" name="company" type="text" autocomplete="organization" />
+    </div>
+  </div>
+
+  <div class="eq-row">
+    <div class="field" data-field="email">
+      <label for="eq-email">{t('form.email', lang)}</label>
+      <input id="eq-email" name="email" type="email" autocomplete="email" dir="ltr" required />
+      <p class="err" id="eq-email-err"></p>
+    </div>
+
+    <div class="field" data-field="port">
+      <label for="eq-port">{t('form.port', lang)}</label>
+      <input id="eq-port" name="port" type="text" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="field" data-field="commodity">
+    <label for="eq-commodity">{t('form.product', lang)}</label>
+    <div class="sel">
+      <select id="eq-commodity" name="commodity">
+        <option value="">{t('form.select', lang)}</option>
+        {
+          options.map((o) => (
+            <option value={o.value} selected={preselect === o.value}>
+              {o.label}
+            </option>
+          ))
+        }
+      </select>
+      <svg class="sel-arrow" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+        <path d="M1 1.5 L6 6.5 L11 1.5" fill="none" stroke="currentColor" stroke-width="1.4"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="field" data-field="message">
+    <label for="eq-message">{t('form.message', lang)}</label>
+    <textarea id="eq-message" name="message" rows="5" required></textarea>
+    <p class="err" id="eq-message-err"></p>
+  </div>
+
+  {/* Honeypot. Clipped, not display:none — a bot that reads the DOM fills it, a person
+      never sees or tabs into it. The server rejects any payload that carries a value. */}
+  <div class="vh" aria-hidden="true">
+    <label for="eq-website">Leave this field empty</label>
+    <input id="eq-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <button class="eq-send" type="submit">{t('form.send', lang)}</button>
+
+  <p class="eq-status" id="eq-status" role="status" aria-live="polite"></p>
+</form>
+
+<script define:vars={{ S }}>
+  (() => {
+    const form = document.getElementById('eq-form');
+    if (!form) return;
+    const status = document.getElementById('eq-status');
+    const button = form.querySelector('.eq-send');
+    const honey = form.querySelector('#eq-website');
+
+    const field = (name) => form.querySelector(`[data-field="${name}"]`);
+    const setError = (name, msg) => {
+      const wrap = field(name);
+      if (!wrap) return;
+      const input = wrap.querySelector('input, textarea');
+      const err = wrap.querySelector('.err');
+      wrap.classList.toggle('bad', Boolean(msg));
+      if (err) err.textContent = msg || '';
+      if (input) {
+        input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (err) input.setAttribute('aria-describedby', err.id);
+      }
+    };
+
+    const validate = () => {
+      const name = form.elements.name.value.trim();
+      const email = form.elements.email.value.trim();
+      const message = form.elements.message.value.trim();
+      const errors = {
+        name: name ? '' : S.errName,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : S.errEmail,
+        message: message.length >= 8 ? '' : S.errMsg,
+      };
+      Object.entries(errors).forEach(([k, v]) => setError(k, v));
+      return Object.values(errors).every((v) => !v);
+    };
+
+    const setState = (state, text) => {
+      form.dataset.state = state;
+      status.textContent = text || '';
+      const busy = state === 'sending';
+      button.disabled = busy || state === 'sent';
+      button.textContent = busy ? S.sending : S.send;
+    };
+
+    form.addEventListener('input', (e) => {
+      const wrap = e.target.closest('[data-field]');
+      if (wrap && wrap.classList.contains('bad')) {
+        setError(wrap.dataset.field, '');
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.dataset.state === 'sending') return;
+
+      // Submit-time honeypot check. A bot that filled it gets a success screen and
+      // stops retrying; nothing is sent and the server would reject it anyway.
+      if (honey && honey.value.trim() !== '') {
+        setState('sent', S.sent);
+        return;
+      }
+
+      if (!validate()) {
+        form.querySelector('.bad input, .bad textarea')?.focus();
+        return;
+      }
+
+      setState('sending', S.sending);
+
+      const payload = {
+        name: form.elements.name.value.trim(),
+        company: form.elements.company.value.trim(),
+        email: form.elements.email.value.trim(),
+        port: form.elements.port.value.trim(),
+        commodity: form.elements.commodity.value,
+        commodityLabel:
+          form.elements.commodity.options[form.elements.commodity.selectedIndex]?.text || '',
+        message: form.elements.message.value.trim(),
+        website: '',
+        lang: document.documentElement.lang || 'en',
+      };
+
+      try {
+        const res = await fetch('/api/enquiry', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        setState('sent', S.sent);
+        form.querySelectorAll('input, textarea, select').forEach((el) => {
+          el.value = '';
+          el.disabled = true;
+        });
+      } catch {
+        // The values stay in the fields on purpose, so the buyer can copy them into
+        // the email the failure message asks them to send.
+        setState('failed', S.failed);
+      }
+    });
+  })();
+</script>
+
+<style>
+  .eq {
+    display: grid;
+    gap: 22px;
+  }
+
+  .eq-row {
+    display: grid;
+    gap: 22px;
+  }
+  @media (min-width: 620px) {
+    .eq-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  .field { display: grid; gap: 8px; min-inline-size: 0; }
+
+  /* The honeypot input keeps its default 176px width inside a 1px clipped box. It is
+     invisible either way, but at 320px it reaches past the inline edge and any future
+     change to .vh's overflow would turn that into a scrollbar. */
+  .eq .vh input { inline-size: 1px; min-inline-size: 0; }
+
+  .field label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .field label {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* Hairline box, never filled — a filled field on a dark ground has no edge at all. */
+  .field input,
+  .field select,
+  .field textarea {
+    inline-size: 100%;
+    max-inline-size: 100%;
+    background: var(--obsidian);
+    border: 1px solid var(--hair-ivory);
+    color: var(--ivory);
+    padding: 13px 15px;
+    font-family: inherit;
+    font-size: 16px; /* below 16px iOS zooms the page on focus */
+    font-weight: 300;
+    line-height: 1.5;
+    transition: border-color 0.3s var(--snap), box-shadow 0.3s var(--snap);
+  }
+  .field textarea { resize: vertical; min-block-size: 118px; }
+
+  /* The chevron is an element, not a background-image: background-position has no
+     logical keywords, so an image would sit on the wrong edge in Persian. */
+  .sel { position: relative; display: grid; min-inline-size: 0; }
+  .field select { appearance: none; padding-inline-end: 42px; }
+  .field select option { background: var(--obsidian); color: var(--ivory); }
+  .sel-arrow {
+    position: absolute;
+    inset-inline-end: 15px;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    inline-size: 12px;
+    block-size: 8px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--gold-light);
+    box-shadow: inset 0 0 0 1px var(--gold-light);
+  }
+
+  /* The invalid state is carried by the message, not by the colour: saffron red is
+     2.2:1 on obsidian and could not identify anything on its own. The text is ivory
+     at 13.4:1 and the red bar is a marker beside it. */
+  .err {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ivory);
+    border-inline-start: 3px solid var(--saffron-red);
+    padding-inline-start: 10px;
+  }
+  .field:not(.bad) .err { display: none; }
+  .field.bad input,
+  .field.bad textarea,
+  .field.bad select { border-color: var(--saffron-red); }
+
+  .eq-send {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    inline-size: 100%;
+    padding: 17px 24px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ivory);
+    background: transparent;
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  :global(html[lang='fa']) .eq-send {
+    font-family: var(--font-fa);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .eq-send::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .eq-send:hover:not(:disabled)::after { transform: scaleY(1); }
+  .eq-send:hover:not(:disabled) { color: var(--obsidian-deep); }
+  .eq-send:disabled { cursor: default; border-color: var(--hair-ivory); color: var(--text-dim); }
+
+  .eq-status {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--ivory);
+    padding-inline-start: 14px;
+    border-inline-start: 3px solid transparent;
+  }
+  .eq[data-state='idle'] .eq-status { display: none; }
+  .eq[data-state='sending'] .eq-status { color: var(--text-muted); border-inline-start-color: var(--hair-strong); }
+  .eq[data-state='sent'] .eq-status { border-inline-start-color: var(--gold); }
+  .eq[data-state='failed'] .eq-status { border-inline-start-color: var(--saffron-red); }
+
+  @media (pointer: coarse) {
+    .field input,
+    .field select { min-block-size: 48px; }
+    .eq-send { min-block-size: 52px; }
+  }
+</style>

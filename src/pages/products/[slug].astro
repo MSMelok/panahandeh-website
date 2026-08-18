@@ -1,0 +1,31 @@
+---
+/**
+ * English product detail, one page per line in products.ts.
+ *
+ * A wrapper: the markup lives in components/pages/ProductDetail.astro and the JSON-LD
+ * in lib/schema.ts, so the Persian route emits exactly the same page and the same graph.
+ */
+import Base from '../../layouts/Base.astro';
+import ProductDetail from '../../components/pages/ProductDetail.astro';
+import { PRODUCTS, type Product } from '../../data/products';
+import { productSchema, productBreadcrumb } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return PRODUCTS.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const lang = 'en' as const;
+const { product } = Astro.props as { product: Product };
+---
+
+<Base
+  title={`${product.en} — ${product.grade}`}
+  description={product.blurbEn}
+  lang={lang}
+  path={`/products/${product.slug}`}
+  image={`/assets/${product.img}.webp`}
+  type="product"
+  schema={[productSchema(product, lang), productBreadcrumb(product, lang)]}
+>
+  <ProductDetail lang={lang} product={product} />
+</Base>

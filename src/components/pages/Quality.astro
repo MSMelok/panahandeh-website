@@ -1,0 +1,562 @@
+---
+/**
+ * Quality — the whole page, in one place, in both languages.
+ *
+ * Two halves, and they answer different questions. The certifications half is
+ * *what a buyer receives*; the control-points half is *where each thing is
+ * settled* — at origin, on the cleaning line, in the contract, before the vessel
+ * sails, on the pouch. Framing the second half as a list of adjectives ("rigorous",
+ * "meticulous") says nothing a buyer can hold anyone to; naming the place where a
+ * limit is fixed does.
+ *
+ * Every string comes from site.ts or i18n.ts. The FAQ questions below are rendered
+ * from the same keys the FAQPage node in lib/schema.ts quotes, so the structured
+ * data and the visible copy cannot drift.
+ */
+import { CERTIFICATIONS, CONTROL_POINTS, type Lang } from '../../data/site';
+import { t, href, digits, type Key } from '../../data/i18n';
+import { FAQ_KEYS } from '../../lib/pageSchema';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const fa = lang === 'fa';
+
+const certs = CERTIFICATIONS.map((c) => ({
+  id: c.id,
+  name: fa ? c.fa : c.en,
+  body: fa ? c.faBody : c.enBody,
+}));
+
+/* The "where" line is the only thing added to a control point, and each one is
+   read off the fixed text beside it rather than invented. */
+const WHERE: readonly Key[] = ['q.where.1', 'q.where.2', 'q.where.3', 'q.where.4', 'q.where.5'];
+const points = CONTROL_POINTS.map((p, i) => ({
+  n: digits(String(i + 1).padStart(2, '0'), lang),
+  where: t(WHERE[i], lang),
+  name: fa ? p.fa : p.en,
+  body: fa ? p.faFixed : p.enFixed,
+}));
+
+const TRACE: readonly Key[] = [
+  'q.trace.origin',
+  'q.trace.harvest',
+  'q.trace.line',
+  'q.trace.packed',
+];
+
+const faqs = FAQ_KEYS.map(([q, a]) => ({ q: t(q, lang), a: t(a, lang) }));
+---
+
+<section class="pgh">
+  <div class="wrap">
+    <p class="label">{t('q.kicker', lang)}</p>
+    <h1 class="display d1 pgh-h">
+      {t('q.h1a', lang)} <span class="acc">{t('q.h1b', lang)}</span>
+    </h1>
+    <div class="grule" aria-hidden="true"><i></i><i></i><i></i></div>
+    <p class="lede">{t('q.lede', lang)}</p>
+  </div>
+</section>
+
+<!-- ===================== what a buyer receives ===================== -->
+<section class="sec" aria-labelledby="q-certs">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="label">{t('q.certs.k', lang)}</p>
+      <h2 class="display d2" id="q-certs">{t('q.certs.h', lang)}</h2>
+      <p class="lede">{t('q.certs.p', lang)}</p>
+    </header>
+
+    <ul class="certs">
+      {
+        certs.map((c) => (
+          <li class="cert">
+            <span class="cert-dot" aria-hidden="true" />
+            <h3 class="cert-name">{c.name}</h3>
+            <p class="cert-body">{c.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== where each thing is settled ===================== -->
+<section class="sec sec-alt" aria-labelledby="q-ctrl">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="label">{t('q.ctrl.k', lang)}</p>
+      <h2 class="display d2" id="q-ctrl">{t('q.ctrl.h', lang)}</h2>
+      <p class="lede">{t('q.ctrl.p', lang)}</p>
+    </header>
+
+    <ol class="ctrl">
+      {
+        points.map((p) => (
+          <li class="ctrl-row">
+            <span class="ctrl-n" aria-hidden="true">
+              {p.n}
+            </span>
+            <p class="ctrl-where">{p.where}</p>
+            <div class="ctrl-main">
+              <h3 class="ctrl-name">{p.name}</h3>
+              <p class="ctrl-body">{p.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== traceability ===================== -->
+<section class="sec" aria-labelledby="q-trace">
+  <div class="wrap">
+    <div class="trace">
+      <div class="trace-copy">
+        <p class="label">{t('q.trace.k', lang)}</p>
+        <h2 class="display d2" id="q-trace">{t('q.trace.h', lang)}</h2>
+        <p class="lede trace-lede">{t('q.trace.p', lang)}</p>
+      </div>
+
+      <ol class="trace-list">
+        {
+          TRACE.map((k, i) => (
+            <li>
+              <span class="trace-n" aria-hidden="true">
+                {digits(String(i + 1), lang)}
+              </span>
+              <span class="trace-t">{t(k, lang)}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== questions buyers ask ===================== -->
+<section class="sec sec-alt" aria-labelledby="q-faq">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="label">{t('q.faq.k', lang)}</p>
+      <h2 class="display d2" id="q-faq">{t('q.faq.h', lang)}</h2>
+    </header>
+
+    {/* Plain question-and-answer, not an accordion: the FAQPage node quotes these
+        strings, and an answer a reader has to open is an answer a crawler has to
+        guess at. It is also five fewer controls to keep above 44px. */}
+    <dl class="faq">
+      {
+        faqs.map((f) => (
+          <div class="faq-row">
+            <dt class="faq-q">{f.q}</dt>
+            <dd class="faq-a">{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<!-- ===================== closing band ===================== -->
+<section class="close">
+  <div class="wrap close-in">
+    <p class="label">{t('close.k', lang)}</p>
+    <h2 class="display d2">
+      {t('close.h1', lang)} <span class="acc">{t('close.h2', lang)}</span>
+    </h2>
+    <p class="lede">{t('close.p', lang)}</p>
+    <a class="cta" href={href('/contact', lang)}>{t('cta.quote', lang)}</a>
+  </div>
+</section>
+
+<style>
+  /* ---------------------------------------------------------------- shell */
+  .pgh {
+    padding-block: clamp(48px, 7vw, 92px) clamp(40px, 5vw, 68px);
+    border-block-end: 1px solid var(--hair);
+  }
+  .pgh-h {
+    margin-block-start: 18px;
+    max-inline-size: 18ch;
+  }
+  .lede {
+    margin-block: 0;
+  }
+  .pgh .lede {
+    margin-block-start: 26px;
+  }
+
+  /* a gold hairline broken by three khatam diamonds — the one piece of ornament
+     these pages carry, and the reason the ground is dark */
+  .grule {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-block-start: 30px;
+    max-inline-size: 320px;
+  }
+  .grule::before,
+  .grule::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: var(--hair-strong);
+  }
+  .grule i {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex: none;
+  }
+  .grule i:nth-child(2) {
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  .sec {
+    padding-block: var(--rhythm);
+  }
+  .sec-alt {
+    background: var(--surface);
+  }
+  .sec-head {
+    display: grid;
+    gap: 18px;
+    max-inline-size: 64ch;
+    margin-block-end: clamp(36px, 4.4vw, 58px);
+  }
+  .sec-head .display {
+    margin: 0;
+  }
+
+  /* ---------------------------------------------------------------- certs */
+  /* 1px grid gap over a gold hairline: the rules between the tiles are the gap,
+     so nothing has to know which cell is last in its row. */
+  .certs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--hair);
+    border: 1px solid var(--hair);
+  }
+  @media (min-width: 680px) {
+    .certs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .certs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .cert {
+    background: var(--surface);
+    padding: clamp(24px, 3vw, 34px) clamp(20px, 2.4vw, 30px) clamp(28px, 3.2vw, 38px);
+    min-inline-size: 0;
+  }
+  .cert-dot {
+    display: block;
+    inline-size: 6px;
+    block-size: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    margin-block-end: 20px;
+  }
+  .cert-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1.8vw, 1.42rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--text);
+    margin: 0 0 10px;
+  }
+  .cert-body {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .cert-name {
+    font-family: var(--font-fa);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  }
+
+  /* ---------------------------------------------------------------- control */
+  .ctrl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--hair);
+  }
+  .ctrl-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    padding-block: clamp(22px, 2.6vw, 30px);
+    border-block-end: 1px solid var(--hair);
+  }
+  .ctrl-n {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--gold-light);
+    grid-row: 1;
+  }
+  .ctrl-where {
+    margin: 0;
+    grid-row: 1;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    line-height: 1.6;
+    text-transform: uppercase;
+    color: var(--accent);
+    align-self: center;
+  }
+  .ctrl-main {
+    grid-column: 1 / -1;
+    min-inline-size: 0;
+  }
+  .ctrl-name {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .ctrl-body {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--text-muted);
+    max-inline-size: 60ch;
+  }
+  :global(html[lang='fa']) .ctrl-n,
+  :global(html[lang='fa']) .ctrl-name {
+    font-family: var(--font-fa);
+    font-weight: 700;
+  }
+  :global(html[lang='fa']) .ctrl-where {
+    font-family: var(--font-fa);
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  :global(html[lang='fa']) .ctrl-name {
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+  }
+  @media (min-width: 860px) {
+    .ctrl-row {
+      grid-template-columns: auto minmax(0, 21ch) minmax(0, 1fr);
+      gap: 0 28px;
+      align-items: start;
+    }
+    .ctrl-main {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    /* centring the eyebrow against the numeral is a two-column-row fix; once the
+       three columns are side by side everything hangs off the same top edge */
+    .ctrl-where {
+      align-self: start;
+      padding-block-start: 4px;
+    }
+  }
+
+  /* ---------------------------------------------------------------- trace */
+  /* The lot code is the single most checkable claim on the page, so it gets a
+     panel of its own rather than a line inside the control list. */
+  .trace {
+    position: relative;
+    background: var(--surface-raised);
+    padding: clamp(28px, 4vw, 52px);
+    display: grid;
+    gap: clamp(28px, 3.4vw, 44px);
+  }
+  .trace::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: 1px solid var(--hair);
+    pointer-events: none;
+  }
+  .trace > * {
+    position: relative;
+  }
+  @media (min-width: 940px) {
+    .trace {
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: clamp(40px, 4.5vw, 64px);
+    }
+  }
+  .trace-copy {
+    display: grid;
+    gap: 16px;
+    min-inline-size: 0;
+  }
+  .trace-copy .display {
+    margin: 0;
+  }
+  .trace-lede {
+    color: var(--text-muted);
+  }
+  .trace-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--hair-ivory);
+    min-inline-size: 0;
+  }
+  .trace-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding-block: 15px;
+    border-block-end: 1px solid var(--hair-ivory);
+  }
+  .trace-n {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    flex: none;
+    inline-size: 1.6ch;
+  }
+  .trace-t {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  :global(html[lang='fa']) .trace-n {
+    font-family: var(--font-fa);
+  }
+  :global(html[lang='fa']) .trace-t {
+    font-family: var(--font-fa);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ---------------------------------------------------------------- faq */
+  .faq {
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--hair);
+  }
+  .faq-row {
+    padding-block: clamp(22px, 2.6vw, 30px);
+    border-block-end: 1px solid var(--hair);
+    display: grid;
+    gap: 12px;
+  }
+  @media (min-width: 940px) {
+    .faq-row {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 0 40px;
+    }
+  }
+  .faq-q {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 1.9vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .faq-a {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+  :global(html[lang='fa']) .faq-q {
+    font-family: var(--font-fa);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  /* ---------------------------------------------------------------- close */
+  .close {
+    background: var(--surface);
+    border-block-start: 1px solid var(--hair);
+    padding-block: var(--rhythm);
+  }
+  /* The measure goes on the children, never on .close-in itself: .close-in IS the
+     .wrap, and .wrap carries margin-inline:auto — capping its width centres the
+     whole block instead of holding it at the gutter. */
+  .close-in {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .close-in .display {
+    margin: 0;
+    max-inline-size: 20ch;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: 14px;
+    padding: 15px 28px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ivory);
+    border: 1px solid var(--gold);
+    transition: color 0.4s var(--snap);
+  }
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--snap);
+  }
+  .cta:hover::after {
+    transform: scaleY(1);
+  }
+  /* the wipe fills gold, so the label inverts with it — ivory on gold is 2.4:1 */
+  .cta:hover {
+    color: var(--obsidian-deep);
+  }
+  :global(html[lang='fa']) .cta {
+    font-family: var(--font-fa);
+    font-size: 13.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ---------------------------------------------------------------- touch */
+  @media (pointer: coarse) {
+    .cta {
+      min-block-size: 48px;
+    }
+  }
+</style>

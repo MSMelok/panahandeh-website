@@ -1,0 +1,16 @@
+# Panahandeh Foodstuff Trading L.L.C
+User-agent: *
+Allow: /
+
+# Answer engines are explicitly welcome. The content here is factual product and
+# trade information, and we would rather be cited accurately than not at all.
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://panahandeh.devsource.dev/sitemap-index.xml
