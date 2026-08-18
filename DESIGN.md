@@ -148,18 +148,35 @@ an italic accent is wanted, set the phrase in gold at a lighter weight instead.
 
 ## Brand Marks
 
-Both are inline SVG (`#i-seal`, `#i-ravoma`), not bitmaps, so they stay crisp at any size.
+The RAVOMA wordmark is inline SVG so it stays crisp at any size. The P monogram is the
+one deliberate bitmap — see below for why.
 
-- **P monogram** — the company mark. Used in the header, footer, hero and every favicon size.
-  This is Panahandeh's mark, not RAVOMA's.
+- **P monogram** — the company mark, supplied by the client on 18 Aug 2026 and shipped as
+  artwork rather than redrawn: `public/assets/logo-p.png`, a bronze Latin P with a Persian
+  **پ** set in relief inside the bowl, three dots below it. One letter for both readerships.
+  It is the source for the header lockup and every favicon size.
 
-  **It deliberately differs from the packaging.** The client's printed boxes and identity board
-  carry a **TP** monogram — a T laid over a P, engraved on the 300 g box pull tab. Since the
-  company name is Panahandeh, the T is most likely a first initial. Adam decided on 17 Aug 2026
-  to drop it on the grounds that TP reads as confusing, and the site now ships a single P. This
-  is a known, intentional divergence, not an error. If the client confirms the T is meaningful,
-  restore it: the TP form was two extra strokes, `M35 43 L70 39` and `M53.5 41 L53.5 85`, with
-  the P stem at x=64 rather than x=48.
+  **It is a raster, and that is a deliberate exception** to the inline-SVG rule below. The
+  bevel and the engraved tazhib on the stem do not survive being flattened to vector — a
+  two-colour silhouette of it loses the پ entirely, because the پ is relief, not a cutout.
+
+  Rendering notes that are load-bearing:
+  - The header sets `block-size` and lets the width follow, so the letter keeps its own
+    636:879 proportion. Never constrain it to a square; the artwork is not square.
+  - Favicons carry a **deep burgundy `#5A171B` tile**. A favicon lands on browser chrome we
+    do not control, and the bronze on a transparent ground disappears into a dark tab bar.
+    The 16/32/48 builds get a brightness and unsharp pass before the downscale — routine
+    favicon hand-tuning, not a recolour.
+  - The mark measures **3.11:1 mean against obsidian**, with highlights at 5.18:1. That
+    clears the 3:1 required of a meaningful graphic, and the mark is `aria-hidden` anyway
+    since the wordmark beside it carries the company name.
+  - The **TP** on the client's packaging is a separate question from this file. See the note
+    below; nothing here reintroduces the T.
+
+  The previous mark was an inline SVG stroked P inside a circle seal, in `currentColor`. It
+  was replaced wholesale. If it is ever needed again: circle `r=52` at `cx=cy=60`, stem
+  `M48 38 L48 86`, bowl `M48 41 h9 a14 14 0 0 1 0 28 H48`, stroke-width 4.6.
+
 - **RAVOMA wordmark** — Cinzel with the O replaced by a gold saffron-stigma leaf. The letters are
   two `<text>` runs at x-positions measured from a real Cinzel render, with the leaf drawn between
   them, so the ornament lands correctly without depending on font metrics at runtime.

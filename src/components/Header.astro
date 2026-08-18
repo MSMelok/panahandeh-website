@@ -59,19 +59,16 @@ const isActive = (to: string) =>
   <header class="hdr" id="hdr">
     <div class="wrap hdr-in">
       <a class="lock" href={href('/', lang)} aria-label={t('a11y.home', lang)}>
-        <svg class="seal" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="2.4"></circle>
-          <g
-            fill="none"
-            stroke="currentColor"
-            stroke-width="4.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M48 38 L48 86"></path>
-            <path d="M48 41 h9 a14 14 0 0 1 0 28 H48"></path>
-          </g>
-        </svg>
+        <img
+          class="seal"
+          src="/assets/logo-p.png"
+          width="98"
+          height="136"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          fetchpriority="high"
+        />
         <span class="lock-t">
           <b>PANAHANDEH</b>
           <small>{SUBLINE}</small>
@@ -198,10 +195,9 @@ const isActive = (to: string) =>
     min-inline-size: 0;
   }
   .seal {
-    inline-size: 34px;
     block-size: 34px;
+    inline-size: auto;
     flex: none;
-    color: var(--gold);
   }
   .lock-t { min-inline-size: 0; }
   .lock b {
@@ -488,7 +484,7 @@ const isActive = (to: string) =>
   @media (max-width: 460px) {
     .shell-head { --hdr-h: 66px; }
     .lock b { font-size: 16px; letter-spacing: 0.05em; }
-    .seal { inline-size: 28px; block-size: 28px; }
+    .seal { block-size: 28px; }
     .lock { gap: 9px; }
     .hdr-end { gap: 8px; }
     .lang a { padding-inline: 7px; font-size: 10.5px; letter-spacing: 0.06em; }

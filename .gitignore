@@ -27,3 +27,6 @@ dist/
 
 # Client artwork — unreleased commercial material. Never committed.
 brand/
+
+# Local design scratch — not part of the site
+scratch-logo/
