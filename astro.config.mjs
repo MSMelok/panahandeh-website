@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://panahandeh.devsource.dev',
+  site: 'https://panahandeh.blackminted.com',
   // Static by default; only the enquiry endpoint opts out with prerender = false,
   // so every content page is still plain HTML at the edge.
   adapter: vercel({ webAnalytics: { enabled: false } }),

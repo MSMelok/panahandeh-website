@@ -8,7 +8,7 @@ label.
 deliberately: the wordmark, page titles, legal line and metadata all read PANAHANDEH, and the
 RAVOMA mark appears where it belongs — on the products.
 
-**Live:** https://panahandeh.devsource.dev
+**Live:** https://panahandeh.blackminted.com
 
 The site is built with [Astro](https://astro.build) and ships as prerendered HTML: 15 routes in
 each of three languages, 45 pages in total. The one exception is the enquiry endpoint, which runs

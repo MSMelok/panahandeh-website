@@ -8,7 +8,7 @@
  */
 
 export const SITE = {
-  url: 'https://panahandeh.devsource.dev',
+  url: 'https://panahandeh.blackminted.com',
   /** Legal entity. Never merged with the product brand. */
   legalName: 'Panahandeh Foodstuff Trading L.L.C',
   shortName: 'Panahandeh',

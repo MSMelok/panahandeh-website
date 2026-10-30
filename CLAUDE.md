@@ -2,7 +2,7 @@
 
 Astro site, prerendered: 15 routes in each of English (`/`), Persian (`/fa/`) and Arabic
 (`/ar/`), 45 pages. The only server route is `/api/enquiry`. Deployed to Vercel at
-https://panahandeh.devsource.dev.
+https://panahandeh.blackminted.com.
 
 The three competing demos at `/v1/`, `/v2/`, `/v3/` were removed once the client chose
 design 03; `vercel.json` redirects those paths to the root. Do not resurrect them.
